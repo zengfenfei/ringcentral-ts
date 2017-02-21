@@ -89,7 +89,9 @@ export default class RestClient extends EventEmitter {
         }
         if (token.expired()) {
             if (token.refreshTokenExpired()) {
-                throw new Error("AccessToken and refreshToken have expired.");
+                let e = new Error("AccessToken and refreshToken have expired.");
+                e['code'] = 'TokenExpired';
+                throw e;
             } else {
                 await this.refreshToken();
             }
@@ -104,15 +106,20 @@ export default class RestClient extends EventEmitter {
             headers["content-type"] = "application/json";
         }
         let url = format({ pathname: this.server + "/restapi/" + SERVER_VERSION + endpoint, query });
-        let res = await fetch(url);
+        let res = await fetch(url, opts);
         if (!res.ok) {
-            let errorMessage = 'Fail to request ' + url + '.';
+            let errorMessage = 'Fail to call ' + url + '. ';
             if (isJsonRes(res)) {
-                let data = await res.json();
-                throw new Error(errorMessage);
+                let resJson = await res.json();
+                let e = new RestError(errorMessage + (resJson.message || resJson.error_description),
+                    resJson.errorCode || resJson.error,
+                    res.status,
+                    resJson);
+                throw e;
             } else {
-                let text = await res.text();
-                throw new Error(errorMessage + '\n' + text);
+                let resText = await res.text();
+                let e = new RestError(errorMessage + resText, 'Unknown', res.status, resText);
+                throw e;
             }
         }
         return res;
@@ -216,7 +223,6 @@ export default class RestClient extends EventEmitter {
             this.emit(EventRefreshError, e);
             return Promise.reject(e);
         }
-
 
         this.refreshingToken = this.fetchNewToken().then(() => {
             this.refreshingToken = null;

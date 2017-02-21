@@ -115,12 +115,15 @@ describe("Auth", () => {
     });
 
     it("Refresh token with wrong refreshToken", () => {
-        let refreshToken = client.getToken().refreshToken;
-        client.getToken().refreshToken = 'xxxxx';
+        let token = client.getToken();
+        let testToken = new Token(token);
+        testToken.refreshToken = 'xxxxx';
+        client.tokenStore.save(testToken);
         return client.refreshToken().then(() => {
             throw new Error('Refresh token should not success with wrong refresh token.');
         }, e => {
             expect(e.code).to.eq('invalid_grant');
+            client.tokenStore.save(token)
         });
     });
 
@@ -128,7 +131,7 @@ describe("Auth", () => {
 
 describe("http methods", () => {
     it("list answering rules", () => {
-        return client.put("/account/~/extension/~/answering-rule/36288004", {
+        return client.put("/account/~/extension/~/answering-rule/36288004x", {
             callers: [{
                 "callerId": "8688888"
             }, {
@@ -137,10 +140,6 @@ describe("http methods", () => {
                 "callerId": "867777"
             }]
 
-        }).then(res => res.json()).then(data => {
-            console.log(data);
-        }).catch(e => {
-            console.error("@@@", e)
-        });
+        }).then(res => res.json());
     });
 });
