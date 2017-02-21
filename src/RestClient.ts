@@ -36,7 +36,7 @@ export default class RestClient extends EventEmitter {
     appSecret: string;
 
     tokenStore: TokenStore;
-    private ongoingTokenRefresh: Promise<void>;
+    private refreshingToken: Promise<void>;
 
     agents = [pkg.name + "/" + pkg.version];
 
@@ -84,7 +84,7 @@ export default class RestClient extends EventEmitter {
         let token = this.tokenStore.get();
         if (!token) {
             let e = new Error("Cannot perform api calls without login.");
-            e.name = "NotLogin";
+            e['code'] = "NoToken";
             throw e;
         }
         if (token.expired()) {
@@ -176,7 +176,6 @@ export default class RestClient extends EventEmitter {
             body: stringify({ token: token.accessToken })
         });
         if (res.ok) {
-            let resJson = await res.text();
             this.tokenStore.clear();
             this.emit(EventLogoutSuccess);
         } else {
@@ -199,45 +198,74 @@ export default class RestClient extends EventEmitter {
 
     /** Only one request will be sent at the same time. */
     refreshToken(): Promise<void> {
-        let tokenData = this.tokenStore.get();
-        if (!tokenData) {
-            let e = new Error("Cannot refresh token without login.");
-            e.name = "NotLogin";
+        if (this.refreshingToken) {
+            return this.refreshingToken;
+        }
+
+        let token = this.getToken();
+        if (!token) {
+            let e = new Error("Cannot refresh token without existing one.");
+            e['code'] = 'NoToken';
             return Promise.reject(e);
         }
-        if (this.ongoingTokenRefresh) {
-            return this.ongoingTokenRefresh;
-        }
+
         this.emit(EventRefreshStart);
-        let token = tokenData.token;
         if (token.refreshTokenExpired()) {
-            this.emit(EventRefreshError, new Error("Refresh token expired."));
-            return Promise.reject(new Error("Refresh token has expired, can not refresh."));
+            let e = new Error("Cannot refresh token, existed refreshToken has expired.");
+            e['code'] = 'RefreshTokenExpired';
+            this.emit(EventRefreshError, e);
+            return Promise.reject(e);
         }
+
+
+        this.refreshingToken = this.fetchNewToken().then(() => {
+            this.refreshingToken = null;
+        }, e => {
+            this.refreshingToken = null;
+            throw e;
+        });
+        return this.refreshingToken;
+    }
+
+    private async fetchNewToken(): Promise<void> {
+        let token = this.getToken();
         let body = {
             refresh_token: token.refreshToken,
             grant_type: "refresh_token",
             endpoint_id: token.endpointId
         };
         let startTime = Date.now();
-        this.ongoingTokenRefresh = fetch(this.server + TOKEN_URL, {
+        let res = await fetch(this.server + TOKEN_URL, {
             method: "POST",
             body: stringify(body),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Authorization": "Basic " + this.basicAuth()
             }
-        }).then(detectResponseError).then(res => res.json()).then(json => {
-            this.ongoingTokenRefresh = null;
-            tokenData.token = new Token(json, Date.now() - startTime);
-            this.tokenStore.save(tokenData);
-            this.emit(EventRefreshSuccess);
-        }, e => {
-            this.ongoingTokenRefresh = null;
-            this.emit(EventRefreshError, e);
-            throw e;
         });
-        return this.ongoingTokenRefresh;
+        if (res.ok) {
+            let resJson = await res.json();
+            this.tokenStore.save(new Token(resJson, Date.now() - startTime));
+            this.emit(EventRefreshSuccess);
+        } else {
+            if (isJsonRes(res)) {
+                let resJson = await res.json();
+                let e = new RestError('Fail to refresh token: ' + (resJson.error_description || resJson.message),
+                    resJson.error || resJson.errorCode,
+                    res.status,
+                    resJson);
+                if (e.code == 'invalid_grant') {    // Token is invalid, clear them.
+                    this.tokenStore.clear();
+                }
+                this.emit(EventRefreshError, e);
+                throw e;
+            } else {
+                let resText = await res.text();
+                let e = new RestError('Fail to refresh token: ' + resText, 'Unknown', res.status, resText);
+                this.emit(EventRefreshError, e);
+                throw e;
+            }
+        }
     }
 
 }

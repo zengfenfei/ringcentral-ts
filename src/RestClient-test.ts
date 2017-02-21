@@ -37,7 +37,7 @@ describe("Auth", () => {
         });
     });
 
-    it('logout', async () => {
+    it('invalidates access token and refresh token after logout', async () => {
         expect(client.getToken()).to.exist;
         await client.logout();
         expect(client.getToken()).to.not.exist;
@@ -60,14 +60,14 @@ describe("Auth", () => {
         client.tokenStore.save(token);
     });
 
-    let NotLoginError = "NotLogin";
+    let NotLoginError = "NoToken";
     it("Call api before login", () => {
         return client.logout().then(() => {
             return client.get("/some-api");
         }).then(() => {
             throw new Error("Should not success.");
         }, e => {
-            expect(e.name).to.eq(NotLoginError);
+            expect(e.code).to.eq(NotLoginError);
         });
     });
 
@@ -77,7 +77,7 @@ describe("Auth", () => {
         }).then(() => {
             throw new Error("Should not success.");
         }, e => {
-            expect(e.name).to.eq(NotLoginError);
+            expect(e.code).to.eq(NotLoginError);
         });
     });
 
@@ -101,27 +101,29 @@ describe("Auth", () => {
         });
     });*/
 
-    it("Allow only one refresh token request at the same time", () => {
-        return client.auth(config.user).then(() => {
-            let p1 = client.refreshToken();
-            let p2 = client.refreshToken();
-            expect(p1).to.eq(p2);
+    it("Allow only one refresh token request at the same time.", () => {
+        let p1 = client.refreshToken();
+        let p2 = client.refreshToken();
+        expect(p1).to.eq(p2);
+        return p1;
+    });
+
+    it("should get different access token after refresh.", async () => {
+        let token = client.getToken();
+        await client.refreshToken();
+        expect(token.accessToken).not.eq(client.getToken().accessToken);
+    });
+
+    it("Refresh token with wrong refreshToken", () => {
+        let refreshToken = client.getToken().refreshToken;
+        client.getToken().refreshToken = 'xxxxx';
+        return client.refreshToken().then(() => {
+            throw new Error('Refresh token should not success with wrong refresh token.');
+        }, e => {
+            expect(e.code).to.eq('invalid_grant');
         });
     });
 
-
-
-    it("Logout expired accessToken.");
-
-    it("Refresh Token", () => {
-        return client.auth(config.user).then(() => client.refreshToken());
-    });
-
-    it("Refresh token with wrong info");
-
-    it("Access token and refresh token should be invalid after logout", () => {
-        return client.logout();
-    });
 });
 
 describe("http methods", () => {
