@@ -52,6 +52,10 @@ export default class RestClient extends EventEmitter {
         return new Buffer(this.appKey + ":" + this.appSecret).toString("base64");
     }
 
+    getToken(): Token {
+        return this.tokenStore.get();
+    }
+
     /**
      * Send http GET method
      */
@@ -157,26 +161,40 @@ export default class RestClient extends EventEmitter {
         }
     }
 
-    logout(): Promise<void> {
-        let tokenData = this.tokenStore.get();
-        if (!tokenData) {
-            return Promise.resolve(null);
+    async logout(): Promise<void> {
+        let token = this.tokenStore.get();
+        if (!token) {
+            return;
         }
         this.emit(EventLogoutStart);
-        return fetch(this.server + REVOKE_URL, {
+        let res = await fetch(this.server + REVOKE_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Authorization": "Basic " + this.basicAuth()
             },
-            body: stringify({ token: tokenData.token.accessToken })
-        }).then(detectResponseError).then(() => {
+            body: stringify({ token: token.accessToken })
+        });
+        if (res.ok) {
+            let resJson = await res.text();
             this.tokenStore.clear();
             this.emit(EventLogoutSuccess);
-        }, err => {
-            this.emit(EventLogoutError, err);
-            throw err;
-        });
+        } else {
+            if (isJsonRes(res)) {
+                let resJson = await res.json();
+                let e = new RestError('Fail to logout RC platform: ' + (resJson.error_description || resJson.message),
+                    resJson.error || resJson.errorCode,
+                    res.status,
+                    resJson);
+                this.emit(EventLogoutError, e);
+                throw e;
+            } else {
+                let resText = await res.text();
+                let e = new RestError('Fail to logout RC platform: ' + resText, 'Unknown', res.status, resText);
+                this.emit(EventLogoutError, e);
+                throw e;
+            }
+        }
     }
 
     /** Only one request will be sent at the same time. */

@@ -12,6 +12,7 @@
     "lint": "tslint -c tslint.json codegen/ts-sample/*.ts src/**/*.ts"
   },
   "dependencies": {
+    "@types/chai": "^3.4.35",
     "@types/mocha": "^2.2.39",
     "@types/node": "^7.0.5",
     "form-data": "^2.1.2",

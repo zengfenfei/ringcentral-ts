@@ -1,5 +1,6 @@
-import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
 import { expect } from "chai";
+import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
+import Token from './Token';
 
 let config = require('../config/test.json');
 
@@ -34,6 +35,29 @@ describe("Auth", () => {
         }, e => {
             expect(e.code).to.equal("invalid_client");
         });
+    });
+
+    it('logout', async () => {
+        expect(client.getToken()).to.exist;
+        await client.logout();
+        expect(client.getToken()).to.not.exist;
+        await client.auth(config.user);
+        expect(client.getToken()).to.exist;
+    });
+
+    it('logout with wrong access token', async () => {
+        let token = client.getToken();
+        let testToken = new Token(token);
+
+        client.tokenStore.save(testToken);
+        testToken.accessToken += 'xxxxx';
+        await client.logout();
+
+        client.tokenStore.save(testToken);
+        testToken.accessToken = '';
+        await client.logout();
+
+        client.tokenStore.save(token);
     });
 
     let NotLoginError = "NotLogin";

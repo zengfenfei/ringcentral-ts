@@ -37,7 +37,7 @@ export default class Token {
 
 export interface TokenStore {
     // Fetch token data from redis, dababase, or other places
-    init(): Promise<void>;
+    restore(): Promise<void>;
     save(data: Token);
     get(): Token;
     clear(): void;
@@ -66,7 +66,7 @@ export class WebTokenStore implements TokenStore {
         this.store.removeItem(this.key);
     }
 
-    async init(): Promise<void> {
+    async restore(): Promise<void> {
     }
 }
 
@@ -85,6 +85,6 @@ export class MemoryTokenStore implements TokenStore {
         this.token = null;
     }
 
-    async init(): Promise<void> {
+    async restore(): Promise<void> {
     }
 }
