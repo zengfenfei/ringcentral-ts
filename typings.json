@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "isomorphic-fetch": "registry:dt/isomorphic-fetch#0.0.0+20170120045107"
+  }
+}
