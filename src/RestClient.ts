@@ -56,6 +56,22 @@ export default class RestClient extends EventEmitter {
         return this.tokenStore.get();
     }
 
+    async restoreToken(tokenStore?: TokenStore): Promise<void> {
+        if (tokenStore) {
+            this.tokenStore = tokenStore;
+        }
+        await this.tokenStore.restore();
+        let token = this.getToken();
+        if (token.expired()) {
+            if (token.refreshTokenExpired()) {
+                this.tokenStore.clear();
+                throw new Error('Token expired.');
+            } else {
+                await this.refreshToken();
+            }
+        }
+    }
+
     /**
      * Send http GET method
      */
@@ -81,7 +97,7 @@ export default class RestClient extends EventEmitter {
      * Perform an authenticated API call.
      */
     async call(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
-        let token = this.tokenStore.get();
+        let token = this.getToken();
         if (!token) {
             let e = new Error("Cannot perform api calls without login.");
             e['code'] = "NoToken";
@@ -114,11 +130,12 @@ export default class RestClient extends EventEmitter {
                 let e = new RestError(errorMessage + (resJson.message || resJson.error_description),
                     resJson.errorCode || resJson.error,
                     res.status,
-                    resJson);
+                    resJson,
+                    res);
                 throw e;
             } else {
                 let resText = await res.text();
-                let e = new RestError(errorMessage + resText, 'Unknown', res.status, resText);
+                let e = new RestError(errorMessage + resText, 'Unknown', res.status, resText, res);
                 throw e;
             }
         }
@@ -267,7 +284,7 @@ export default class RestClient extends EventEmitter {
                 throw e;
             } else {
                 let resText = await res.text();
-                let e = new RestError('Fail to refresh token: ' + resText, 'Unknown', res.status, resText);
+                let e = new RestError('Fail to refresh token: ' + resText, 'Unknown', res.status, resText, res);
                 this.emit(EventRefreshError, e);
                 throw e;
             }
@@ -281,25 +298,18 @@ function isJsonRes(res: Response) {
     return ct && ct.match("application/json");
 }
 
-function detectResponseError(res: Response): Response | Promise<Response> {
-    if (res.ok) {
-        return res;
-    }
-    let isJson = isJsonRes(res);
-    let errorResult = isJson ? res.json() : res.text();
-    return errorResult.then(err => Promise.reject(err));
-}
-
 class RestError extends Error {
     code: string;
     httpStatus: number;
     detail: any;    // http response json or text
+    rawRes: any;    // The raw http response
 
-    constructor(message: string, code: string, httpStatus: number, detail?) {
+    constructor(message: string, code: string, httpStatus: number, detail?, raw?) {
         super(message);
         this.code = code;
         this.httpStatus = httpStatus;
         this.detail = detail;
+        this.rawRes = raw;
     }
 }
 

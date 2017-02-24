@@ -1,7 +1,7 @@
 cd $(dirname $0)/..
 cd build/
 
-links=("package.json" "config")
+links=("package.json" "data")
 for link in "${links[@]}"
 do
 [ -e $link ] && rm $link

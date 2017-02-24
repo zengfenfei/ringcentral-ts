@@ -86,5 +86,8 @@ export class MemoryTokenStore implements TokenStore {
     }
 
     async restore(): Promise<void> {
+        if (!this.token) {
+            throw new Error('Token not exist in memory.');
+        }
     }
 }

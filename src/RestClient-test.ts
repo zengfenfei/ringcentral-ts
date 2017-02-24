@@ -1,13 +1,18 @@
 import { expect } from "chai";
 import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
 import Token from './Token';
-
-let config = require('../config/test.json');
+import FileTokenStore from './FileTokenStore';
+import config from '../test/config';
 
 let client = new RestClient(config.app);
 
 before(() => {
-    return client.auth(config.user);
+    return client.restoreToken(new FileTokenStore(config.tokenCacheFile)).then(() => {
+        console.log('Restore token success')
+    }, e => {
+        console.log('>>> Fail to restore token', e);
+        return client.auth(config.user);
+    });
 });
 
 describe("Auth", () => {
@@ -129,17 +134,17 @@ describe("Auth", () => {
 
 });
 
-describe("http methods", () => {
-    it("list answering rules", () => {
-        return client.put("/account/~/extension/~/answering-rule/36288004x", {
-            callers: [{
-                "callerId": "8688888"
-            }, {
-                "callerId": "866666"
-            }, {
-                "callerId": "867777"
-            }]
+describe("429 handling", () => {
 
-        }).then(res => res.json());
+    it('Check if requests in 429 state will postpone the recovering time.', async () => {
+        while (true) {
+            try {
+                let res = await client.get("/account/~/extension/~/answering-rule/");
+                console.log('success', res.headers);
+            } catch (e) {
+                console.error('fail', e.rawRes.headers);
+            }
+        }
     });
+
 });

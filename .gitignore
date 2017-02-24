@@ -2,4 +2,6 @@ node_modules/
 build/
 coverage/
 typings/
-config/
+
+# Configuration and generated runtime data for test.
+data/
