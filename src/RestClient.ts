@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import { format } from 'url';
 import { stringify } from 'querystring';
 import * as fetch from "isomorphic-fetch";
+import delay from './delay';
 //import { name as packageName, version as packageVersion } from "./generated/package";
 import Token, { TokenStore, MemoryTokenStore } from "./Token";
 import isKnownReqBodyType from "known-fetch-body";
@@ -35,6 +36,9 @@ export default class RestClient extends EventEmitter {
     appKey: string;
     appSecret: string;
 
+    handleRateLimit: boolean;
+    private recoverTime: number; // In 429 status
+
     tokenStore: TokenStore;
     private refreshingToken: Promise<void>;
 
@@ -46,6 +50,7 @@ export default class RestClient extends EventEmitter {
         this.appKey = opts.appKey;
         this.appSecret = opts.appSecret;
         this.tokenStore = opts.tokenStore || new MemoryTokenStore();
+        this.handleRateLimit = opts.handleRateLimit === false ? false : true;
     }
 
     private basicAuth(): string {
@@ -93,10 +98,37 @@ export default class RestClient extends EventEmitter {
         return this.call(url, query, { method: "PUT", body: body });
     }
 
+    // Handle rate limit.
+    async call(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
+        try {
+            return await this.sendApiCall(endpoint, query, opts);
+        } catch (e) {
+            if (this.handleRateLimit && e.code === ErrorRateExceeded) {
+                await delay(this.recoverTime - Date.now());
+                return await this.call(endpoint, query, opts);
+            }
+            throw e;
+        }
+    }
+
     /**
      * Perform an authenticated API call.
      */
-    async call(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
+    private async sendApiCall(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
+        opts = opts || {};
+        opts.method = opts.method || 'GET';
+        let url = format({ pathname: this.server + "/restapi/" + SERVER_VERSION + endpoint, query });
+
+        if (this.recoverTime) {
+            let timeLeft = this.recoverTime - Date.now();
+            if (timeLeft > 0) {
+                let e = new RestError(opts.method + ' ' + url + ': Throttled by rate limit', ErrorRateExceeded, 'Please retry after ' + timeLeft + ' milliseconds');
+                e['retryAfter'] = timeLeft;
+                throw e;
+            }
+            this.recoverTime = 0;
+        }
+
         let token = this.getToken();
         if (!token) {
             let e = new Error("Cannot perform api calls without login.");
@@ -112,7 +144,6 @@ export default class RestClient extends EventEmitter {
                 await this.refreshToken();
             }
         }
-        opts = opts || {};
         let headers = opts.headers = opts.headers || {};
         headers["Authorization"] = token.type + " " + token.accessToken;
         headers["Client-Id"] = this.appKey;
@@ -121,21 +152,24 @@ export default class RestClient extends EventEmitter {
             opts.body = JSON.stringify(opts.body);
             headers["content-type"] = "application/json";
         }
-        let url = format({ pathname: this.server + "/restapi/" + SERVER_VERSION + endpoint, query });
         let res = await fetch(url, opts);
         if (!res.ok) {
-            let errorMessage = 'Fail to call ' + url + '. ';
+            let errorMessage = opts.method + ' ' + url + ': ';
             if (isJsonRes(res)) {
                 let resJson = await res.json();
                 let e = new RestError(errorMessage + (resJson.message || resJson.error_description),
                     resJson.errorCode || resJson.error,
-                    res.status,
                     resJson,
                     res);
+                if (e.code === ErrorRateExceeded) {
+                    let retryAfter = parseInt(res.headers.get('retry-after')) * 1000;
+                    this.recoverTime = Date.now() + retryAfter;
+                    e['retryAfter'] = retryAfter;
+                }
                 throw e;
             } else {
                 let resText = await res.text();
-                let e = new RestError(errorMessage + resText, 'Unknown', res.status, resText, res);
+                let e = new RestError(errorMessage + resText, 'Unknown', resText, res);
                 throw e;
             }
         }
@@ -172,13 +206,13 @@ export default class RestClient extends EventEmitter {
                 let resJson = await res.json();
                 let e = new RestError('RC platform auth fails: ' + (resJson.error_description || resJson.message),
                     resJson.error || resJson.errorCode,
-                    res.status,
-                    resJson);
+                    resJson,
+                    res);
                 this.emit(EventLoginError, e);
                 throw e;
             } else {
                 let resText = await res.text();
-                let e = new RestError('RC platform auth fails: ' + resText, 'Unknown', res.status, resText);
+                let e = new RestError('RC platform auth fails: ' + resText, 'Unknown', resText, res);
                 this.emit(EventLoginError, e);
                 throw e;
             }
@@ -207,13 +241,13 @@ export default class RestClient extends EventEmitter {
                 let resJson = await res.json();
                 let e = new RestError('Fail to logout RC platform: ' + (resJson.error_description || resJson.message),
                     resJson.error || resJson.errorCode,
-                    res.status,
-                    resJson);
+                    resJson,
+                    res);
                 this.emit(EventLogoutError, e);
                 throw e;
             } else {
                 let resText = await res.text();
-                let e = new RestError('Fail to logout RC platform: ' + resText, 'Unknown', res.status, resText);
+                let e = new RestError('Fail to logout RC platform: ' + resText, 'Unknown', resText, res);
                 this.emit(EventLogoutError, e);
                 throw e;
             }
@@ -275,8 +309,8 @@ export default class RestClient extends EventEmitter {
                 let resJson = await res.json();
                 let e = new RestError('Fail to refresh token: ' + (resJson.error_description || resJson.message),
                     resJson.error || resJson.errorCode,
-                    res.status,
-                    resJson);
+                    resJson,
+                    res);
                 if (e.code == 'invalid_grant') {    // Token is invalid, clear them.
                     this.tokenStore.clear();
                 }
@@ -284,7 +318,7 @@ export default class RestClient extends EventEmitter {
                 throw e;
             } else {
                 let resText = await res.text();
-                let e = new RestError('Fail to refresh token: ' + resText, 'Unknown', res.status, resText, res);
+                let e = new RestError('Fail to refresh token: ' + resText, 'Unknown', resText, res);
                 this.emit(EventRefreshError, e);
                 throw e;
             }
@@ -300,18 +334,18 @@ function isJsonRes(res: Response) {
 
 class RestError extends Error {
     code: string;
-    httpStatus: number;
     detail: any;    // http response json or text
     rawRes: any;    // The raw http response
 
-    constructor(message: string, code: string, httpStatus: number, detail?, raw?) {
+    constructor(message: string, code: string, detail?, raw?: Response) {
         super(message);
         this.code = code;
-        this.httpStatus = httpStatus;
         this.detail = detail;
         this.rawRes = raw;
     }
 }
+
+const ErrorRateExceeded = 'CMN-301';
 
 interface ServiceOptions {
     server?: string;
@@ -319,6 +353,7 @@ interface ServiceOptions {
     appSecret: string;
     /** Default TokenStore is MemoryTokenStore */
     tokenStore?: TokenStore;
+    handleRateLimit?: boolean;
 }
 
 

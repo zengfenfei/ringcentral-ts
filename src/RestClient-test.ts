@@ -8,9 +8,9 @@ let client = new RestClient(config.app);
 
 before(() => {
     return client.restoreToken(new FileTokenStore(config.tokenCacheFile)).then(() => {
-        console.log('Restore token success')
+        console.log('Using restored token.');
     }, e => {
-        console.log('>>> Fail to restore token', e);
+        console.log('Get new token');
         return client.auth(config.user);
     });
 });
@@ -139,10 +139,11 @@ describe("429 handling", () => {
     it('Check if requests in 429 state will postpone the recovering time.', async () => {
         while (true) {
             try {
-                let res = await client.get("/account/~/extension/~/answering-rule/");
-                console.log('success', res.headers);
+                setTimeout(() => client.get("/account/~/extension/"), 5 * 1000);
+                let res = await client.get("/account/~/extension/");
+                console.log('success rate-remaining', res.headers.get('x-rate-limit-remaining'));
             } catch (e) {
-                console.error('fail', e.rawRes.headers);
+                console.error('fail', e.code, e.message);
             }
         }
     });
