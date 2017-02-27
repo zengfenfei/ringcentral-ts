@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import delay from './delay';
 import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
 import Token from './Token';
 import FileTokenStore from './FileTokenStore';
@@ -137,14 +138,31 @@ describe("Auth", () => {
 describe("429 handling", () => {
 
     it('Check if requests in 429 state will postpone the recovering time.', async () => {
-        while (true) {
+        let startTime = Date.now();
+        let reqCount = 0;
+        let minutesElapsed = 0;
+        while (minutesElapsed < 30) {
             try {
-                setTimeout(() => client.get("/account/~/extension/"), 5 * 1000);
-                let res = await client.get("/account/~/extension/");
-                console.log('success rate-remaining', res.headers.get('x-rate-limit-remaining'));
+                let n = 8;
+                await sendRequests(n);
+                reqCount += n;
+                minutesElapsed = (Date.now() - startTime) / 1000 / 60;
+                console.log('Requests sent per minute:', reqCount / minutesElapsed);
             } catch (e) {
-                console.error('fail', e.code, e.message);
+                console.error('fail', e);
             }
+        }
+
+        // With throttling: 30q/s, Without throttling: 17q/s
+
+        async function sendRequests(n: number) {
+            client.get('/account/~/extension/');
+            await delay(2 * 1000);
+            let a = [];
+            for (let i = 0; i < n - 1; i++) {
+                a.push(client.get('/account/~/extension/'));
+            }
+            return await Promise.all(a);
         }
     });
 
