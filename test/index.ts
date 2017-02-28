@@ -1,4 +1,5 @@
 import '../src/RestClient-test';
+import '../src/Subscription-test';
 import { expect } from "chai";
 import { createReadStream } from "fs";
 import "../service-test";
