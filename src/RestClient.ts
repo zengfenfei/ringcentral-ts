@@ -67,6 +67,9 @@ export default class RestClient extends EventEmitter {
         }
         await this.tokenStore.restore();
         let token = this.getToken();
+        if (!token) {
+            throw new Error('Token not exists, fail to restore.');
+        }
         if (token.expired()) {
             if (token.refreshTokenExpired()) {
                 this.tokenStore.clear();

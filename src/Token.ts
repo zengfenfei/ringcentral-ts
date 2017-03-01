@@ -36,38 +36,11 @@ export default class Token {
 }
 
 export interface TokenStore {
-    // Fetch token data from redis, dababase, or other places
+    // Fetch token data from localStorage, redis, dababase, or other places
     restore(): Promise<void>;
     save(data: Token);
     get(): Token;
     clear(): void;
-}
-
-export class WebTokenStore implements TokenStore {
-    key: string;
-    store: Storage;
-
-    constructor(key: string, store: Storage) {
-        this.key = key;
-        this.store = store;
-    }
-
-    save(data: Token) {
-        this.store[this.key] = JSON.stringify(data);
-    }
-    get(): Token {
-        let data = localStorage[this.key];
-        if (data) {
-            let json = JSON.parse(data);
-            return new Token(json);
-        }
-    }
-    async clear() {
-        this.store.removeItem(this.key);
-    }
-
-    async restore(): Promise<void> {
-    }
 }
 
 export class MemoryTokenStore implements TokenStore {
@@ -86,8 +59,5 @@ export class MemoryTokenStore implements TokenStore {
     }
 
     async restore(): Promise<void> {
-        if (!this.token) {
-            throw new Error('Token not exist in memory.');
-        }
     }
 }

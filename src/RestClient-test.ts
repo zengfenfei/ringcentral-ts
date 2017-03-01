@@ -11,7 +11,7 @@ before(() => {
     return client.restoreToken(new FileTokenStore(config.tokenCacheFile)).then(() => {
         console.log('Using restored token.');
     }, e => {
-        console.log('Get new token');
+        console.log('Fail to get existed token, get new one', e);
         return client.auth(config.user);
     });
 });
