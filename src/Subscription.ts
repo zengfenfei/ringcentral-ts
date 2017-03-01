@@ -49,8 +49,8 @@ export default class Subscription extends EventEmitter {
             clearTimeout(this.refreshTimer);
             this.refreshTimer = null;
         }
-        this.pubnub.unsubscribeAll();
-        this.pubnub.stop();
+        this.pubnub.removeAllListeners();
+        this.pubnub.destroy();
         this.pubnub = null;
     }
 
