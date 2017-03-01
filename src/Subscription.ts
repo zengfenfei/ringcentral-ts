@@ -73,7 +73,7 @@ export default class Subscription extends EventEmitter {
                     keyLength: 128,
                     mode: 'ecb'
                 });
-                this.emit('notification', decrypted);
+                this.emit('message', decrypted);
             },
             status: status => {
                 /*
@@ -104,6 +104,10 @@ export default class Subscription extends EventEmitter {
         pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
         this.pubnub = pubnub;
         this.subscriptionUpdated(subscription);
+    }
+
+    onMessage(listener: Function) {
+        this.on('message', listener);
     }
 
     async cancel() {

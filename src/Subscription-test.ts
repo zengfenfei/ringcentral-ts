@@ -18,7 +18,7 @@ describe('Subscription', () => {
 
     it.skip('should receive notifications forever', async () => {
         let sub = new Subscription(restClient);
-        sub.on('notification', msg => {
+        sub.onMessage(msg => {
             console.log('>>>notification', msg.body.telephonyStatus, msg);
         });
         sub.on('error', e => {
@@ -29,7 +29,7 @@ describe('Subscription', () => {
 
     it.skip('should not receive notification after subscription canceled', async () => {
         let sub = new Subscription(restClient);
-        sub.on('notification', msg => {
+        sub.onMessage(msg => {
             console.log('>>>notification', msg.body.telephonyStatus, msg);
         });
         sub.on('error', e => {
