@@ -1,7 +1,7 @@
 import RestClient from './RestClient';
 import Subscription from './Subscription';
 import FileTokenStore from './FileTokenStore';
-import delay from './delay';
+import delay from 'delay.ts';
 import config from '../test/config';
 
 /*

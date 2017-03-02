@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import { format } from 'url';
 import { stringify } from 'querystring';
 import * as fetch from "isomorphic-fetch";
-import delay from './delay';
+import delay from 'delay.ts';
 //import { name as packageName, version as packageVersion } from "./generated/package";
 import Token, { TokenStore, MemoryTokenStore } from "./Token";
 import isKnownReqBodyType from "known-fetch-body";

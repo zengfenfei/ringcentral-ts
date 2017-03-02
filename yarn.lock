@@ -699,6 +699,12 @@ degenerator@~1.0.0:
     escodegen "1.x.x"
     esprima "3.x.x"
 
+delay.ts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/delay.ts/-/delay.ts-1.0.0.tgz#30ba067dbbb1fea82e376318645469564f3965fe"
+  dependencies:
+    "@types/node" "^7.0.5"
+
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"

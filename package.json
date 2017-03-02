@@ -15,6 +15,7 @@
     "@types/chai": "^3.4.35",
     "@types/mocha": "^2.2.39",
     "@types/node": "^7.0.5",
+    "delay.ts": "^1.0.0",
     "form-data": "^2.1.2",
     "fs-promise": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",

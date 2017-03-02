@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import delay from './delay';
+import delay from 'delay.ts';
 import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
 import Token from './Token';
 import FileTokenStore from './FileTokenStore';
