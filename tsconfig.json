@@ -7,8 +7,7 @@
     },
     "files": [
         "src/Client.ts",
-        "test/index.ts",
-        "typings/index.d.ts"
+        "test/index.ts"
     ],
     "compileOnSave": true
 }
