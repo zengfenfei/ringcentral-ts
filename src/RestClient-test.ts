@@ -2,18 +2,13 @@ import { expect } from "chai";
 import delay from 'delay.ts';
 import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
 import Token from './Token';
-import FileTokenStore from './FileTokenStore';
 import config from '../test/config';
+import auth from '../test/auth';
 
-let client = new RestClient(config.app);
+let client: RestClient;
 
-before(() => {
-    return client.restoreToken(new FileTokenStore(config.tokenCacheFile)).then(() => {
-        console.log('Using restored token.');
-    }, e => {
-        console.log('Fail to get existed token, get new one', e);
-        return client.auth(config.user);
-    });
+before(async () => {
+    client = await auth;
 });
 
 describe("Auth", () => {

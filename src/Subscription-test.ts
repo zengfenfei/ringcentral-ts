@@ -1,17 +1,17 @@
+import delay from 'delay.ts';
 import RestClient from './RestClient';
 import Subscription from './Subscription';
-import FileTokenStore from './FileTokenStore';
-import delay from 'delay.ts';
 import config from '../test/config';
+import auth from '../test/auth';
 
 /*
  Please run mocha with option --no-exit.
 */
 
-let restClient = new RestClient(config.app);
+let restClient: RestClient;
 
 before(async () => {
-    await restClient.restoreToken(new FileTokenStore(config.tokenCacheFile));
+    restClient = await auth;
 });
 
 describe('Subscription', () => {

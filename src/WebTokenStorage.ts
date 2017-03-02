@@ -3,7 +3,7 @@ import Token, { TokenStore } from './Token';
 /**
  * Store token in localStorage or sessionStorage
  */
-export class WebTokenStore implements TokenStore {
+export default class WebTokenStore implements TokenStore {
     key: string;
     store: Storage;
 
