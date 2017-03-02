@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 
-module.exports = [{
+module.exports = [/*{
     entry: "./build/src/Client.js",
     output: {
         path: "./build",
@@ -23,8 +23,8 @@ module.exports = [{
             { test: /\.css$/, loader: "style!css" }
         ]
     }
-}, {
-        entry: "./build/src/test/tests.js",
+}, */{
+        entry: "./build/test/index.js",
         output: {
             path: "./build",
             filename: "tests.js"

@@ -2,8 +2,8 @@ import '../src/RestClient-test';
 import '../src/Subscription-test';
 import { expect } from "chai";
 import { createReadStream } from "fs";
-import "../service-test";
 
+/*
 let config: any;
 let client: Client;
 
@@ -151,7 +151,7 @@ describe("post", () => {
         });
     });
 });
-
+*/
 function shouldBePagingResult(list) {
     expect(list).to.has.keys(["navigation", "paging", "records"]);
 }

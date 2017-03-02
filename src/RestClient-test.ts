@@ -132,7 +132,7 @@ describe("Auth", () => {
 
 describe("429 handling", () => {
 
-    it('Check if requests in 429 state will postpone the recovering time.', async () => {
+    it.skip('Check if requests in 429 state will postpone the recovering time.', async () => {
         let startTime = Date.now();
         let reqCount = 0;
         let minutesElapsed = 0;
