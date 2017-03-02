@@ -24,12 +24,19 @@ module.exports = [/*{
         ]
     }
 }, */{
-        entry: "./build/test/index.js",
+        entry:[ "babel-polyfill", "./build/test/index.js"],
         output: {
             path: "./build",
             filename: "tests.js"
         },
-        externals: {
+        module: {
+            loaders: [
+                {
+                    test: /\.js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    loader: 'babel-loader?presets[]=es2015'
+                }
+            ]
         },
         node: {
             fs: "empty"
