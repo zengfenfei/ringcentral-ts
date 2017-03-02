@@ -13,11 +13,11 @@
   <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
 
   <script>
-    mocha.setup('bdd')
+    mocha.setup('bdd');
+    mocha.timeout(0);
   </script>
   <script src="../build/tests.js"></script>
   <script>
-    mocha.timeout(0);
     mocha.checkLeaks();
     mocha.run();
   </script>
