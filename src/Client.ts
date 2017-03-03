@@ -1,11 +1,16 @@
-import Service, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ServiceOptions } from './RestClient';
-import { MemoryTokenStore } from './Token';
+import restClient, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ServiceOptions } from './RestClient';
+import Account from './paths/Account';
+import ClientInfo from './paths/ClientInfo';
+import Dictionary from './paths/Dictionary';
+import NumberParser from './paths/NumberParser';
+import NumberPool from './paths/Subscription';
+import Subscription from './paths/Subscription';
 
 export default class Client {
-    service: Service;
+    rest: restClient;
 
     constructor(opts: ServiceOptions) {
-        this.service = new Service(opts);
+        this.rest = new restClient(opts);
     }
 
     /** Ttl: time to live in seconds. */
@@ -22,30 +27,42 @@ export default class Client {
         /** List of API permissions to be used with access token (see [Application Permissions](https://developer.ringcentral.com/api-docs/latest/APIPermissions.html)). Can be omitted when requesting all permissions defined during the application registration phase */
         scope?: string[]
     }): Promise<void> {
-        return this.service.auth(opts);
+        return this.rest.auth(opts);
     }
 
     logout(): Promise<void> {
-        return this.service.logout();
+        return this.rest.logout();
     }
-    /*
-        account(id?: string): Account {
-            return new Account(null, id, this.service);
-        }
 
-        clientInfo(): ClientInfo {
-            return new ClientInfo(null, null, this.service);
-        }
 
-        numberPool(): NumberPool {
-            return new NumberPool(null, null, this.service);
-        }
-    */
+    account(id?: string): Account {
+        return new Account(null, id, this.rest);
+    }
+
+    clientInfo(id?: string): ClientInfo {
+        return new ClientInfo(null, id, this.rest);
+    }
+
+    dictionary(id?: string): Dictionary {
+        return new Dictionary(null, id, this.rest);
+    }
+
+    numberParser(id?: string): NumberParser {
+        return new NumberParser(null, id, this.rest);
+    }
+
+    numberPool(id?: string): NumberPool {
+        return new NumberPool(null, id, this.rest);
+    }
+
+    subscription(id?: string): Subscription {
+        return new Subscription(null, id, this.rest);
+    }
 }
 
 export {
     Client, // For commonjs
-    MemoryTokenStore,
+
     SERVER_PRODUCTION,
     SERVER_SANDBOX,
     SERVER_VERSION
