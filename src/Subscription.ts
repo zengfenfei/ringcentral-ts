@@ -84,7 +84,7 @@ export default class Subscription extends EventEmitter {
                     Good response:
                     {   category: 'PNConnectedCategory',
                         operation: 'PNSubscribeOperation'... }
-    
+
                     Wrong subscribeKey:
                     {   error: true,
                         operation: 'PNSubscribeOperation',
@@ -145,4 +145,4 @@ const deliveryMode = { transportType: 'PubNub', encryption: true };
 // In ms
 const refreshHandicap = 30 * 1000;
 // In seconds
-//export const MAX_LIFETIME = 604800;
+// export const MAX_LIFETIME = 604800;

@@ -3,7 +3,7 @@ import { format } from 'url';
 import { stringify } from 'querystring';
 import * as fetch from 'isomorphic-fetch';
 import delay from 'delay.ts';
-//import { name as packageName, version as packageVersion } from './generated/package';
+/*import { name as packageName, version as packageVersion } from './generated/package';*/
 import Token, { TokenStore, MemoryTokenStore } from './Token';
 import isKnownReqBodyType from 'known-fetch-body';
 
@@ -314,7 +314,7 @@ export default class RestClient extends EventEmitter {
                     resJson.error || resJson.errorCode,
                     resJson,
                     res);
-                if (e.code == 'invalid_grant') {    // Token is invalid, clear them.
+                if (e.code === 'invalid_grant') {    // Token is invalid, clear them.
                     this.tokenStore.clear();
                 }
                 this.emit(EventRefreshError, e);

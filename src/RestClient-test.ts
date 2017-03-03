@@ -124,7 +124,7 @@ describe('Auth', () => {
             throw new Error('Refresh token should not success with wrong refresh token.');
         }, e => {
             expect(e.code).to.eq('invalid_grant');
-            client.tokenStore.save(token)
+            client.tokenStore.save(token);
         });
     });
 

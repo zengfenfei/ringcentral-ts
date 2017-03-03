@@ -69,7 +69,7 @@ describe('Subscription', () => {
 
 });
 
-/* 
+/*
 errorCode: 'TokenInvalid',
 message: 'Access token corrupted'
 
