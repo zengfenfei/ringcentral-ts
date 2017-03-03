@@ -19,5 +19,5 @@ export default client.restoreToken(store).catch(e => {
 }).then(() => client);
 
 function inNode() {
-    return typeof process != 'undefined' && process.versions && process.versions.node;
+    return typeof process !== 'undefined' && process.versions && process.versions.node;
 }

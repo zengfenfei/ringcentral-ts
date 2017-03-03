@@ -1,6 +1,6 @@
-import { expect } from "chai";
+import { expect } from 'chai';
 import delay from 'delay.ts';
-import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from "./RestClient";
+import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from './RestClient';
 import Token from './Token';
 import config from '../test/config';
 import auth from '../test/auth';
@@ -11,30 +11,30 @@ before(async () => {
     client = await auth;
 });
 
-describe("Auth", () => {
+describe('Auth', () => {
 
-    it("fail login, empty credential", () => {
-        return client.auth({ username: "", password: "" }).then(() => {
-            throw "Should not login";
+    it('fail login, empty credential', () => {
+        return client.auth({ username: '', password: '' }).then(() => {
+            throw 'Should not login';
         }, e => {
-            expect(e.code).to.equal("invalid_request");
+            expect(e.code).to.equal('invalid_request');
         });
     });
 
-    it("fail login, wrong credential", () => {
-        return client.auth({ username: "xxx", password: "xxx" }).then(() => {
-            throw "Should not login";
+    it('fail login, wrong credential', () => {
+        return client.auth({ username: 'xxx', password: 'xxx' }).then(() => {
+            throw 'Should not login';
         }, e => {
-            expect(e.code).to.equal("invalid_grant");
+            expect(e.code).to.equal('invalid_grant');
         });
     });
 
-    it("fail login, wrong appKey/appSecret", () => {
-        let service2 = new RestClient({ appKey: "xx", appSecret: "xx" });
+    it('fail login, wrong appKey/appSecret', () => {
+        let service2 = new RestClient({ appKey: 'xx', appSecret: 'xx' });
         return service2.auth(config.user).then(() => {
-            throw "Should not login:";
+            throw 'Should not login:';
         }, e => {
-            expect(e.code).to.equal("invalid_client");
+            expect(e.code).to.equal('invalid_client');
         });
     });
 
@@ -61,28 +61,28 @@ describe("Auth", () => {
         client.tokenStore.save(token);
     });
 
-    let NotLoginError = "NoToken";
-    it("Call api before login", () => {
+    let NotLoginError = 'NoToken';
+    it('Call api before login', () => {
         return client.logout().then(() => {
-            return client.get("/some-api");
+            return client.get('/some-api');
         }).then(() => {
-            throw new Error("Should not success.");
+            throw new Error('Should not success.');
         }, e => {
             expect(e.code).to.eq(NotLoginError);
         });
     });
 
-    it("Refresh token before login", () => {
+    it('Refresh token before login', () => {
         return client.logout().then(() => {
             return client.refreshToken();
         }).then(() => {
-            throw new Error("Should not success.");
+            throw new Error('Should not success.');
         }, e => {
             expect(e.code).to.eq(NotLoginError);
         });
     });
 
-    it("login with right credential", () => {
+    it('login with right credential', () => {
         return client.auth(config.user).then(() => {
             let token = client.tokenStore.get();
             expect(token.expired()).to.be.false;
@@ -90,7 +90,7 @@ describe("Auth", () => {
         });
     });
 
-    /*it("Login will try to use cached token", () => {
+    /*it('Login will try to use cached token', () => {
         let cachedAccessToken;
         let service2 = new RestClient(.app);
         return service.login(authConfig.user).then(() => {
@@ -102,20 +102,20 @@ describe("Auth", () => {
         });
     });*/
 
-    it("Allow only one refresh token request at the same time.", () => {
+    it('Allow only one refresh token request at the same time.', () => {
         let p1 = client.refreshToken();
         let p2 = client.refreshToken();
         expect(p1).to.eq(p2);
         return p1;
     });
 
-    it("should get different access token after refresh.", async () => {
+    it('should get different access token after refresh.', async () => {
         let token = client.getToken();
         await client.refreshToken();
         expect(token.accessToken).not.eq(client.getToken().accessToken);
     });
 
-    it("Refresh token with wrong refreshToken", () => {
+    it('Refresh token with wrong refreshToken', () => {
         let token = client.getToken();
         let testToken = new Token(token);
         testToken.refreshToken = 'xxxxx';
@@ -130,7 +130,7 @@ describe("Auth", () => {
 
 });
 
-describe("429 handling", () => {
+describe('429 handling', () => {
 
     it.skip('Check if requests in 429 state will postpone the recovering time.', async () => {
         let startTime = Date.now();

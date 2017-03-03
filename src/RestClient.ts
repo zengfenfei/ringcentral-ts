@@ -1,30 +1,30 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events';
 import { format } from 'url';
 import { stringify } from 'querystring';
-import * as fetch from "isomorphic-fetch";
+import * as fetch from 'isomorphic-fetch';
 import delay from 'delay.ts';
-//import { name as packageName, version as packageVersion } from "./generated/package";
-import Token, { TokenStore, MemoryTokenStore } from "./Token";
-import isKnownReqBodyType from "known-fetch-body";
+//import { name as packageName, version as packageVersion } from './generated/package';
+import Token, { TokenStore, MemoryTokenStore } from './Token';
+import isKnownReqBodyType from 'known-fetch-body';
 
-const SERVER_PRODUCTION = "https://platform.ringcentral.com";
-const SERVER_SANDBOX = "https://platform.devtest.ringcentral.com";
+const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
+const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
 
-const SERVER_VERSION = "v1.0";
+const SERVER_VERSION = 'v1.0';
 
-const TOKEN_URL = "/restapi/oauth/token";
-const REVOKE_URL = "/restapi/oauth/revoke";
+const TOKEN_URL = '/restapi/oauth/token';
+const REVOKE_URL = '/restapi/oauth/revoke';
 
 // Auth events
-const EventLoginStart = "LoginStart";
-const EventLoginSuccess = "LoginSuccess";
-const EventLoginError = "LoginError";
-const EventRefreshStart = "RefreshStart";
-const EventRefreshSuccess = "RefreshSuccess";
-const EventRefreshError = "RefreshError";
-const EventLogoutStart = "LogoutStart";
-const EventLogoutSuccess = "LogoutSuccess";
-const EventLogoutError = "LogoutError";
+const EventLoginStart = 'LoginStart';
+const EventLoginSuccess = 'LoginSuccess';
+const EventLoginError = 'LoginError';
+const EventRefreshStart = 'RefreshStart';
+const EventRefreshSuccess = 'RefreshSuccess';
+const EventRefreshError = 'RefreshError';
+const EventLogoutStart = 'LogoutStart';
+const EventLogoutSuccess = 'LogoutSuccess';
+const EventLogoutError = 'LogoutError';
 
 let pkg = require('../package.json');
 
@@ -42,7 +42,7 @@ export default class RestClient extends EventEmitter {
     tokenStore: TokenStore;
     private refreshingToken: Promise<void>;
 
-    agents = [pkg.name + "/" + pkg.version];
+    agents = [pkg.name + '/' + pkg.version];
 
     constructor(opts: ServiceOptions) {
         super();
@@ -54,7 +54,7 @@ export default class RestClient extends EventEmitter {
     }
 
     private basicAuth(): string {
-        return new Buffer(this.appKey + ":" + this.appSecret).toString("base64");
+        return new Buffer(this.appKey + ':' + this.appSecret).toString('base64');
     }
 
     getToken(): Token {
@@ -88,17 +88,17 @@ export default class RestClient extends EventEmitter {
     }
 
     delete(url: string, query?: {}): Promise<Response> {
-        return this.call(url, query, { method: "DELETE" });
+        return this.call(url, query, { method: 'DELETE' });
     }
 
     /** Body can be Blob, FormData, URLSearchParams, String, Buffer or stream.Readable, any other type, plain object or instance of class will stringified as json. */
     post(url: string, body: any, query?: {}): Promise<Response> {
-        return this.call(url, query, { method: "POST", body: body });
+        return this.call(url, query, { method: 'POST', body: body });
     }
 
     /** Type of body is the same as post. */
     put(url: string, body: any, query?: {}): Promise<Response> {
-        return this.call(url, query, { method: "PUT", body: body });
+        return this.call(url, query, { method: 'PUT', body: body });
     }
 
     // Handle rate limit.
@@ -120,7 +120,7 @@ export default class RestClient extends EventEmitter {
     private async sendApiCall(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
         opts = opts || {};
         opts.method = opts.method || 'GET';
-        let url = format({ pathname: this.server + "/restapi/" + SERVER_VERSION + endpoint, query });
+        let url = format({ pathname: this.server + '/restapi/' + SERVER_VERSION + endpoint, query });
 
         if (this.recoverTime) {
             let timeLeft = this.recoverTime - Date.now();
@@ -134,13 +134,13 @@ export default class RestClient extends EventEmitter {
 
         let token = this.getToken();
         if (!token) {
-            let e = new Error("Cannot perform api calls without login.");
-            e['code'] = "NoToken";
+            let e = new Error('Cannot perform api calls without login.');
+            e['code'] = 'NoToken';
             throw e;
         }
         if (token.expired()) {
             if (token.refreshTokenExpired()) {
-                let e = new Error("AccessToken and refreshToken have expired.");
+                let e = new Error('AccessToken and refreshToken have expired.');
                 e['code'] = 'TokenExpired';
                 throw e;
             } else {
@@ -148,12 +148,12 @@ export default class RestClient extends EventEmitter {
             }
         }
         let headers = opts.headers = opts.headers || {};
-        headers["Authorization"] = token.type + " " + token.accessToken;
-        headers["Client-Id"] = this.appKey;
-        headers["X-User-Agent"] = this.agents.join(' ');
+        headers['Authorization'] = token.type + ' ' + token.accessToken;
+        headers['Client-Id'] = this.appKey;
+        headers['X-User-Agent'] = this.agents.join(' ');
         if (!isKnownReqBodyType(opts.body)) {
             opts.body = JSON.stringify(opts.body);
-            headers["content-type"] = "application/json";
+            headers['content-type'] = 'application/json';
         }
         let res = await fetch(url, opts);
         if (!res.ok) {
@@ -182,22 +182,22 @@ export default class RestClient extends EventEmitter {
     async auth(opts: { username: string; password: string; extension?: string, accessTokenTtl?: number, refreshTokenTtl?: number, scope?: string[] }): Promise<void> {
         let tokenData = this.tokenStore.get();
         let body = {
-            grant_type: "password",
+            grant_type: 'password',
             username: opts.username,
             extension: opts.extension,
             password: opts.password,
             access_token_ttl: opts.accessTokenTtl,
             refresh_token_ttl: opts.refreshTokenTtl,
-            scope: opts.scope && opts.scope.join(" ")
+            scope: opts.scope && opts.scope.join(' ')
         };
         this.emit(EventLoginStart);
         let startTime = Date.now();
         let res = await fetch(this.server + TOKEN_URL, {
             body: stringify(body),
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Basic " + this.basicAuth()
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + this.basicAuth()
             }
         });
         if (res.ok) {
@@ -229,10 +229,10 @@ export default class RestClient extends EventEmitter {
         }
         this.emit(EventLogoutStart);
         let res = await fetch(this.server + REVOKE_URL, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Basic " + this.basicAuth()
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + this.basicAuth()
             },
             body: stringify({ token: token.accessToken })
         });
@@ -265,14 +265,14 @@ export default class RestClient extends EventEmitter {
 
         let token = this.getToken();
         if (!token) {
-            let e = new Error("Cannot refresh token without existing one.");
+            let e = new Error('Cannot refresh token without existing one.');
             e['code'] = 'NoToken';
             return Promise.reject(e);
         }
 
         this.emit(EventRefreshStart);
         if (token.refreshTokenExpired()) {
-            let e = new Error("Cannot refresh token, existed refreshToken has expired.");
+            let e = new Error('Cannot refresh token, existed refreshToken has expired.');
             e['code'] = 'RefreshTokenExpired';
             this.emit(EventRefreshError, e);
             return Promise.reject(e);
@@ -291,16 +291,16 @@ export default class RestClient extends EventEmitter {
         let token = this.getToken();
         let body = {
             refresh_token: token.refreshToken,
-            grant_type: "refresh_token",
+            grant_type: 'refresh_token',
             endpoint_id: token.endpointId
         };
         let startTime = Date.now();
         let res = await fetch(this.server + TOKEN_URL, {
-            method: "POST",
+            method: 'POST',
             body: stringify(body),
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Basic " + this.basicAuth()
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + this.basicAuth()
             }
         });
         if (res.ok) {
@@ -331,8 +331,8 @@ export default class RestClient extends EventEmitter {
 }
 
 function isJsonRes(res: Response) {
-    let ct = res.headers.get("content-type");
-    return ct && ct.match("application/json");
+    let ct = res.headers.get('content-type');
+    return ct && ct.match('application/json');
 }
 
 class RestError extends Error {

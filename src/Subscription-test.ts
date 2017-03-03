@@ -85,7 +85,7 @@ async function testRefreshExpiredSubscription() {
         setTimeout(() => {
             console.log('The subscription should expire now.');
             restClient.get('/subscription/' + sub.id).then(res => res.json()).then(subscription => {
-                console.log("get subscription", subscription);
+                console.log('get subscription', subscription);
             });
             sub.refresh().catch(e => {
                 console.error('Refresh error', e);

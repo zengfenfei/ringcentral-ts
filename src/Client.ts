@@ -1,6 +1,5 @@
-import "es6-promise";
-import Service, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ServiceOptions } from "./RestClient";
-import { MemoryTokenStore } from "./Token";
+import Service, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ServiceOptions } from './RestClient';
+import { MemoryTokenStore } from './Token';
 
 export default class Client {
     service: Service;
@@ -11,7 +10,7 @@ export default class Client {
 
     /** Ttl: time to live in seconds. */
     login(opts: {
-        /** Phone number linked to account or extension in account in E.164 format with or without leading "+" sign */
+        /** Phone number linked to account or extension in account in E.164 format with or without leading '+' sign */
         username: string;
         password: string;
         /** Extension short number. If company number is specified as a username, and extension is not specified, the server will attempt to authenticate client as main company administrator */
@@ -33,11 +32,11 @@ export default class Client {
         account(id?: string): Account {
             return new Account(null, id, this.service);
         }
-    
+
         clientInfo(): ClientInfo {
             return new ClientInfo(null, null, this.service);
         }
-    
+
         numberPool(): NumberPool {
             return new NumberPool(null, null, this.service);
         }

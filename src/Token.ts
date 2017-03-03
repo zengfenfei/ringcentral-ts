@@ -7,14 +7,14 @@ export default class Token {
             }
             return;
         }
-        this.accessToken = data["access_token"];
-        this.type = data["token_type"];
-        this.expiresIn = Date.now() + data["expires_in"] * 1000 - timeSpent;
-        this.refreshToken = data["refresh_token"];
-        this.refreshTokenExpiresIn = Date.now() + data["refresh_token_expires_in"] * 1000 - timeSpent;
-        this.scope = data["scope"].split(" ");
-        this.ownerId = data["owner_id"];
-        this.endpointId = data["endpoint_id"];
+        this.accessToken = data['access_token'];
+        this.type = data['token_type'];
+        this.expiresIn = Date.now() + data['expires_in'] * 1000 - timeSpent;
+        this.refreshToken = data['refresh_token'];
+        this.refreshTokenExpiresIn = Date.now() + data['refresh_token_expires_in'] * 1000 - timeSpent;
+        this.scope = data['scope'].split(' ');
+        this.ownerId = data['owner_id'];
+        this.endpointId = data['endpoint_id'];
     }
 
     accessToken: string;
