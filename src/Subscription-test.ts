@@ -11,7 +11,7 @@ import auth from '../test/auth';
 let restClient: RestClient;
 
 before(async () => {
-    restClient = await auth;
+    restClient = (await auth).rest;
 });
 
 describe('Subscription', () => {

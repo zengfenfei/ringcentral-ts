@@ -44,7 +44,7 @@ export default class RestClient extends EventEmitter {
 
     agents = [pkg.name + '/' + pkg.version];
 
-    constructor(opts: ServiceOptions) {
+    constructor(opts: ClientOptions) {
         super();
         this.server = opts.server || SERVER_PRODUCTION;
         this.appKey = opts.appKey;
@@ -350,7 +350,7 @@ class RestError extends Error {
 
 const ErrorRateExceeded = 'CMN-301';
 
-interface ServiceOptions {
+interface ClientOptions {
     server?: string;
     appKey: string;
     appSecret: string;
@@ -375,5 +375,5 @@ export {
     EventLogoutSuccess,
     EventLogoutError,
 
-    ServiceOptions
+    ClientOptions
 }

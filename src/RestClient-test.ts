@@ -8,7 +8,7 @@ import auth from '../test/auth';
 let client: RestClient;
 
 before(async () => {
-    client = await auth;
+    client = (await auth).rest;
 });
 
 describe('Auth', () => {

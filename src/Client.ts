@@ -1,4 +1,5 @@
-import restClient, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ServiceOptions } from './RestClient';
+import restClient, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ClientOptions } from './RestClient';
+import { TokenStore } from './Token';
 import Account from './paths/Account';
 import ClientInfo from './paths/ClientInfo';
 import Dictionary from './paths/Dictionary';
@@ -9,12 +10,12 @@ import Subscription from './paths/Subscription';
 export default class Client {
     rest: restClient;
 
-    constructor(opts: ServiceOptions) {
+    constructor(opts: ClientOptions) {
         this.rest = new restClient(opts);
     }
 
     /** Ttl: time to live in seconds. */
-    login(opts: {
+    auth(opts: {
         /** Phone number linked to account or extension in account in E.164 format with or without leading '+' sign */
         username: string;
         password: string;
@@ -28,6 +29,10 @@ export default class Client {
         scope?: string[]
     }): Promise<void> {
         return this.rest.auth(opts);
+    }
+
+    restoreToken(tokenStore?: TokenStore): Promise<void> {
+        return this.rest.restoreToken();
     }
 
     logout(): Promise<void> {

@@ -1,10 +1,10 @@
-import RestClient from '../src/RestClient';
+import Client from '../src/Client';
 import config from './config';
 import { TokenStore } from '../src/Token';
 import FileTokenStore from '../src/FileTokenStore';
 import WebTokenStorage from '../src/WebTokenStorage';
 
-let client = new RestClient(config.app);
+let client = new Client(config.app);
 let store: TokenStore;
 
 if (inNode()) {

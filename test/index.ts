@@ -1,24 +1,23 @@
-import '../src/RestClient-test';
-import '../src/Subscription-test';
+import testConfig from './config';
+import auth from './auth';
+import Client from '../src/Client';
 import { expect } from 'chai';
 import { createReadStream } from 'fs';
+import '../src/Client-test';
+import '../src/RestClient-test';
+import '../src/Subscription-test';
+import './paths-test';
 
-/*
-let config: any;
 let client: Client;
+const inNode = !!createReadStream;
 
 let aYearAgo = new Date();
 aYearAgo.setFullYear(aYearAgo.getFullYear() - 1);
 
 before(function () {
     // runs before all tests in this block
-    return testConfig.then(conf => {
-        config = conf;
-        client = new Client(config.app);
-    });
+    return auth.then(c => client = c);
 });
-
-beforeEach(() => client.login(config.user));
 
 describe('Account', function () {
 
@@ -30,7 +29,8 @@ describe('Account', function () {
 
     it('Get Account info with id not exists should return 404', function () {
         return client.account('accountIdNotExist').get().catch(function (e) {
-            expect(e.errorCode).to.equal('InvalidParameter');
+            expect(e.apiResponse.response().status).to.eq(404);
+            expect(e.apiResponse.json().errorCode).to.equal('InvalidParameter');
         });
     });
 });
@@ -75,12 +75,16 @@ describe('Binary response', function () {
 
     it('Get recording content', function () {
         let ext = client.account().extension();
-        return ext.callLog().list({ withRecording: true, dateFrom: aYearAgo.toISOString() }).then(function (callLogs) {
+        return ext.callLog().list({ dateFrom: aYearAgo.toISOString(), withRecording: true }).then(function (callLogs) {
             if (callLogs.records.length <= 0) {
-                throw new Error('No recordings found.');
+                // throw new Error('No recordings found.');
+                return;
             }
             return callLogs.records[0].recording;
         }).then(function (recording) {
+            if (!recording) {
+                return;
+            }
             return client.account().recording(recording.id + '').content().get().then(content => {
                 expect(content.headers.get('content-type')).to.has.string('audio/mpeg');
             });
@@ -91,9 +95,13 @@ describe('Binary response', function () {
 
 let imgPath = __dirname + '/res/banner_index_logged.png';
 describe('Binary request', function () {
-    if (!createReadStream) {
-        return;
-    }
+
+    before('Only run in node', function () {
+        if (!inNode) {
+            this.skip();
+        }
+    });
+
     it('Put profile image, input binary, response is empty.', function () {
         return client.account().extension().profileImage().put(createReadStream(imgPath));
     });
@@ -101,6 +109,11 @@ describe('Binary request', function () {
     it('Post profile image, input binary, response is empty.', function () {
         return client.account().extension().profileImage().post(createReadStream(imgPath));
     });
+
+    it('gets current profile image', function () {
+        return client.account().extension().profileImage().get();
+    });
+
 });
 
 describe('Fax', function () {
@@ -118,40 +131,47 @@ describe('Fax', function () {
         return client.account().extension().fax().post({}, []).then(msg => {
             throw new Error('should not send.');
         }, e => {
-            expect(e.errorCode).to.eq('InvalidParameter');
+            expect(e.apiResponse.json().errorCode).to.eq('InvalidParameter');
         });
     });
 });
 
 describe('Call Log', () => {
     it('Get call log', () => {
-        return client.account().extension().callLog().list({ perPage: 2, dateFrom: aYearAgo.toISOString() }).then(callLogs => {
+        return client.account().extension().callLog().list({ dateFrom: aYearAgo.toISOString(), perPage: 2 }).then(callLogs => {
             shouldBePagingResult(callLogs);
+            if (callLogs.records.length < 1) {
+                return console.warn('No call log items');
+            }
             expect(callLogs.records[0]).to.has.keys(['uri', 'id', 'sessionId', 'startTime', 'duration', 'type', 'direction', 'action', 'result', 'to', 'from']);
         });
     });
 
-    it('delete today's call log', () => {
+    it('delete today\'s call log', () => {
         return client.account().extension().callLog().delete();
     });
 });
 
 describe('post', () => {
     it('send sms, post plain object', () => {
-        return client.account().extension().sms().post({ to: [{ phoneNumber: '+16507411615' }], from: { phoneNumber: config.user.username }, text: 'test sms text content.' }).then(sms => {
+        return client.account().extension().sms().post({
+            from: { phoneNumber: '+17322764403' },
+            text: 'test sms text content.',
+            to: [{ phoneNumber: '+16507411615' }],
+        }).then(sms => {
             expect(sms).to.has.keys(['uri', 'id', 'to', 'from', 'type', 'creationTime', 'readStatus', 'priority', 'attachments', 'direction', 'availability', 'subject', 'messageStatus', 'smsSendingAttemptsCount', 'conversationId', 'conversation', 'lastModifiedTime']);
         });
     });
 
     it('send sms, without from', () => {
-        return client.account().extension().sms().post({ to: [{ phoneNumber: '+16507411615' }], text: 'test sms text content.' }).then(sms => {
+        return client.account().extension().sms().post({ text: 'test sms text content.', to: [{ phoneNumber: '+16507411615' }] }).then(sms => {
             throw new Error('should fail');
         }).catch(e => {
-            expect(e.errorCode).to.eq('InvalidParameter');
+            expect(e.apiResponse.json().errorCode).to.eq('InvalidParameter');
         });
     });
 });
-*/
+
 function shouldBePagingResult(list) {
-    expect(list).to.has.keys(['navigation', 'paging', 'records']);
+    expect(list).to.has.keys(['navigation', 'paging', 'records', 'uri']);
 }
