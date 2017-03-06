@@ -15,6 +15,7 @@ export default class WebTokenStore implements TokenStore {
     save(data: Token) {
         this.store[this.key] = JSON.stringify(data);
     }
+
     get(): Token {
         let data = localStorage[this.key];
         if (data) {
@@ -22,10 +23,11 @@ export default class WebTokenStore implements TokenStore {
             return new Token(json);
         }
     }
-    async clear() {
+
+    clear() {
         this.store.removeItem(this.key);
     }
 
-    async restore(): Promise<void> {
+    async restore() {
     }
 }

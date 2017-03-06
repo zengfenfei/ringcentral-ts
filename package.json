@@ -16,7 +16,6 @@
     "@types/node": "^7.0.5",
     "delay.ts": "^1.1.0",
     "form-data": "^2.1.2",
-    "fs-promise": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "known-fetch-body": "^0.1.1",
     "pubnub": "^4.4.4"

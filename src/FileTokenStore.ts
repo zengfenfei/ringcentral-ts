@@ -1,5 +1,5 @@
 import Token, { TokenStore } from './Token';
-import * as fs from 'fs-promise';
+import * as fs from 'fs';
 
 export default class FileTokenStore implements TokenStore {
     file: string;
@@ -9,14 +9,14 @@ export default class FileTokenStore implements TokenStore {
         this.file = file;
     }
 
-    async restore(): Promise<void> {
-        let data = await fs.readFile(this.file);
+    async restore() {
+        let data = fs.readFileSync(this.file);
         this.token = new Token(JSON.parse(data.toString()));
     }
 
     save(data: Token) {
         this.token = data;
-        return fs.writeFileSync(this.file, JSON.stringify(data));
+        fs.writeFileSync(this.file, JSON.stringify(data));
     }
 
     get(): Token {
@@ -24,6 +24,7 @@ export default class FileTokenStore implements TokenStore {
     }
 
     clear() {
-        return fs.unlink(this.file);
+        this.token = null;
+        fs.unlinkSync(this.file);
     }
 }

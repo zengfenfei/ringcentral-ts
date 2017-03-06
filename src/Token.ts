@@ -36,28 +36,42 @@ export default class Token {
 }
 
 export interface TokenStore {
-    // Fetch token data from localStorage, redis, dababase, or other places
+    /**
+     * Fetch token data from localStorage, redis, dababase, or other places
+     */
     restore(): Promise<void>;
-    save(data: Token);
+
+    /**
+     * Will be called every time making an API call. Should sync method
+     */
     get(): Token;
+
+    /**
+     * Should handle error inside the method
+     */
+    save(data: Token): void;
+
+    /**
+     * Should handle error inside the method
+     */
     clear(): void;
 }
 
 export class MemoryTokenStore implements TokenStore {
     token: Token;
 
-    constructor() {
-    }
     save(data: Token) {
         this.token = data;
     }
+
     get(): Token {
         return this.token;
     }
+
     clear() {
         this.token = null;
     }
 
-    async restore(): Promise<void> {
+    async restore() {
     }
 }
