@@ -32,7 +32,7 @@ export default class Client {
     }
 
     restoreToken(tokenStore?: TokenStore): Promise<void> {
-        return this.rest.restoreToken();
+        return this.rest.restoreToken(tokenStore);
     }
 
     logout(): Promise<void> {
