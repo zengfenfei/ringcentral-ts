@@ -7,12 +7,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Test",
             "program": "${workspaceRoot}/node_modules/.bin/_mocha",
             "cwd": "${workspaceRoot}",
             "sourceMaps": true,
             "args": [
-                "${workspaceRoot}/build/src/RestClient-test.js"
+                "${workspaceRoot}/build/test/index.js"
             ],
             "outFiles": [
                 "${workspaceRoot}/build/**/*.js"
