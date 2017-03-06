@@ -29,8 +29,8 @@ describe('Account', function () {
 
     it('Get Account info with id not exists should return 404', function () {
         return client.account('accountIdNotExist').get().catch(function (e) {
-            expect(e.apiResponse.response().status).to.eq(404);
-            expect(e.apiResponse.json().errorCode).to.equal('InvalidParameter');
+            expect(e.rawRes.status).to.eq(404);
+            expect(e.code).to.equal('InvalidParameter');
         });
     });
 });
@@ -131,7 +131,7 @@ describe('Fax', function () {
         return client.account().extension().fax().post({}, []).then(msg => {
             throw new Error('should not send.');
         }, e => {
-            expect(e.apiResponse.json().errorCode).to.eq('InvalidParameter');
+            expect(e.code).to.eq('InvalidParameter');
         });
     });
 });
@@ -167,7 +167,7 @@ describe('post', () => {
         return client.account().extension().sms().post({ text: 'test sms text content.', to: [{ phoneNumber: '+16507411615' }] }).then(sms => {
             throw new Error('should fail');
         }).catch(e => {
-            expect(e.apiResponse.json().errorCode).to.eq('InvalidParameter');
+            expect(e.code).to.eq('InvalidParameter');
         });
     });
 });

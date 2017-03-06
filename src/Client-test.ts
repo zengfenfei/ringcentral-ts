@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import * as RingCentral from "ringcentral";
 import auth from "../test/auth";
 import Client from "./Client";
 
