@@ -11,7 +11,8 @@ export default class FileTokenStore implements TokenStore {
 
     async restore() {
         let data = fs.readFileSync(this.file);
-        this.token = new Token(JSON.parse(data.toString()));
+        this.token = Token.restore(data.toString());
+        return this.token;
     }
 
     save(data: Token) {

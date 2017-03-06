@@ -11,9 +11,9 @@ const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
 const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
 
 const SERVER_VERSION = 'v1.0';
-
-const TOKEN_URL = '/restapi/oauth/token';
-const REVOKE_URL = '/restapi/oauth/revoke';
+const BASE_URL = '/restapi/';
+const TOKEN_URL = BASE_URL + 'oauth/token';
+const REVOKE_URL = BASE_URL + 'oauth/revoke';
 
 // Auth events
 const EventLoginStart = 'LoginStart';
@@ -61,14 +61,16 @@ export default class RestClient extends EventEmitter {
         return this.tokenStore.get();
     }
 
-    async restoreToken(tokenStore?: TokenStore): Promise<void> {
+    // Alternative for auth
+    async restoreToken(ownerInfo?: { username: string, extension?: string }, tokenStore?: TokenStore): Promise<void> {
         if (tokenStore) {
             this.tokenStore = tokenStore;
         }
-        await this.tokenStore.restore();
-        let token = this.getToken();
+        let token = await this.tokenStore.restore();
         if (!token) {
             throw new Error('Token not exists, fail to restore.');
+        } else {
+            token.validateOwner(this.appKey, ownerInfo);
         }
         if (token.expired()) {
             if (token.refreshTokenExpired()) {
@@ -120,7 +122,7 @@ export default class RestClient extends EventEmitter {
     private async sendApiCall(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
         opts = opts || {};
         opts.method = opts.method || 'GET';
-        let url = format({ pathname: this.server + '/restapi/' + SERVER_VERSION + endpoint, query });
+        let url = format({ pathname: this.server + BASE_URL + SERVER_VERSION + endpoint, query });
 
         if (this.recoverTime) {
             let timeLeft = this.recoverTime - Date.now();
@@ -202,7 +204,9 @@ export default class RestClient extends EventEmitter {
         });
         if (res.ok) {
             let resJson = await res.json();
-            this.tokenStore.save(new Token(resJson, Date.now() - startTime));
+            let token = new Token();
+            token.setOwner(this.appKey, opts);
+            this.tokenStore.save(token.update(resJson, Date.now() - startTime));
             this.emit(EventLoginSuccess);
         } else {
             if (isJsonRes(res)) {
@@ -305,7 +309,8 @@ export default class RestClient extends EventEmitter {
         });
         if (res.ok) {
             let resJson = await res.json();
-            this.tokenStore.save(new Token(resJson, Date.now() - startTime));
+            let token = this.getToken();
+            this.tokenStore.save(token.update(resJson, Date.now() - startTime));
             this.emit(EventRefreshSuccess);
         } else {
             if (isJsonRes(res)) {

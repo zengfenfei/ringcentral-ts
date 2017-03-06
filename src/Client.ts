@@ -31,8 +31,8 @@ export default class Client {
         return this.rest.auth(opts);
     }
 
-    restoreToken(tokenStore?: TokenStore): Promise<void> {
-        return this.rest.restoreToken(tokenStore);
+    restoreToken(ownerInfo?: { username: string, extension?: string }, tokenStore?: TokenStore): Promise<void> {
+        return this.rest.restoreToken(ownerInfo, tokenStore);
     }
 
     logout(): Promise<void> {

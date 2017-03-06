@@ -19,8 +19,7 @@ export default class WebTokenStore implements TokenStore {
     get(): Token {
         let data = localStorage[this.key];
         if (data) {
-            let json = JSON.parse(data);
-            return new Token(json);
+            return Token.restore(data);
         }
     }
 
@@ -29,5 +28,6 @@ export default class WebTokenStore implements TokenStore {
     }
 
     async restore() {
+        return this.get();
     }
 }

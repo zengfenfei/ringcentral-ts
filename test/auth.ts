@@ -13,7 +13,7 @@ if (inNode()) {
     store = new WebTokenStorage('ringcentral-ts-test-token', localStorage);
 }
 
-export default client.restoreToken(store).catch(e => {
+export default client.restoreToken(config.user, store).catch(e => {
     console.log('No existed token, getting a new one');
     return client.auth(config.user);
 }).then(() => client);

@@ -129,7 +129,7 @@ describe('PathSegments', function () {
         });
 
         it('service info', function () {
-            return client.account().extension().meeting().serviceInfo().get();
+            return client.account().extension().meeting().serviceInfo().get().catch(e => console.log(e.detail));
         });
 
     });

@@ -48,7 +48,7 @@ describe('Auth', () => {
 
     it('logout with wrong access token', async () => {
         let token = client.getToken();
-        let testToken = new Token(token);
+        let testToken = Token.restore(JSON.stringify(token));
 
         client.tokenStore.save(testToken);
         testToken.accessToken += 'xxxxx';
@@ -117,7 +117,7 @@ describe('Auth', () => {
 
     it('Refresh token with wrong refreshToken', () => {
         let token = client.getToken();
-        let testToken = new Token(token);
+        let testToken = Token.restore(JSON.stringify(token));
         testToken.refreshToken = 'xxxxx';
         client.tokenStore.save(testToken);
         return client.refreshToken().then(() => {
