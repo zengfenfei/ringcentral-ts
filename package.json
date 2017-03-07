@@ -40,5 +40,8 @@
   "private": false,
   "main": "./build/src/Client.js",
   "typings": "./src/Client.ts",
-  "license": "MIT"
+  "license": "MIT",
+  "description": "Javascript/typescript sdk for RingCentral REST API. Refer to http://developer.ringcentral.com/.",
+  "repository": "git@github.com:zengfenfei/ringcentral.ts.git",
+  "author": "Kevin Zeng <zengfenfei@gmail.com>"
 }
