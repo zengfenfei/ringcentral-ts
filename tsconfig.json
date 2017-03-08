@@ -3,10 +3,10 @@
         "outDir": "./build",
         "target": "es6",
         "module": "commonjs",
-        "sourceMap": true
+        "sourceMap": true,
+        "declaration": true
     },
     "files": [
-        "src/Client.ts",
         "test/index.ts"
     ],
     "compileOnSave": true

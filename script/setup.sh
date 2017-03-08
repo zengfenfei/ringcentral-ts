@@ -7,7 +7,3 @@ do
 [ -e $link ] && rm $link
 ln -sf ../$link $link
 done
-
-cd -
-mkdir src/definitions
-mkdir src/paths

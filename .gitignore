@@ -5,3 +5,6 @@ typings/
 
 # Configuration and generated runtime data for test.
 data/
+
+# Generated code
+./src/pkg.ts

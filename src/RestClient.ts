@@ -3,7 +3,7 @@ import { format } from 'url';
 import { stringify } from 'querystring';
 import * as fetch from 'isomorphic-fetch';
 import delay from 'delay.ts';
-/*import { name as packageName, version as packageVersion } from './generated/package';*/
+import * as pkg from './pkg';
 import Token, { TokenStore, MemoryTokenStore } from './Token';
 import isKnownReqBodyType from 'known-fetch-body';
 
@@ -26,7 +26,6 @@ const EventLogoutStart = 'LogoutStart';
 const EventLogoutSuccess = 'LogoutSuccess';
 const EventLogoutError = 'LogoutError';
 
-let pkg = require('../package.json');
 
 /**
  * A wrapper for sending http requests to RingCentralService.
@@ -355,7 +354,7 @@ class RestError extends Error {
 
 const ErrorRateExceeded = 'CMN-301';
 
-interface ClientOptions {
+export interface ClientOptions {
     server?: string;
     appKey: string;
     appSecret: string;
@@ -378,7 +377,5 @@ export {
     EventRefreshError,
     EventLogoutStart,
     EventLogoutSuccess,
-    EventLogoutError,
-
-    ClientOptions
+    EventLogoutError
 }

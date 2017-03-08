@@ -1,7 +1,7 @@
 // parse config
 import * as path from 'path';
 
-interface Config {
+export interface Config {
     app: {
         server: string;
         appKey: string;
