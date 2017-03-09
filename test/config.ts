@@ -18,7 +18,7 @@ export interface Config {
     };
 }
 
-let config: Config = require('../data/test.json');
+let config: Config = require('../data/test-config.json');
 
 config.tokenCacheFile = path.resolve(__dirname, '../data/', config.tokenCacheFile);
 export default config;

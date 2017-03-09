@@ -12,5 +12,5 @@ done
 
 cd -    # Back project root
 mkdir -p data
-auth_conf=data/test.json
+auth_conf=data/test-config.json
 [ ! -e $auth_conf ] && echo '{}' > $auth_conf     # Required by test/auth.ts
