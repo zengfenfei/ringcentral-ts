@@ -1,3 +1,5 @@
+'use strict';
+
 let fs = require('fs');
 let path = require('path');
 let pkg = require('../package.json');
