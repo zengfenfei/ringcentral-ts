@@ -71,6 +71,17 @@ rc.auth({
 });
 ```
 
+## Rate limit handling
+
+You can only call RingCentral API at [limited rate](http://ringcentral-api-docs.readthedocs.io/en/latest/rate_limits/). By default, when rate limit hit, it will wait until the service is available and resend the API request. To prevent this behavior, you can set the `handleRateLimit` option of the constructor:
+
+```javascript
+let rc = new RingCentral({
+    handleRateLimit: false,
+    ...
+});
+```
+
 ## API Call Examples
 
 ### Telephony Calls
