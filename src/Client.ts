@@ -1,4 +1,4 @@
-import restClient, { SERVER_PRODUCTION, SERVER_SANDBOX, SERVER_VERSION, ClientOptions } from './RestClient';
+import restClient, { SERVER_PRODUCTION, SERVER_SANDBOX, API_VERSION, ClientOptions } from './RestClient';
 import { TokenStore } from './Token';
 import Account from './paths/Account';
 import ClientInfo from './paths/ClientInfo';
@@ -6,8 +6,9 @@ import Dictionary from './paths/Dictionary';
 import NumberParser from './paths/NumberParser';
 import NumberPool from './paths/Subscription';
 import Subscription from './paths/Subscription';
+import Subscription2 from './Subscription';
 
-export default class Client {
+export default class RingCentral {
     rest: restClient;
 
     constructor(opts: ClientOptions) {
@@ -39,6 +40,10 @@ export default class Client {
         return this.rest.logout();
     }
 
+    createSubscription() {
+        return new Subscription2(this.rest);
+    }
+
 
     account(id?: string): Account {
         return new Account(null, id, this.rest);
@@ -66,9 +71,9 @@ export default class Client {
 }
 
 export {
-    Client, // For commonjs
+    RingCentral,    // For commonjs
 
     SERVER_PRODUCTION,
     SERVER_SANDBOX,
-    SERVER_VERSION
+    API_VERSION
 };

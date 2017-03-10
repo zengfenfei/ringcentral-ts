@@ -10,8 +10,8 @@ import isKnownReqBodyType from 'known-fetch-body';
 const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
 const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
 
-const SERVER_VERSION = 'v1.0';
-const BASE_URL = '/restapi/';
+export const API_VERSION = 'v1.0';
+export const BASE_URL = '/restapi/';
 const TOKEN_URL = BASE_URL + 'oauth/token';
 const REVOKE_URL = BASE_URL + 'oauth/revoke';
 
@@ -121,7 +121,7 @@ export default class RestClient extends EventEmitter {
     private async sendApiCall(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
         opts = opts || {};
         opts.method = opts.method || 'GET';
-        let url = format({ pathname: this.server + BASE_URL + SERVER_VERSION + endpoint, query });
+        let url = format({ pathname: this.server + BASE_URL + API_VERSION + endpoint, query });
 
         if (this.recoverTime) {
             let timeLeft = this.recoverTime - Date.now();
@@ -367,7 +367,6 @@ export interface ClientOptions {
 export {
     SERVER_PRODUCTION,
     SERVER_SANDBOX,
-    SERVER_VERSION,
 
     EventLoginStart,
     EventLoginSuccess,

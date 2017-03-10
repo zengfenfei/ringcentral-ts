@@ -1,14 +1,14 @@
 import { EventEmitter } from 'events';
 import * as PubNub from 'pubnub';
 import { OPERATIONS, CATEGORIES } from 'pubnub';
-import RestClient from './RestClient';
+import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 
 export default class Subscription extends EventEmitter {
 
     rest: RestClient;
     id: string;
     expirationTime: number; // Epoch time in ms.
-    eventFilters: string[];
+    eventFilters: string[]; // Without REST base url
     refreshTimer: NodeJS.Timer;
 
     pubnub: any;
@@ -30,7 +30,7 @@ export default class Subscription extends EventEmitter {
         }
         this.id = subscription.id;
         this.expirationTime = Date.parse(subscription.expirationTime);
-        this.eventFilters = subscription.eventFilters;
+        this.eventFilters = unprefixFilters(subscription.eventFilters);
         this.refreshTimer = setTimeout(() => {
             this.refreshTimer = null;
             this.refresh().catch(reason => {
@@ -63,6 +63,7 @@ export default class Subscription extends EventEmitter {
         if (this.pubnub) {
             throw new Error('Subscription exists.');
         }
+        eventFilters = prefixFilters(eventFilters);
         let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
         let subscription = await res.json();
         let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey });
@@ -134,11 +135,20 @@ export default class Subscription extends EventEmitter {
         if (Date.now() >= this.expirationTime) {
             throw Error('Subscription expired, can not refresh.');
         }
-        let res = await this.rest.put('/subscription/' + this.id, { eventFilters: this.eventFilters, deliveryMode });
+        let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
         let subscription = await res.json();
         this.subscriptionUpdated(subscription);
     }
 
+}
+
+// Prefix with REST base url
+function prefixFilters(filters: string[]) {
+    return filters.map(f => BASE_URL + API_VERSION + f);
+}
+
+function unprefixFilters(filters: string[]) {
+    return filters.map(f => f.replace(BASE_URL + API_VERSION, ''));
 }
 
 const deliveryMode = { transportType: 'PubNub', encryption: true };
