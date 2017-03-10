@@ -7,14 +7,14 @@ node_js:
 script:
 - npm run lint
 - npm run build
-before_deploy: 'cd build/src'
+before_deploy: cd build/src
 deploy:
   provider: npm
-  email: 'zengfenfei@gmail.com'
+  email: zengfenfei@gmail.com
   api_key:
-    secure: TSaWW3Fy0CZgvce40ePy5xAIqLNdhUaFgwE+Aztl2n6jNoJA1drCbywplklDpUZaPEUGNaRY60sYNHdCV22hZItUYhuGfuQV9HYXBZ03ptFzZeY8ueLcfkKF4gxBggpklTPdrMYBPwDFDBb3o6ws5X5GDb25UXK+4i97xv27VLnW8pzHVLTP2x79OZyk4FuJTdlSkiVZw23EU1Qzf+C+60G78ExQ4lFyKEPGhuD9o7Zp/HM2S+4o51F51HHbPkyaPVAlkQWP++7Ndd7qhXfvnRCsPXYFAPf52N4rHpvV33FMPR3iPp6ey0UHAnXtAkvuhL/AecXpvRg5twZhUE+XpofXQxXeoU3HS8xKDpR6YQInTlW9yhfihTFBC+OMGiEC/uPbLLIVvl2UiyV7VWNP2KMuq+8J3SgGwvWUweF04M9xK2PrRyJaqhVMb/5jZmumN92feQLeMz+mgy9mXXKDvIDrUfNac2dby4s92mIT63yusFFA7KgNwEMoK55souckliEyoIZZfdF535pCRrCHz/PCVg+9gJ7M4b/8yLMrPjJI2c+1e/ARWUcbI+rvmOBcxp5w0+e35lFizNJB4Ne0w92jnpH9JNOzzuwOMAw0059dzhYz7O9unjCFsEqBVStZbPzQJ2oZnlJ+VMskqLdMXsTlwrh+gMh6iVLFEyXZIT8=
+    secure: vDNcXfyZJTWft+qo23lSDsH1KU9PiqEHaJk1ChCLjjKlAR9XOwjvhQfjtyul/wPdOJ7BrR5y3vpLXVnB7Qh4NBopS+Pr0E26Pu9n4OOKXYUUNJcmOuG2IT0sUH7rN3ky6JBl8lEUJGmf+VgtZpLN1kOgybFtwoelefpKcw+vUxr4HHqJDFuBC0wAlCAqwSMG9P328IlvqYxLv5Kgg4IoKdFIxO+AUIBE1Lz8VIIDioOkcYO7ZpNfqUyfIuh2/VnkXGb3bPRywBxl/do6rlEPTy7HcKFH2y+GTIhdZlrRck8zzrktl6yzT99YMAD9hoeRIDbROYEFuB1rtMYTExMpDwta/MwTfN7TTdL84XAMDWfSHYjQrhTLhUXzjaSpkCglcAcZMsRH6jaxaUzRVkH5eShaSDPwFSeO3Vnnk1ZnvcR54gR0xUywUAAgBd9Hg6nYaPNHv4xZslZJaaO1FSp/+2QAJdX8C2ScbqN+1H09IixFjS69f68iAMRve3s/zUVVnzcxifgXBryT4wqLdRGwmml53ZSGVMcr9M7vifsa52iN5XII59gjcy1pK12MuM0AhnvFcCMA4KNST3+ALdqNNipdE3OStkTk8je6RtJXSkmr6jMedaz3wA+UmfggYEB36D9TRZVIdDeTR9hEK5Myo0fMdFxqOcCcOCnh61aenHk=
   on:
-    node: '6'
+    node: 6
     tags: true
     repo: zengfenfei/ringcentral-ts
     condition: "$TRAVIS_TAG =~ ^[0-9]+.[0-9]+.[0-9]+"
