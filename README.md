@@ -7,6 +7,8 @@ This is a library implemented in typescript which provides convenient APIs for t
 # Table of contents
 
 - [Getting Started](#getting-started)
+- [Handle rate limit](#rate-limit-handling)
+- [Cache the token](#tokenstore)
 - [API Call Examples](#api-call-examples)
     - [Telephony Calls](#telephony-calls)
     - [Send SMS](#send-sms)
@@ -81,6 +83,42 @@ let rc = new RingCentral({
     ...
 });
 ```
+
+## TokenStore
+
+By default the token is stored in memory, it will be lost when the process exits in node or the web page reloads. You can specify a `TokenStore` to cache the token in `localStorage`, file, redis or other databases, etc.
+
+Creating Token Store:
+```javascript
+// In browser
+import WebTokenStorage from 'ringcentral-ts/WebTokenStorage';
+let tokenStore = new WebTokenStorage('{localStorageKey}', localStorage);
+
+// In node.js
+import FileTotkenStorage from 'ringcentral-ts/FileTokenStore';
+let tokenStore = new FileTotkenStorage('{filePathToStoreTheToken}');
+```
+
+Restoring token from token store:
+```javascript
+let rc = new RingCentral({
+    tokenStore
+    ...
+});
+rc.restoreToken({   // Optionally, you can specify the username and extension to check with after the token is restored.
+    username: 'xxx',
+    extension: 'xxx'
+}).then(() => {
+    console.log('Load token from tokenStore successfully.');
+}, e => {
+    console.error('Fail to load token from tokenStore, possible reasons: the cached token is valid; no token is cached in the store; the cached token is created by a different appKey or RC account.');
+    return rc.auth({
+        ...
+    }); // Login with username/password or oauth
+});
+```
+
+Except for memory, `localStorage` and file, you can also cache token in other places(redis, sql databases, etc.). You can create your own `TokenStore` by implementing [its interfaces](src/Token.ts#L80).
 
 ## API Call Examples
 
