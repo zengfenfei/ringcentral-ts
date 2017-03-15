@@ -15,30 +15,28 @@ export default class Token {
     }
 
     /**
-     * Restore from json string
-     * @param serialized json string
+     * Restore from cached data
      */
-    static restore(serialized: string) {
-        let token = new Token();
-        let data = JSON.parse(serialized);
-        for (let p in data) {
-            token[p] = data[p];
+    fromCache(cached) {
+        for (let p in cached) {
+            this[p] = cached[p];
         }
-        return token;
+        return this;
     }
 
-    /** Populate token from server response
+    /**
+     *  Populate token from server response.
      *  timeSpent: Time in ms spent fetching token.
      */
-    update(data, timeSpent: number) {
-        this.accessToken = data['access_token'];
-        this.type = data['token_type'];
-        this.expiresIn = Date.now() + data['expires_in'] * 1000 - timeSpent;
-        this.refreshToken = data['refresh_token'];
-        this.refreshTokenExpiresIn = Date.now() + data['refresh_token_expires_in'] * 1000 - timeSpent;
-        this.scope = data['scope'].split(' ');
-        this.ownerId = data['owner_id'];
-        this.endpointId = data['endpoint_id'];
+    fromServer(newToken, timeSpent: number) {
+        this.accessToken = newToken['access_token'];
+        this.type = newToken['token_type'];
+        this.expiresIn = Date.now() + newToken['expires_in'] * 1000 - timeSpent;
+        this.refreshToken = newToken['refresh_token'];
+        this.refreshTokenExpiresIn = Date.now() + newToken['refresh_token_expires_in'] * 1000 - timeSpent;
+        this.scope = newToken['scope'].split(' ');
+        this.ownerId = newToken['owner_id'];
+        this.endpointId = newToken['endpoint_id'];
         return this;
     }
 
@@ -53,7 +51,10 @@ export default class Token {
 
     // Ower info, these info will be checked after restored
     appKey: string;
-    owner: string;   // format: {phone-number}*{extension-number}
+    /**
+     *  format: {phone-number}*{extension-number}
+     */
+    owner: string;
 
     expired(): boolean {
         return Date.now() >= this.expiresIn;

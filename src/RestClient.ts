@@ -203,9 +203,9 @@ export default class RestClient extends EventEmitter {
         });
         if (res.ok) {
             let resJson = await res.json();
-            let token = new Token();
+            let token = this.getToken() || new Token();
             token.setOwner(this.appKey, opts);
-            this.tokenStore.save(token.update(resJson, Date.now() - startTime));
+            this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
             this.emit(EventLoginSuccess);
         } else {
             if (isJsonRes(res)) {
@@ -309,7 +309,7 @@ export default class RestClient extends EventEmitter {
         if (res.ok) {
             let resJson = await res.json();
             let token = this.getToken();
-            this.tokenStore.save(token.update(resJson, Date.now() - startTime));
+            this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
             this.emit(EventRefreshSuccess);
         } else {
             if (isJsonRes(res)) {

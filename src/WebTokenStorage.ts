@@ -6,6 +6,7 @@ import Token, { TokenStore } from './Token';
 export default class WebTokenStore implements TokenStore {
     key: string;
     store: Storage;
+    token = new Token();
 
     constructor(key: string, store: Storage) {
         this.key = key;
@@ -19,7 +20,7 @@ export default class WebTokenStore implements TokenStore {
     get(): Token {
         let data = localStorage[this.key];
         if (data) {
-            return Token.restore(data);
+            return this.token.fromCache(JSON.parse(data));
         }
     }
 
