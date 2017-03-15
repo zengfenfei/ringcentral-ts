@@ -7,7 +7,7 @@ let pkg = require('../package.json');
 
 let output = './build/src/';
 pkg.main = path.relative(output, pkg.main);
-pkg.typings = path.relative(output, pkg.typings);
+pkg.types = path.relative(output, pkg.types);
 try {
     updateVersion2gitTag(pkg);
 } catch (e) { }

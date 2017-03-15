@@ -39,7 +39,7 @@
   "preferGlobal": false,
   "private": false,
   "main": "./build/src/Client.js",
-  "typings": "./src/Client.ts",
+  "types": "./build/src/Client.d.ts",
   "license": "MIT",
   "description": "Javascript/typescript sdk for RingCentral REST API. Refer to http://developer.ringcentral.com/.",
   "repository": "git@github.com:zengfenfei/ringcentral.ts.git",
