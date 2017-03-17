@@ -13,6 +13,7 @@
         "pretty": true,
         "noImplicitThis": true,
         "alwaysStrict": true,
+        "noUnusedLocals": true,
         "importHelpers": true
     },
     "files": [

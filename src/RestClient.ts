@@ -181,7 +181,7 @@ export default class RestClient extends EventEmitter {
     }
 
     async auth(opts: { username: string; password: string; extension?: string, accessTokenTtl?: number, refreshTokenTtl?: number, scope?: string[] }): Promise<void> {
-        let tokenData = this.tokenStore.get();
+        // let tokenData = this.tokenStore.get();
         let body = {
             grant_type: 'password',
             username: opts.username,

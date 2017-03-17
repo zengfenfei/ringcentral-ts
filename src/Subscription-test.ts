@@ -1,7 +1,7 @@
 import delay from 'delay.ts';
 import RestClient from './RestClient';
 import Subscription from './Subscription';
-import config from '../test/config';
+// import config from '../test/config';
 import auth from '../test/auth';
 
 /*
