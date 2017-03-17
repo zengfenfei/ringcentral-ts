@@ -1,4 +1,4 @@
-import testConfig from './config';
+// import testConfig from './config';
 import auth from './auth';
 import Client from '../src/Client';
 import { expect } from 'chai';

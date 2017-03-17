@@ -1,10 +1,10 @@
 import auth from './auth';
 import Client from '../src/Client';
 import { expect } from 'chai';
-import { createReadStream } from 'fs';
+// import { createReadStream } from 'fs';
 
 let client: Client;
-const inNode = !!createReadStream;
+// const inNode = !!createReadStream;
 
 before(function () {
     // runs before all tests in this block
@@ -67,7 +67,7 @@ describe('PathSegments', function () {
             let ext = client.account().extension();
             let createdId: string;
             let createdBlockedPhoneNumber = '+18989999';
-            let updatedBlockedPhoneNumber = '+12222898';
+            // let updatedBlockedPhoneNumber = '+12222898';
             return ext.blockedNumber().post({ phoneNumber: createdBlockedPhoneNumber }).then(res => {
                 createdId = res.id;
                 expect(res.phoneNumber).to.eqls(createdBlockedPhoneNumber);
