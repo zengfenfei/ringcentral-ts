@@ -2,10 +2,10 @@
 
 interface MeetingScheduleInfoTimezoneInfo {
 
-    /**
-     * Identifier of a timezone
-     */
-    id?: string;
+	/**
+	 * Identifier of a timezone
+	 */
+	id?: string;
 }
 
 export default MeetingScheduleInfoTimezoneInfo;

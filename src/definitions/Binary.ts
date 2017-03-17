@@ -2,10 +2,10 @@
 
 interface Binary {
 
-    /**
-     * Required. Binary data.
-     */
-    data?: ArrayBuffer;
+	/**
+	 * Required. Binary data.
+	 */
+	data?: ArrayBuffer;
 }
 
 export default Binary;

@@ -4,25 +4,25 @@ import ExtensionInfoRequestContactInfoRegionalSettings from './ExtensionInfoRequ
 
 interface ExtensionInfoRequestContactInfo {
 
-    /**
-     * Contact information
-     */
-    contact?: ContactInfo;
+	/**
+	 * Contact information
+	 */
+	contact?: ContactInfo;
 
-    /**
-     * Region data (timezone, home country, language)
-     */
-    regionalSettings?: ExtensionInfoRequestContactInfoRegionalSettings;
+	/**
+	 * Region data (timezone, home country, language)
+	 */
+	regionalSettings?: ExtensionInfoRequestContactInfoRegionalSettings;
 
-    /**
-     * Specifies extension configuration wizard state (web service setup). The default value is 'NotStarted'
-     */
-    setupWizardState?: 'NotStarted' | 'Incomplete' | 'Completed';
+	/**
+	 * Specifies extension configuration wizard state (web service setup). The default value is 'NotStarted'
+	 */
+	setupWizardState?: 'NotStarted' | 'Incomplete' | 'Completed';
 
-    /**
-     * Extension user department
-     */
-    department?: string;
+	/**
+	 * Extension user department
+	 */
+	department?: string;
 }
 
 export default ExtensionInfoRequestContactInfo;

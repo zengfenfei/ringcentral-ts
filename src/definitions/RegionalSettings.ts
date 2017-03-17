@@ -7,30 +7,30 @@ import TimezoneInfo from './TimezoneInfo';
 
 interface RegionalSettings {
 
-    /**
-     * Extension country information
-     */
-    homeCountry?: CountryInfo;
+	/**
+	 * Extension country information
+	 */
+	homeCountry?: CountryInfo;
 
-    /**
-     * Extension timezone information
-     */
-    timezone?: TimezoneInfo;
+	/**
+	 * Extension timezone information
+	 */
+	timezone?: TimezoneInfo;
 
-    /**
-     * User interface language data
-     */
-    language?: LanguageInfo;
+	/**
+	 * User interface language data
+	 */
+	language?: LanguageInfo;
 
-    /**
-     * Information on language used for telephony greetings
-     */
-    greetingLanguage?: GreetingLanguageInfo;
+	/**
+	 * Information on language used for telephony greetings
+	 */
+	greetingLanguage?: GreetingLanguageInfo;
 
-    /**
-     * Formatting language preferences for numbers, dates and currencies
-     */
-    formattingLocale?: FormattingLocaleInfo;
+	/**
+	 * Formatting language preferences for numbers, dates and currencies
+	 */
+	formattingLocale?: FormattingLocaleInfo;
 }
 
 export default RegionalSettings;

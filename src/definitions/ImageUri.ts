@@ -2,10 +2,10 @@
 
 interface ImageUri {
 
-    /**
-     * Link to an image.
-     */
-    uri?: string;
+	/**
+	 * Link to an image.
+	 */
+	uri?: string;
 }
 
 export default ImageUri;

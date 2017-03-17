@@ -6,10 +6,10 @@ let client: Client;
 auth.then(c => client = c);
 
 describe('client', () => {
-    it('covers all', runCoverage);
+	it('covers all', runCoverage);
 });
 
 function runCoverage() {
-    client.clientInfo();
-    client.numberPool();
+	client.clientInfo();
+	client.numberPool();
 }

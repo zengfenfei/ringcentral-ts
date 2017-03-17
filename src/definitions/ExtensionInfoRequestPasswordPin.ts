@@ -2,15 +2,15 @@
 
 interface ExtensionInfoRequestPasswordPin {
 
-    /**
-     * Password for extension
-     */
-    password?: string;
+	/**
+	 * Password for extension
+	 */
+	password?: string;
 
-    /**
-     * IVR PIN
-     */
-    ivrPin?: string;
+	/**
+	 * IVR PIN
+	 */
+	ivrPin?: string;
 }
 
 export default ExtensionInfoRequestPasswordPin;

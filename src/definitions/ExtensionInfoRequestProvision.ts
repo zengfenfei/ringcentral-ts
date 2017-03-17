@@ -3,15 +3,15 @@ import ExtensionInfoRequestProvisionContactInfo from './ExtensionInfoRequestProv
 
 interface ExtensionInfoRequestProvision {
 
-    /**
-     * Mandatory. Resulting extension status
-     */
-    status?: 'NotActivated';
+	/**
+	 * Mandatory. Resulting extension status
+	 */
+	status?: 'NotActivated';
 
-    /**
-     * Mandatory. Extension user contact information
-     */
-    contact?: ExtensionInfoRequestProvisionContactInfo;
+	/**
+	 * Mandatory. Extension user contact information
+	 */
+	contact?: ExtensionInfoRequestProvisionContactInfo;
 }
 
 export default ExtensionInfoRequestProvision;

@@ -2,10 +2,10 @@
 
 interface ExtensionInfoRequestPartnerId {
 
-    /**
-     * Extension partner identifier
-     */
-    partnerId?: string;
+	/**
+	 * Extension partner identifier
+	 */
+	partnerId?: string;
 }
 
 export default ExtensionInfoRequestPartnerId;

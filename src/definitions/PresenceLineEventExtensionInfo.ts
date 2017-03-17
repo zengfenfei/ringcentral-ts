@@ -2,10 +2,10 @@
 
 interface PresenceLineEventExtensionInfo {
 
-    /**
-     * Internal identifier of the extension
-     */
-    id?: string;
+	/**
+	 * Internal identifier of the extension
+	 */
+	id?: string;
 }
 
 export default PresenceLineEventExtensionInfo;
