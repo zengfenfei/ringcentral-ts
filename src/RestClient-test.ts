@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import delay from 'delay.ts';
-import RestClient, { EventLoginStart, EventLoginError, EventLoginSuccess } from './RestClient';
+import RestClient/*, { EventLoginStart, EventLoginError, EventLoginSuccess }*/ from './RestClient';
 import Token from './Token';
 import config from '../test/config';
 import auth from '../test/auth';
