@@ -18,7 +18,8 @@
     "form-data": "^2.1.2",
     "isomorphic-fetch": "^2.2.1",
     "known-fetch-body": "^0.1.1",
-    "pubnub": "^4.4.4"
+    "pubnub": "^4.4.4",
+    "tslib": "^1.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",

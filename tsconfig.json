@@ -1,10 +1,19 @@
 {
     "compilerOptions": {
         "outDir": "./build",
-        "target": "es6",
+        "target": "es5",
+        "lib": [
+            "es6",
+            "dom"
+        ],
         "module": "commonjs",
+        "moduleResolution": "node",
         "sourceMap": true,
-        "declaration": true
+        "declaration": true,
+        "pretty": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "importHelpers": true
     },
     "files": [
         "test/index.ts"
