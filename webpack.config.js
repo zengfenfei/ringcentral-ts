@@ -24,22 +24,17 @@ module.exports = [/*{
         ]
     }
 }, */{
-        entry:[ "babel-polyfill", "./build/test/index.js"],
-        output: {
-            path: "./build",
-            filename: "tests.js"
-        },
-        module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    exclude: /(node_modules|bower_components)/,
-                    loader: 'babel-loader?presets[]=es2015'
-                }
-            ]
-        },
-        node: {
-            fs: "empty"
-        },
-        plugins: [new webpack.optimize.UglifyJsPlugin({})]
-    }];
+		entry: ["babel-polyfill", "./build/test/index.js"],
+		output: {
+			path: "./build",
+			filename: "tests.js"
+		},
+		module: {
+			loaders: [
+			]
+		},
+		node: {
+			fs: "empty"
+		},
+		plugins: [new webpack.optimize.UglifyJsPlugin({})]
+	}];
