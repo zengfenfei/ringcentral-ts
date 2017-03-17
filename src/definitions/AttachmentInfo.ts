@@ -2,15 +2,15 @@
 
 interface AttachmentInfo {
 
-    /**
-     * Link to custom data attachment
-     */
-    uri?: string;
+	/**
+	 * Link to custom data attachment
+	 */
+	uri?: string;
 
-    /**
-     * Type of custom data attachment, see also MIME Types
-     */
-    contentType?: string;
+	/**
+	 * Type of custom data attachment, see also MIME Types
+	 */
+	contentType?: string;
 }
 
 export default AttachmentInfo;

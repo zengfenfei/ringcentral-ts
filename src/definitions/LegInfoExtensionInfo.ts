@@ -2,15 +2,15 @@
 
 interface LegInfoExtensionInfo {
 
-    /**
-     * Internal identifier of an extension
-     */
-    id?: string;
+	/**
+	 * Internal identifier of an extension
+	 */
+	id?: string;
 
-    /**
-     * Canonical URI of an extension
-     */
-    uri?: string;
+	/**
+	 * Canonical URI of an extension
+	 */
+	uri?: string;
 }
 
 export default LegInfoExtensionInfo;

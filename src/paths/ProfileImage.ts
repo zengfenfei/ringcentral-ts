@@ -5,25 +5,25 @@ import PathSegment from '../PathSegment';
 import ProfileImageBase from './ProfileImageBase';
 
 export default class ProfileImage extends ProfileImageBase {
-    constructor(prv: PathSegment, id?: string, service?) {
-        super(prv, id, service);
-    }
+	constructor(prv: PathSegment, id?: string, service?) {
+		super(prv, id, service);
+	}
 
     /**
      *  Update Profile Image
      */
-    put(imageData: Binary, contentType = 'image/png'): Promise<void> {
-        let form = new FormData();
-        form.append('image', imageData, { contentType: contentType, filename: 'profile.' + contentType.split('/').pop() });
-        return this.getRest().put(this.getEndpoint(), form).then(res => { });
-    }
+	put(imageData: Binary, contentType = 'image/png'): Promise<void> {
+		let form = new FormData();
+		form.append('image', imageData, { contentType: contentType, filename: 'profile.' + contentType.split('/').pop() });
+		return this.getRest().put(this.getEndpoint(), form).then(res => { });
+	}
 
     /**
      *  Update Profile Image (same as PUT)
      */
-    post(imageData: Binary, contentType = 'image/png'): Promise<void> {
-        let form = new FormData();
-        form.append('image', imageData, { contentType: contentType, filename: 'profile.' + contentType.split('/').pop() });
-        return this.getRest().put(this.getEndpoint(), form).then(res => { });
-    }
+	post(imageData: Binary, contentType = 'image/png'): Promise<void> {
+		let form = new FormData();
+		form.append('image', imageData, { contentType: contentType, filename: 'profile.' + contentType.split('/').pop() });
+		return this.getRest().put(this.getEndpoint(), form).then(res => { });
+	}
 }

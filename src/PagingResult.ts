@@ -5,18 +5,18 @@ import PagingInfo from './definitions/PagingInfo';
  * PagingResult
  */
 export default class PagingResult<T> {
-    constructor(data) {
-        this.records = data['records'];
-        this.navigation = data['navigation'];
-        this.paging = data['paging'];
-    }
+	constructor(data) {
+		this.records = data['records'];
+		this.navigation = data['navigation'];
+		this.paging = data['paging'];
+	}
 
     /**
      * List of real results
      */
-    records: T[];
+	records: T[];
 
-    navigation: NavigationInfo;
+	navigation: NavigationInfo;
 
-    paging: PagingInfo;
+	paging: PagingInfo;
 }

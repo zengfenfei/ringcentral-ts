@@ -2,20 +2,20 @@
 import * as path from 'path';
 
 export interface Config {
-    app: {
-        server: string;
-        appKey: string;
-        appSecret: string;
-    };
+	app: {
+		server: string;
+		appKey: string;
+		appSecret: string;
+	};
 
-    // Resolved absolute path
-    tokenCacheFile: string;
+	// Resolved absolute path
+	tokenCacheFile: string;
 
-    user: {
-        username: string;
-        extension: string;
-        password: string;
-    };
+	user: {
+		username: string;
+		extension: string;
+		password: string;
+	};
 }
 
 let config: Config = require('../data/test-config.json');

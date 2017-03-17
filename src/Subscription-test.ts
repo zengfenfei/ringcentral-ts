@@ -11,61 +11,61 @@ import auth from '../test/auth';
 let restClient: RestClient;
 
 before(async () => {
-    restClient = (await auth).rest;
+	restClient = (await auth).rest;
 });
 
 describe('Subscription', () => {
 
-    it.skip('should receive notifications forever', async () => {
-        let sub = new Subscription(restClient);
-        sub.onMessage(msg => {
-            console.log('>>>notification', msg.body.telephonyStatus, msg);
-        });
-        sub.on('error', e => {
-            console.error('Subscription error', e);
-        });
-        await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
-    });
+	it.skip('should receive notifications forever', async () => {
+		let sub = new Subscription(restClient);
+		sub.onMessage(msg => {
+			console.log('>>>notification', msg.body.telephonyStatus, msg);
+		});
+		sub.on('error', e => {
+			console.error('Subscription error', e);
+		});
+		await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
+	});
 
-    it.skip('should not receive notification after subscription canceled', async () => {
-        let sub = new Subscription(restClient);
-        sub.onMessage(msg => {
-            console.log('>>>notification', msg.body.telephonyStatus, msg);
-        });
-        sub.on('error', e => {
-            console.error('Subscription error', e);
-        });
-        await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
-        await delay(5 * 1000);
-        await sub.cancel();
-    });
+	it.skip('should not receive notification after subscription canceled', async () => {
+		let sub = new Subscription(restClient);
+		sub.onMessage(msg => {
+			console.log('>>>notification', msg.body.telephonyStatus, msg);
+		});
+		sub.on('error', e => {
+			console.error('Subscription error', e);
+		});
+		await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
+		await delay(5 * 1000);
+		await sub.cancel();
+	});
 
-    it.skip('should work when multiple instances created, and resubscribe after canceled', async () => {
-        let filters = ['/restapi/v1.0/account/~/extension/~/presence'];
-        let sub = new Subscription(restClient);
-        sub.onMessage(msg => console.log('##message of first subscription', msg.body.telephonyStatus));
+	it.skip('should work when multiple instances created, and resubscribe after canceled', async () => {
+		let filters = ['/restapi/v1.0/account/~/extension/~/presence'];
+		let sub = new Subscription(restClient);
+		sub.onMessage(msg => console.log('##message of first subscription', msg.body.telephonyStatus));
 
-        let sub2 = new Subscription(restClient);
-        sub2.onMessage(msg => console.log('@@message of second subscription', msg.body.telephonyStatus));
-        sub2.subscribe(filters);
+		let sub2 = new Subscription(restClient);
+		sub2.onMessage(msg => console.log('@@message of second subscription', msg.body.telephonyStatus));
+		sub2.subscribe(filters);
 
-        let sub3 = new Subscription(restClient);
-        sub3.onMessage(msg => console.log('$$message of third subscription', msg.body.telephonyStatus));
-        sub3.subscribe(filters);
+		let sub3 = new Subscription(restClient);
+		sub3.onMessage(msg => console.log('$$message of third subscription', msg.body.telephonyStatus));
+		sub3.subscribe(filters);
 
-        await sub.subscribe(filters);
-        await delay(800);
-        await sub.cancel();
-        await delay(3000);
-        await sub.subscribe(filters);
-        await sub.cancel();
-        await sub.subscribe(filters);
+		await sub.subscribe(filters);
+		await delay(800);
+		await sub.cancel();
+		await delay(3000);
+		await sub.subscribe(filters);
+		await sub.cancel();
+		await sub.subscribe(filters);
 
-        await delay(15 * 1000);
-        await sub.cancel();
-        await sub2.cancel();
-        await sub3.cancel();
-    });
+		await delay(15 * 1000);
+		await sub.cancel();
+		await sub2.cancel();
+		await sub3.cancel();
+	});
 
 });
 

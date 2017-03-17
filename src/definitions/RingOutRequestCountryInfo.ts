@@ -2,10 +2,10 @@
 
 interface RingOutRequestCountryInfo {
 
-    /**
-     * Dialing plan country identifier
-     */
-    id?: string;
+	/**
+	 * Dialing plan country identifier
+	 */
+	id?: string;
 }
 
 export default RingOutRequestCountryInfo;

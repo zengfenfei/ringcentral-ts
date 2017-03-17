@@ -2,40 +2,40 @@
 
 interface ShippingAddress {
 
-    /**
-     * Name of a receiver
-     */
-    customerName?: string;
+	/**
+	 * Name of a receiver
+	 */
+	customerName?: string;
 
-    /**
-     * Street address, line 1 - street address, P.O. box, company name, c/o
-     */
-    street?: string;
+	/**
+	 * Street address, line 1 - street address, P.O. box, company name, c/o
+	 */
+	street?: string;
 
-    /**
-     * Street address, line 2 - apartment, suite, unit, building, floor, etc.
-     */
-    street2?: string;
+	/**
+	 * Street address, line 2 - apartment, suite, unit, building, floor, etc.
+	 */
+	street2?: string;
 
-    /**
-     * City name
-     */
-    city?: string;
+	/**
+	 * City name
+	 */
+	city?: string;
 
-    /**
-     * State/province name
-     */
-    state?: string;
+	/**
+	 * State/province name
+	 */
+	state?: string;
 
-    /**
-     * Zip code
-     */
-    zip?: string;
+	/**
+	 * Zip code
+	 */
+	zip?: string;
 
-    /**
-     * Country name
-     */
-    country?: string;
+	/**
+	 * Country name
+	 */
+	country?: string;
 }
 
 export default ShippingAddress;

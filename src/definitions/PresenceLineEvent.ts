@@ -3,15 +3,15 @@ import PresenceLineEventExtensionInfo from './PresenceLineEventExtensionInfo';
 
 interface PresenceLineEvent {
 
-    /**
-     * Extension information
-     */
-    extension?: PresenceLineEventExtensionInfo;
+	/**
+	 * Extension information
+	 */
+	extension?: PresenceLineEventExtensionInfo;
 
-    /**
-     * Order number of a notification to state the chronology
-     */
-    sequence?: number;
+	/**
+	 * Order number of a notification to state the chronology
+	 */
+	sequence?: number;
 }
 
 export default PresenceLineEvent;

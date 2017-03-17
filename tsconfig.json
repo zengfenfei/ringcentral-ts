@@ -1,23 +1,23 @@
 {
-    "compilerOptions": {
-        "outDir": "./build",
-        "target": "es5",
-        "lib": [
-            "es6",
-            "dom"
-        ],
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "declaration": true,
-        "pretty": true,
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "noUnusedLocals": true,
-        "importHelpers": true
-    },
-    "files": [
-        "test/index.ts"
-    ],
-    "compileOnSave": true
+	"compilerOptions": {
+		"outDir": "./build",
+		"target": "es5",
+		"lib": [
+			"es6",
+			"dom"
+		],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"declaration": true,
+		"pretty": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"importHelpers": true
+	},
+	"files": [
+		"test/index.ts"
+	],
+	"compileOnSave": true
 }

@@ -3,35 +3,35 @@ import ContactAddressInfo from './ContactAddressInfo';
 
 interface ContactInfo {
 
-    /**
-     * For User extension type only. Extension user first name
-     */
-    firstName?: string;
+	/**
+	 * For User extension type only. Extension user first name
+	 */
+	firstName?: string;
 
-    /**
-     * For User extension type only. Extension user last name
-     */
-    lastName?: string;
+	/**
+	 * For User extension type only. Extension user last name
+	 */
+	lastName?: string;
 
-    /**
-     * Extension user company name
-     */
-    company?: string;
+	/**
+	 * Extension user company name
+	 */
+	company?: string;
 
-    /**
-     * Email of extension user
-     */
-    email?: string;
+	/**
+	 * Email of extension user
+	 */
+	email?: string;
 
-    /**
-     * Extension user contact phone number
-     */
-    businessPhone?: string;
+	/**
+	 * Extension user contact phone number
+	 */
+	businessPhone?: string;
 
-    /**
-     * Business address of extension user company
-     */
-    businessAddress?: ContactAddressInfo;
+	/**
+	 * Business address of extension user company
+	 */
+	businessAddress?: ContactAddressInfo;
 }
 
 export default ContactInfo;

@@ -3,10 +3,10 @@ import WeeklyScheduleInfo from './WeeklyScheduleInfo';
 
 interface BusinessHourScheduleInfo {
 
-    /**
-     * Weekly schedule
-     */
-    weeklyRanges?: WeeklyScheduleInfo;
+	/**
+	 * Weekly schedule
+	 */
+	weeklyRanges?: WeeklyScheduleInfo;
 }
 
 export default BusinessHourScheduleInfo;

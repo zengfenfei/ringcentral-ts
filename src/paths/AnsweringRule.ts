@@ -11,146 +11,146 @@ import PagingResult from '../PagingResult';
 import PathSegment from '../PathSegment';
 
 export default class AnsweringRule extends PathSegment {
-    constructor(prv: PathSegment, id?: string, service?) {
-        super('answering-rule', id, prv, service);
-    }
+	constructor(prv: PathSegment, id?: string, service?) {
+		super('answering-rule', id, prv, service);
+	}
 
-    /**
-     *  Create Custom Answering Rule
-     */
-    post(body: PostBody): Promise<AnsweringRuleInfo> {
-        return this.getRest().call(this.getEndpoint(true), undefined, {
-            body: body,
-            method: 'post'
-        }).then<any>((res) => {
-                return res.json();
-        });
-    }
-
-
-    /**
-     *  Get Answering Rules List
-     */
-    list(): Promise<PagingResult<AnsweringRuleInfo>> {
-        return this.getRest().call(this.getEndpoint(false), undefined, {
-            body: undefined,
-            method: 'get'
-        }).then<any>((res) => {
-                return res.json();
-        });
-    }
+	/**
+	 *  Create Custom Answering Rule
+	 */
+	post(body: PostBody): Promise<AnsweringRuleInfo> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: body,
+			method: 'post'
+		}).then<any>((res) => {
+				return res.json();
+		});
+	}
 
 
-    /**
-     *  Delete Answering Rule by ID
-     */
-    delete(): Promise<void> {
-        return this.getRest().call(this.getEndpoint(true), undefined, {
-            body: undefined,
-            method: 'delete'
-        }).then(res => {});
-    }
+	/**
+	 *  Get Answering Rules List
+	 */
+	list(): Promise<PagingResult<AnsweringRuleInfo>> {
+		return this.getRest().call(this.getEndpoint(false), undefined, {
+			body: undefined,
+			method: 'get'
+		}).then<any>((res) => {
+				return res.json();
+		});
+	}
 
 
-    /**
-     *  Get Custom Answering Rule by ID
-     */
-    get(): Promise<AnsweringRuleInfo> {
-        return this.getRest().call(this.getEndpoint(true), undefined, {
-            body: undefined,
-            method: 'get'
-        }).then<any>((res) => {
-                return res.json();
-        });
-    }
+	/**
+	 *  Delete Answering Rule by ID
+	 */
+	delete(): Promise<void> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: undefined,
+			method: 'delete'
+		}).then(res => {});
+	}
 
 
-    /**
-     *  Update Answering Rule by ID
-     */
-    put(body: PutBody): Promise<AnsweringRuleInfo> {
-        return this.getRest().call(this.getEndpoint(true), undefined, {
-            body: body,
-            method: 'put'
-        }).then<any>((res) => {
-                return res.json();
-        });
-    }
+	/**
+	 *  Get Custom Answering Rule by ID
+	 */
+	get(): Promise<AnsweringRuleInfo> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: undefined,
+			method: 'get'
+		}).then<any>((res) => {
+				return res.json();
+		});
+	}
+
+
+	/**
+	 *  Update Answering Rule by ID
+	 */
+	put(body: PutBody): Promise<AnsweringRuleInfo> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: body,
+			method: 'put'
+		}).then<any>((res) => {
+				return res.json();
+		});
+	}
 
 }
 
 export interface PostBody {
 
-    /**
-     * Specifies if the rule is active or inactive. The default value is 'True'
-     */
-    enabled?: boolean;
+	/**
+	 * Specifies if the rule is active or inactive. The default value is 'True'
+	 */
+	enabled?: boolean;
 
-    /**
-     * Type of an answering rule, the supported value is 'Custom'
-     */
-    type?: string;
+	/**
+	 * Type of an answering rule, the supported value is 'Custom'
+	 */
+	type?: string;
 
-    /**
-     * Name of an answering rule specified by user. Max number of symbols is 30
-     */
-    name?: string;
+	/**
+	 * Name of an answering rule specified by user. Max number of symbols is 30
+	 */
+	name?: string;
 
-    /**
-     * Answering rule will be applied when calls are received from the specified caller(s)
-     */
-    callers?: CallersInfo[];
+	/**
+	 * Answering rule will be applied when calls are received from the specified caller(s)
+	 */
+	callers?: CallersInfo[];
 
-    /**
-     * Answering rule will be applied when calling the specified number(s)
-     */
-    calledNumbers?: CalledNumberInfo[];
+	/**
+	 * Answering rule will be applied when calling the specified number(s)
+	 */
+	calledNumbers?: CalledNumberInfo[];
 
-    /**
-     * Schedule when an answering rule should be applied
-     */
-    schedule?: AnsweringRuleScheduleInfo;
+	/**
+	 * Schedule when an answering rule should be applied
+	 */
+	schedule?: AnsweringRuleScheduleInfo;
 
-    /**
-     * Specifies how incoming calls should be forwarded. The default value is 'ForwardCalls'
-     */
-    callHandlingAction?: 'ForwardCalls' | 'UnconditionalForwarding';
+	/**
+	 * Specifies how incoming calls should be forwarded. The default value is 'ForwardCalls'
+	 */
+	callHandlingAction?: 'ForwardCalls' | 'UnconditionalForwarding';
 
-    /**
-     * Forwarding parameters. If the 'callHandlingAction' parameter value is set to 'ForwardCalls' - should be specified . The settings determine the forwarding numbers to which the call should be forwarded. If not specified in request, then the business-hours forwarding rules are set by default
-     */
-    forwarding?: ForwardingInfo;
+	/**
+	 * Forwarding parameters. If the 'callHandlingAction' parameter value is set to 'ForwardCalls' - should be specified . The settings determine the forwarding numbers to which the call should be forwarded. If not specified in request, then the business-hours forwarding rules are set by default
+	 */
+	forwarding?: ForwardingInfo;
 
-    /**
-     * Unconditional forwarding parameters. If the 'callHandlingAction' parameter value is set to 'UnconditionalForwarding' - should be specified
-     */
-    unconditionalForwarding?: UnconditionalForwardingInfo;
+	/**
+	 * Unconditional forwarding parameters. If the 'callHandlingAction' parameter value is set to 'UnconditionalForwarding' - should be specified
+	 */
+	unconditionalForwarding?: UnconditionalForwardingInfo;
 
-    /**
-     * Specifies whether to take a voicemail and who should do it
-     */
-    voiceMail?: VoicemailInfo;
+	/**
+	 * Specifies whether to take a voicemail and who should do it
+	 */
+	voiceMail?: VoicemailInfo;
 }
 
 export interface PutBody {
 
-    /**
-     * Specifies if the answering rule is active or not
-     */
-    enabled?: boolean;
+	/**
+	 * Specifies if the answering rule is active or not
+	 */
+	enabled?: boolean;
 
-    /**
-     * Custom name of an answering rule. The maximum number of characters is 64
-     */
-    name?: string;
+	/**
+	 * Custom name of an answering rule. The maximum number of characters is 64
+	 */
+	name?: string;
 
-    /**
-     * Forwarding parameters. Returned if 'ForwardCalls' is specified in 'callHandlingAction'. These settings determine the forwarding numbers to which the call will be forwarded
-     */
-    forwarding?: ForwardingInfo;
+	/**
+	 * Forwarding parameters. Returned if 'ForwardCalls' is specified in 'callHandlingAction'. These settings determine the forwarding numbers to which the call will be forwarded
+	 */
+	forwarding?: ForwardingInfo;
 
-    /**
-     * Predefined greetings applied for an answering rule
-     */
-    greetings?: GreetingInfo[];
+	/**
+	 * Predefined greetings applied for an answering rule
+	 */
+	greetings?: GreetingInfo[];
 }

@@ -6,25 +6,25 @@ import ExtensionInfoRequestContactInfoRegionalSettingsTimezone from './Extension
 
 interface ExtensionInfoRequestContactInfoRegionalSettings {
 
-    /**
-     * Timezone data
-     */
-    timezone?: ExtensionInfoRequestContactInfoRegionalSettingsTimezone;
+	/**
+	 * Timezone data
+	 */
+	timezone?: ExtensionInfoRequestContactInfoRegionalSettingsTimezone;
 
-    /**
-     * User interface language data
-     */
-    language?: ExtensionInfoRequestContactInfoRegionalSettingsLanguage;
+	/**
+	 * User interface language data
+	 */
+	language?: ExtensionInfoRequestContactInfoRegionalSettingsLanguage;
 
-    /**
-     * Information on language used for telephony greetings
-     */
-    greetingLanguage?: ExtensionInfoRequestContactInfoRegionalSettingsGreetingLanguage;
+	/**
+	 * Information on language used for telephony greetings
+	 */
+	greetingLanguage?: ExtensionInfoRequestContactInfoRegionalSettingsGreetingLanguage;
 
-    /**
-     * Formatting language preferences for numbers, dates and currencies
-     */
-    formattingLocale?: ExtensionInfoRequestContactInfoRegionalSettingsFormattingLocale;
+	/**
+	 * Formatting language preferences for numbers, dates and currencies
+	 */
+	formattingLocale?: ExtensionInfoRequestContactInfoRegionalSettingsFormattingLocale;
 }
 
 export default ExtensionInfoRequestContactInfoRegionalSettings;
