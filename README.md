@@ -30,7 +30,7 @@ npm install ringcentral-ts --save
 
 ### Import the module
 
-```typescript
+```javascript
 // In Typescript or ES6 (Recommended)
 import RingCentral, { SERVER_SANDBOX } from 'ringcentral-ts';
 
@@ -48,7 +48,7 @@ To perform subsequent operations, you need a ringcentral appKey (apply at https:
 
 Login, logout, get current ringcentral account info.
 
-```typescript
+```javascript
 let rc = new RingCentral({
     server: SERVER_SANDBOX, // You should use SERVER_PRODUCTION in production
     appKey: '{yourAppKey}',
@@ -171,7 +171,7 @@ Except for memory, `localStorage` and file, you can also cache token in other pl
 
 4. View the recent calls
 
-    ```typescript
+    ```javascript
     let dateFrom = new Date(Date.now() - 24 * 60 * 60 * 1000);  // A day ago
     rc.account().extension().callLog().list({ dateFrom: dateFrom.toISOString() }).then(results => {
         console.log("Recent call logs", results.records);
@@ -181,7 +181,7 @@ Except for memory, `localStorage` and file, you can also cache token in other pl
     ```
 
 ### Send SMS
-```typescript
+```javascript
 rc.account().extension().sms().post({
 	to: [{
 		phoneNumber: "{receiverPhoneNumber}"
@@ -201,7 +201,7 @@ rc.account().extension().sms().post({
 
 For all supported options and mediatype, please refer to https://developer.ringcentral.com/api-docs/latest/index.html#!#RefFaxMessages.html.
 
-```typescript
+```javascript
 import * as fs from "fs";
 rc.account().extension().fax().post({
             to: [{ phoneNumber: "{receiverPhoneNumber}" }],
@@ -217,7 +217,7 @@ rc.account().extension().fax().post({
 
 Get detail information of an extension:
 
-```typescript
+```javascript
 rc.account().extension('theExtensionId').get().then(function (extInfo) {
     console.log("The extension info", extInfo);
 }).catch(function (e) {
@@ -227,7 +227,7 @@ rc.account().extension('theExtensionId').get().then(function (extInfo) {
 
 List extensions of an account:
 
-```typescript
+```javascript
 rc.account("theAccountId").extension().list().then(function (extensions) {
     console.log("The list of extension info", extensions.records);
 }).catch(function (e) {
@@ -237,7 +237,7 @@ rc.account("theAccountId").extension().list().then(function (extensions) {
 
 Update infomation of an extension:
 
-```typescript
+```javascript
 rc.account().extension().put({ status: "Enabled" }).then(function () {
     console.log("Success to update extension.");
 }).catch(function () {
