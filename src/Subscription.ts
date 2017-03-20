@@ -82,7 +82,7 @@ export default class Subscription extends EventEmitter {
 		eventFilters = prefixFilters(eventFilters);
 		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
 		let subscription = await res.json();
-		let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey });
+		let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey, ssl: true });
 		// Wrong address pubnub won't report error.
 		pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
 		await new Promise((resolve, reject) => {
