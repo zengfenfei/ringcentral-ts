@@ -94,6 +94,7 @@ export default class Subscription extends EventEmitter {
 						keyLength: 128,
 						mode: 'ecb'
 					});
+					// TODO Filter out duplicated notifications by uuid.
 					this.emit('message', decrypted);
 				},
 				status: status => {
