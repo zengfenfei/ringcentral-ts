@@ -24,7 +24,7 @@ describe('Subscription', () => {
 		sub.on('error', e => {
 			console.error('Subscription error', e);
 		});
-		await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
+		await sub.subscribe(['/account/~/extension/~/presence']);
 	});
 
 	it.skip('should not receive notification after subscription canceled', async () => {
@@ -35,13 +35,13 @@ describe('Subscription', () => {
 		sub.on('error', e => {
 			console.error('Subscription error', e);
 		});
-		await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
+		await sub.subscribe(['/account/~/extension/~/presence']);
 		await delay(5 * 1000);
 		await sub.cancel();
 	});
 
 	it.skip('should work when multiple instances created, and resubscribe after canceled', async () => {
-		let filters = ['/restapi/v1.0/account/~/extension/~/presence'];
+		let filters = ['/account/~/extension/~/presence'];
 		let sub = new Subscription(restClient);
 		sub.onMessage(msg => console.log('##message of first subscription', msg.body.telephonyStatus));
 
@@ -78,7 +78,7 @@ async function testRefreshExpiredSubscription() {
     await restClient.restoreToken(new FileTokenStore(config.tokenCacheFile));
     let sub = new Subscription(restClient);
     try {
-        await sub.subscribe(['/restapi/v1.0/account/~/extension/~/presence']);
+        await sub.subscribe(['/account/~/extension/~/presence']);
         sub.on('notification', msg => {
             console.log('>>>notification', msg.body.telephonyStatus, msg);
         });
