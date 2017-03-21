@@ -10,7 +10,7 @@ export default class Subscription extends EventEmitter {
 
 	id: string;
 	expirationTime: number; // Epoch time in ms.
-	eventFilters: string[]; // Without REST base url
+	eventFilters: string[]; // Without REST base url, can be set by user
 	subscribeKey: string;
 	address: string;	// PubNub channels
 	encryptionKey: string;	// AES encryptionKey
@@ -49,10 +49,12 @@ export default class Subscription extends EventEmitter {
 
 		this.refreshTimer = setTimeout(() => {
 			this.refreshTimer = null;
-			this.refresh().catch(reason => {
+			this.refresh().catch(e => {
 				this.subscriptionDeleted();
-				let e = new Error('Subscription auto refresh error: ' + reason);
-				e['detail'] = reason;
+				if (e.code === ErrorNotFound) {
+					return this.resubscribe(e.message);
+				}
+				e.message = 'Subscription refresh error. ' + e.message;
 				this.emit('error', e);
 			});
 		}, this.expirationTime - Date.now() - refreshHandicap);
@@ -61,7 +63,6 @@ export default class Subscription extends EventEmitter {
 	private subscriptionDeleted() {
 		this.id = '';
 		this.expirationTime = 0;
-		this.eventFilters = null;
 		if (this.refreshTimer) {
 			clearTimeout(this.refreshTimer);
 			this.refreshTimer = null;
@@ -74,6 +75,10 @@ export default class Subscription extends EventEmitter {
     /**
      * expiresIn Optional. Subscription lifetime in seconds. Max value is 7 days (604800 sec)
      * The 'expiresIn' is not supported.
+	 *
+	 * Errors migh occur:
+	 * errorCode: 'SUB-505',
+	 * message: 'Subscriptions limit exceeded'
      */
 	async subscribe(eventFilters: string[]) {
 		if (this.pubnub) {
@@ -145,6 +150,13 @@ export default class Subscription extends EventEmitter {
 		this.subscriptionDeleted();
 	}
 
+	private resubscribe(reason: string) {
+		this.subscribe(this.eventFilters).catch(e => {
+			e.message = 'Resubscribe error: ' + e.message + '. Resubscribe reason: ' + reason;
+			this.emit('error', e);
+		});
+	}
+
 	private async refresh() {
 		if (!this.id) {
 			return;
@@ -173,3 +185,4 @@ const deliveryMode = { transportType: 'PubNub', encryption: true };
 const refreshHandicap = 30 * 1000;
 // In seconds
 // export const MAX_LIFETIME = 604800;
+const ErrorNotFound = 'CMN-102';
