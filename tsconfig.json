@@ -6,8 +6,6 @@
 			"es6",
 			"dom"
 		],
-		"module": "commonjs",
-		"moduleResolution": "node",
 		"sourceMap": true,
 		"declaration": true,
 		"pretty": true,
