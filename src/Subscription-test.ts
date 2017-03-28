@@ -9,32 +9,37 @@ import auth from '../test/auth';
 */
 
 let restClient: RestClient;
+let subscription: Subscription;
 
 before(async () => {
 	restClient = (await auth).rest;
+	subscription = new Subscription(restClient);
+	subscription.onMessage(msg => {
+		console.log('>>>Subscription message', msg);
+	});
+	subscription.on('StatusError', err => {
+		console.log('!!!Subscription status error', err);
+	});
+	subscription.on('status', status => {
+		console.log('Subscription pubnub status', status);
+	});
+	subscription.on('RefreshError', err => {
+		console.log('Subscription refresh error:' + err);
+	});
+	subscription.on('RefreshSuccess', () => {
+		console.log('Subscription refresh RefreshSuccess');
+	});
 });
 
 describe('Subscription', () => {
 
-	it.skip('should receive notifications forever', async () => {
-		let sub = new Subscription(restClient);
-		sub.onMessage(msg => {
-			console.log('>>>notification', msg.body.telephonyStatus, msg);
-		});
-		sub.on('error', e => {
-			console.error('Subscription error', e);
-		});
+	it('should receive notifications forever', async () => {
+		let sub = subscription;
 		await sub.subscribe(['/account/~/extension/~/presence']);
 	});
 
 	it.skip('should not receive notification after subscription canceled', async () => {
-		let sub = new Subscription(restClient);
-		sub.onMessage(msg => {
-			console.log('>>>notification', msg.body.telephonyStatus, msg);
-		});
-		sub.on('error', e => {
-			console.error('Subscription error', e);
-		});
+		let sub = subscription;
 		await sub.subscribe(['/account/~/extension/~/presence']);
 		await delay(5 * 1000);
 		await sub.cancel();
