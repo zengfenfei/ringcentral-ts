@@ -26,7 +26,7 @@ module.exports = [/*{
 }, */{
 		entry: ["babel-polyfill", "./build/test/index.js"],
 		output: {
-			path: "./build",
+			path: __dirname + "/build",
 			filename: "tests.js"
 		},
 		module: {
