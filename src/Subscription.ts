@@ -2,11 +2,13 @@ import { EventEmitter } from 'events';
 import * as assert from 'assert';
 import * as PubNub from 'pubnub';
 import { OPERATIONS, CATEGORIES } from 'pubnub';
+import delay from 'delay.ts';
 import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 
 export default class Subscription extends EventEmitter {
 
 	rest: RestClient;
+	maxRefreshRetries: 10;
 
 	id: string;
 	expirationTime: number; // Epoch time in ms.
@@ -47,15 +49,22 @@ export default class Subscription extends EventEmitter {
 		this.expirationTime = Date.parse(subscription.expirationTime);
 		this.eventFilters = unprefixFilters(subscription.eventFilters);
 
-		this.refreshTimer = setTimeout(() => {
+		this.refreshTimer = setTimeout(async () => {
 			this.refreshTimer = null;
-			this.refresh().catch(e => {
+			this.refresh().catch(async e => {
 				this.subscriptionDeleted();
-				if (e.code === ErrorNotFound) {
-					return this.resubscribe(e.message);
-				}
-				e.message = 'Subscription refresh error. ' + e.message;
+				e.message = 'Subscription refresh failed, will retry ' + this.maxRefreshRetries + ' time. Cause:' + e.message;
 				this.emit(EventRefreshError, e);
+				for (let i = 1; i <= this.maxRefreshRetries; i++) {
+					try {
+						await delay(3 * 1000);
+						await this.subscribe(this.eventFilters);
+						break;
+					} catch (e) {
+						e.message = 'Subscription refresh retry ' + i + '/' + this.maxRefreshRetries + ' failed. Cause:' + e.message;
+						this.emit(EventRefreshError, e);
+					}
+				}
 			});
 		}, this.expirationTime - Date.now() - refreshHandicap);
 	}
@@ -72,14 +81,14 @@ export default class Subscription extends EventEmitter {
 		this.pubnub = null;
 	}
 
-    /**
-     * expiresIn Optional. Subscription lifetime in seconds. Max value is 7 days (604800 sec)
-     * The 'expiresIn' is not supported.
+	/**
+	 * expiresIn Optional. Subscription lifetime in seconds. Max value is 7 days (604800 sec)
+	 * The 'expiresIn' is not supported.
 	 *
 	 * Errors migh occur:
 	 * errorCode: 'SUB-505',
 	 * message: 'Subscriptions limit exceeded'
-     */
+	 */
 	async subscribe(eventFilters: string[]) {
 		if (this.pubnub) {
 			throw new Error('Subscription exists.');
@@ -106,7 +115,7 @@ export default class Subscription extends EventEmitter {
 				Good response:
 				{   category: 'PNConnectedCategory',
 					operation: 'PNSubscribeOperation'... }
-
+	
 				Wrong subscribeKey:
 				{   error: true,
 					operation: 'PNSubscribeOperation',
@@ -152,13 +161,6 @@ export default class Subscription extends EventEmitter {
 		this.subscriptionDeleted();
 	}
 
-	private resubscribe(reason: string) {
-		this.subscribe(this.eventFilters).catch(e => {
-			e.message = 'Resubscribe error: ' + e.message + '. Resubscribe reason: ' + reason;
-			this.emit(EventRefreshError, e);
-		});
-	}
-
 	private async refresh() {
 		if (!this.id) {
 			return;
@@ -188,7 +190,7 @@ const deliveryMode = { transportType: 'PubNub', encryption: true };
 const refreshHandicap = 30 * 1000;
 // In seconds
 // export const MAX_LIFETIME = 604800;
-const ErrorNotFound = 'CMN-102';
+// const ErrorNotFound = 'CMN-102';
 
 // The list of events the subscription may emit.
 const EventMessage = 'message';
