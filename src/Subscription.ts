@@ -8,7 +8,7 @@ import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 export default class Subscription extends EventEmitter {
 
 	rest: RestClient;
-	maxRefreshRetries: 10;
+	maxRefreshRetries = 10;
 
 	id: string;
 	expirationTime: number; // Epoch time in ms.
@@ -53,16 +53,17 @@ export default class Subscription extends EventEmitter {
 			this.refreshTimer = null;
 			this.refresh().catch(async e => {
 				this.subscriptionDeleted();
-				e.message = 'Subscription refresh failed, will retry ' + this.maxRefreshRetries + ' time. Cause:' + e.message;
+				e.message = 'Subscription refresh failed, will retry ' + this.maxRefreshRetries + ' times. Cause:' + e.message;
 				this.emit(EventRefreshError, e);
 				for (let i = 1; i <= this.maxRefreshRetries; i++) {
 					try {
 						await delay(3 * 1000);
 						await this.subscribe(this.eventFilters);
+						this.emit(EventRefreshSuccess);
 						break;
-					} catch (e) {
-						e.message = 'Subscription refresh retry ' + i + '/' + this.maxRefreshRetries + ' failed. Cause:' + e.message;
-						this.emit(EventRefreshError, e);
+					} catch (e2) {
+						e2.message = 'Subscription refresh retry ' + i + '/' + this.maxRefreshRetries + ' failed. Cause:' + e2.message;
+						this.emit(EventRefreshError, e2);
 					}
 				}
 			});
@@ -142,10 +143,10 @@ export default class Subscription extends EventEmitter {
 					this.emit(EventStatus, status);
 				}
 			};
-			pubnub.addListener(
+			pubnub.addListener({
 				message,
 				status
-			);
+			});
 		});
 
 		this.pubnub = pubnub;
