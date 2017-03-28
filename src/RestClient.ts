@@ -233,7 +233,8 @@ export default class RestClient extends EventEmitter {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': 'Basic ' + this.basicAuth()
+				'Authorization': 'Basic ' + this.basicAuth(),
+				'X-User-Agent': this.agents.join(' ')
 			}
 		});
 		if (res.ok) {
@@ -286,7 +287,8 @@ export default class RestClient extends EventEmitter {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': 'Basic ' + this.basicAuth()
+				'Authorization': 'Basic ' + this.basicAuth(),
+				'X-User-Agent': this.agents.join(' ')
 			},
 			body: stringify({ token: token.accessToken })
 		});
