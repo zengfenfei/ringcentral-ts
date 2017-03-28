@@ -91,50 +91,52 @@ export default class Subscription extends EventEmitter {
 		// Wrong address pubnub won't report error.
 		pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
 		await new Promise((resolve, reject) => {
-			pubnub.addListener({
-				message: msg => {
-					let decrypted = pubnub.decrypt(msg.message, subscription.deliveryMode.encryptionKey, {
-						encryptKey: false,
-						keyEncoding: 'base64',
-						keyLength: 128,
-						mode: 'ecb'
-					});
-					// TODO Filter out duplicated notifications by uuid.
-					this.emit('message', decrypted);
-				},
-				status: status => {
-                    /*
-                    Good response:
-                    {   category: 'PNConnectedCategory',
-                        operation: 'PNSubscribeOperation'... }
+			let message = msg => {
+				let decrypted = pubnub.decrypt(msg.message, subscription.deliveryMode.encryptionKey, {
+					encryptKey: false,
+					keyEncoding: 'base64',
+					keyLength: 128,
+					mode: 'ecb'
+				});
+				// TODO Filter out duplicated notifications by uuid.
+				this.emit('message', decrypted);
+			};
+			let status = status => {
+				/*
+				Good response:
+				{   category: 'PNConnectedCategory',
+					operation: 'PNSubscribeOperation'... }
 
-                    Wrong subscribeKey:
-                    {   error: true,
-                        operation: 'PNSubscribeOperation',
-                        category: 'PNBadRequestCategory'... }
-                    */
-					if (status.operation === OPERATIONS.PNSubscribeOperation) {
-						if (status.category === CATEGORIES.PNConnectedCategory) {
-							resolve();
-							return;
-						} else if (status.error) {
-							let e = new Error('PubNub subscribe failed, ' + status.category);
-							e['detail'] = status;
-							pubnub.removeAllListeners();
-							pubnub.destroy();
-							reject(e);
-							return;
-						}
-					}
-					if (status.error) {
-						let e = new Error('PubNub error status, category: ' + status.category);
+				Wrong subscribeKey:
+				{   error: true,
+					operation: 'PNSubscribeOperation',
+					category: 'PNBadRequestCategory'... }
+				*/
+				if (status.operation === OPERATIONS.PNSubscribeOperation) {
+					if (status.category === CATEGORIES.PNConnectedCategory) {
+						resolve();
+						return;
+					} else if (status.error) {
+						let e = new Error('PubNub subscribe failed, ' + status.category);
 						e['detail'] = status;
-						this.emit('error', e);
-					} else {
-						this.emit('status', status);
+						pubnub.removeAllListeners();
+						pubnub.destroy();
+						reject(e);
+						return;
 					}
 				}
-			});
+				if (status.error) {
+					let e = new Error('PubNub error status, category: ' + status.category);
+					e['detail'] = status;
+					this.emit('error', e);
+				} else {
+					this.emit('status', status);
+				}
+			};
+			pubnub.addListener(
+				message,
+				status
+			);
 		});
 
 		this.pubnub = pubnub;
