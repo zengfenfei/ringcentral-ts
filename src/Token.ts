@@ -2,7 +2,9 @@ export default class Token {
 
 	setOwner(appKey: string, ownerInfo?: { username: string, extension?: string }) {
 		this.appKey = appKey;
-		this.owner = tokenOwner(ownerInfo);
+		if (ownerInfo) {
+			this.owner = tokenOwner(ownerInfo);
+		}
 	}
 
 	validateOwner(appKey: string, ownerInfo?: { username: string, extension?: string }) {

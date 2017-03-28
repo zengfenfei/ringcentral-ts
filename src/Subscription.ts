@@ -116,7 +116,7 @@ export default class Subscription extends EventEmitter {
 				Good response:
 				{   category: 'PNConnectedCategory',
 					operation: 'PNSubscribeOperation'... }
-	
+
 				Wrong subscribeKey:
 				{   error: true,
 					operation: 'PNSubscribeOperation',

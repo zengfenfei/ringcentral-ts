@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { format } from 'url';
-import { stringify } from 'querystring';
+import { stringify, parse } from 'querystring';
 import * as fetch from 'isomorphic-fetch';
 import delay from 'delay.ts';
 import * as pkg from './pkg';
@@ -14,6 +14,7 @@ export const API_VERSION = 'v1.0';
 export const BASE_URL = '/restapi/';
 const TOKEN_URL = BASE_URL + 'oauth/token';
 const REVOKE_URL = BASE_URL + 'oauth/revoke';
+const AUTHORIZE_URL = BASE_URL + 'oauth/authorize';
 
 // Auth events
 const EventLoginStart = 'LoginStart';
@@ -180,8 +181,7 @@ export default class RestClient extends EventEmitter {
 		return res;
 	}
 
-	async auth(opts: { username: string; password: string; extension?: string, accessTokenTtl?: number, refreshTokenTtl?: number, scope?: string[] }): Promise<void> {
-		// let tokenData = this.tokenStore.get();
+	auth(opts: { username: string; password: string; extension?: string, accessTokenTtl?: number, refreshTokenTtl?: number, scope?: string[] }): Promise<void> {
 		let body = {
 			grant_type: 'password',
 			username: opts.username,
@@ -191,6 +191,41 @@ export default class RestClient extends EventEmitter {
 			refresh_token_ttl: opts.refreshTokenTtl,
 			scope: opts.scope && opts.scope.join(' ')
 		};
+		return this.authRequest(body, opts);
+	}
+
+	/**
+	 * Login by oauth. http://ringcentral-api-docs.readthedocs.io/en/latest/oauth/
+	 * @param callbackUrl The full oauth callback url with parameters returned from RingCentral.
+	 */
+	async oauth(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
+		let parts = callbackUrl.split('?');
+		let params = this.parseOauthCallback(parts[1]);
+		if (!params.code) {
+			throw new Error('No authorization code contained in the callback url.');
+		}
+		let body = {
+			grant_type: 'authorization_code',
+			code: params.code,
+			redirect_uri: parts[0],
+			access_token_ttl: opts && opts.accessTokenTtl,
+			refresh_token_ttl: opts && opts.refreshTokenTtl
+		};
+		return await this.authRequest(body);
+	}
+
+	oauthUrl(redirect_uri: string, opts?: { state?: string, force?: boolean }) {
+		let query = {
+			response_type: 'code',
+			client_id: this.appKey,
+			redirect_uri,
+			force: opts && opts.force,
+			state: opts && opts.state
+		};
+		return format({ pathname: this.server + AUTHORIZE_URL, query });
+	}
+
+	private async authRequest(body, user?: { username: string, extension?: string }) {
 		this.emit(EventLoginStart);
 		let startTime = Date.now();
 		let res = await fetch(this.server + TOKEN_URL, {
@@ -204,7 +239,7 @@ export default class RestClient extends EventEmitter {
 		if (res.ok) {
 			let resJson = await res.json();
 			let token = this.getToken() || new Token();
-			token.setOwner(this.appKey, opts);
+			token.setOwner(this.appKey, user);
 			this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
 			this.emit(EventLoginSuccess);
 		} else {
@@ -223,6 +258,22 @@ export default class RestClient extends EventEmitter {
 				throw e;
 			}
 		}
+	}
+	/**
+	 * Parse parameters from oauth.
+	 * @param paramsStr The query part of the RingCentral oauth call back url.
+	 */
+	parseOauthCallback(paramsStr: string): OauthCallbackParams {
+		if (paramsStr.charAt(0) === '?' || paramsStr.charAt(0) === '#') {
+			paramsStr = paramsStr.substr(1);
+		}
+		let params = parse(paramsStr);
+		if (params.error) {
+			let e = new Error(params.error_description);
+			e['code'] = params.error;
+			throw e;
+		}
+		return params;
 	}
 
 	async logout(): Promise<void> {
@@ -350,6 +401,12 @@ class RestError extends Error {
 		this.detail = detail;
 		this.rawRes = raw;
 	}
+}
+
+export interface OauthCallbackParams {
+	code: string;	// The authorization code returned for your application
+	expires_in: number;	// The remaining lifetime of the authorization code
+	state?: string;	// This parameter will be included in response if it was specified in the client authorization request. The value will be copied from the one received from the client
 }
 
 const ErrorRateExceeded = 'CMN-301';
