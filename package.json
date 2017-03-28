@@ -13,7 +13,7 @@
 	"dependencies": {
 		"@types/chai": "^3.4.35",
 		"@types/mocha": "^2.2.39",
-		"@types/node": "^7.0.5",
+		"@types/node": "^7.0.12",
 		"babel-polyfill": "^6.23.0",
 		"delay.ts": "^1.1.0",
 		"form-data": "^2.1.2",
@@ -27,12 +27,12 @@
 		"istanbul": "^0.4.0",
 		"minimist": "^1.2.0",
 		"mocha": "^3.2.0",
-		"sinon": "^1.15.4",
-		"sinon-chai": "^2.8.0",
+		"sinon": "^2.1.0",
+		"sinon-chai": "^2.9.0",
 		"tslint": "^4.5.1",
-		"typedoc": "^0.5.7",
-		"typescript": "^2.2.1",
-		"webpack": "^2.2.1"
+		"typedoc": "^0.5.9",
+		"typescript": "^2.2.2",
+		"webpack": "^2.3.2"
 	},
 	"preferGlobal": false,
 	"private": false,
