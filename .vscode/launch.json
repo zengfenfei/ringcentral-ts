@@ -7,6 +7,22 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Subscription test",
+			"program": "${workspaceRoot}/node_modules/.bin/_mocha",
+			"cwd": "${workspaceRoot}",
+			"sourceMaps": true,
+			"args": [
+				"${workspaceRoot}/build/src/Subscription-test.js",
+				"--no-timeouts",
+				"--no-exit"
+			],
+			"outFiles": [
+				"${workspaceRoot}/build/**/*.js"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Test",
 			"program": "${workspaceRoot}/node_modules/.bin/_mocha",
 			"cwd": "${workspaceRoot}",
