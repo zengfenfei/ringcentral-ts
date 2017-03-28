@@ -55,7 +55,7 @@ export default class Subscription extends EventEmitter {
 					return this.resubscribe(e.message);
 				}
 				e.message = 'Subscription refresh error. ' + e.message;
-				this.emit('error', e);
+				this.emit(EventRefreshError, e);
 			});
 		}, this.expirationTime - Date.now() - refreshHandicap);
 	}
@@ -99,7 +99,7 @@ export default class Subscription extends EventEmitter {
 					mode: 'ecb'
 				});
 				// TODO Filter out duplicated notifications by uuid.
-				this.emit('message', decrypted);
+				this.emit(EventMessage, decrypted);
 			};
 			let status = status => {
 				/*
@@ -128,9 +128,9 @@ export default class Subscription extends EventEmitter {
 				if (status.error) {
 					let e = new Error('PubNub error status, category: ' + status.category);
 					e['detail'] = status;
-					this.emit('error', e);
+					this.emit(EventStatusError, e);
 				} else {
-					this.emit('status', status);
+					this.emit(EventStatus, status);
 				}
 			};
 			pubnub.addListener(
@@ -144,7 +144,7 @@ export default class Subscription extends EventEmitter {
 	}
 
 	onMessage(listener: Function) {
-		this.on('message', listener);
+		this.on(EventMessage, listener);
 	}
 
 	async cancel() {
@@ -155,7 +155,7 @@ export default class Subscription extends EventEmitter {
 	private resubscribe(reason: string) {
 		this.subscribe(this.eventFilters).catch(e => {
 			e.message = 'Resubscribe error: ' + e.message + '. Resubscribe reason: ' + reason;
-			this.emit('error', e);
+			this.emit(EventRefreshError, e);
 		});
 	}
 
@@ -169,6 +169,7 @@ export default class Subscription extends EventEmitter {
 		let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
 		let subscription = await res.json();
 		this.subscriptionUpdated(subscription);
+		this.emit(EventRefreshSuccess);
 	}
 
 }
@@ -188,3 +189,10 @@ const refreshHandicap = 30 * 1000;
 // In seconds
 // export const MAX_LIFETIME = 604800;
 const ErrorNotFound = 'CMN-102';
+
+// The list of events the subscription may emit.
+const EventMessage = 'message';
+const EventStatusError = 'StatusError'; // PubNub status event
+const EventStatus = 'status';	// PubNub status event
+const EventRefreshSuccess = 'RefreshSuccess';
+const EventRefreshError = 'RefreshError';
