@@ -15,7 +15,7 @@ export default class Token {
 	}
 
 	/**
-	 * Restore from cached data
+	 * Restore from cached data. After restored from cache, you should validate the owner info.
 	 */
 	fromCache(cached) {
 		for (let p in cached) {
@@ -25,7 +25,7 @@ export default class Token {
 	}
 
     /**
-     *  Populate token from server response.
+     *  Populate token from server response. You should set owner after calling this method.
      *  timeSpent: Time in ms spent fetching token.
      */
 	fromServer(newToken, timeSpent: number) {
