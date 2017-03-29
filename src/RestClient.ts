@@ -201,9 +201,6 @@ export default class RestClient extends EventEmitter {
 	async oauth(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
 		let parts = callbackUrl.split('?');
 		let params = this.parseOauthCallback(parts[1]);
-		if (!params.code) {
-			throw new Error('No authorization code contained in the callback url.');
-		}
 		let body = {
 			grant_type: 'authorization_code',
 			code: params.code,
@@ -212,6 +209,20 @@ export default class RestClient extends EventEmitter {
 			refresh_token_ttl: opts && opts.refreshTokenTtl
 		};
 		return await this.authRequest(body);
+	}
+
+	/**
+	 * Parse parameters from oauth.
+	 * @param paramsStr The query part of the RingCentral oauth call back url.
+	 */
+	private parseOauthCallback(paramsStr: string): OauthCallbackParams {
+		let params = parse(paramsStr);
+		if (!params.code) {
+			let e = new Error(params.error_description || params.error || 'No authorization code contained in the callback url.');
+			e['code'] = params.error;
+			throw e;
+		}
+		return params;
 	}
 
 	oauthUrl(redirect_uri: string, opts?: { state?: string, force?: boolean }) {
@@ -259,22 +270,6 @@ export default class RestClient extends EventEmitter {
 				throw e;
 			}
 		}
-	}
-	/**
-	 * Parse parameters from oauth.
-	 * @param paramsStr The query part of the RingCentral oauth call back url.
-	 */
-	parseOauthCallback(paramsStr: string): OauthCallbackParams {
-		if (paramsStr.charAt(0) === '?' || paramsStr.charAt(0) === '#') {
-			paramsStr = paramsStr.substr(1);
-		}
-		let params = parse(paramsStr);
-		if (params.error) {
-			let e = new Error(params.error_description);
-			e['code'] = params.error;
-			throw e;
-		}
-		return params;
 	}
 
 	async logout(): Promise<void> {
