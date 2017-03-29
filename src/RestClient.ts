@@ -167,7 +167,8 @@ export default class RestClient extends EventEmitter {
 					resJson,
 					res);
 				if (e.code === ErrorRateExceeded) {
-					let retryAfter = parseInt(res.headers.get('retry-after')) * 1000;
+					// FIXME retry-after is custom header, by default, it can't be retrieved. Server should add header: 'Access-Control-Expose-Headers: retry-after'.
+					let retryAfter = parseInt(res.headers.get('retry-after') || '60') * 1000;
 					this.recoverTime = Date.now() + retryAfter;
 					e['retryAfter'] = retryAfter;
 				}
