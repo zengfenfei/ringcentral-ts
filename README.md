@@ -91,8 +91,8 @@ By default the token is stored in memory, it will be lost when the process exits
 Creating Token Store:
 ```javascript
 // In browser
-import WebTokenStorage from 'ringcentral-ts/WebTokenStorage';
-let tokenStore = new WebTokenStorage('{localStorageKey}', localStorage);
+import WebTokenStore from 'ringcentral-ts/WebTokenStore';
+let tokenStore = new WebTokenStore('{localStorageKey}', localStorage);
 
 // In node.js
 import FileTotkenStorage from 'ringcentral-ts/FileTokenStore';
