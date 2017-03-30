@@ -66,7 +66,7 @@
 			<div class="tsd-panel tsd-typography">
 				<h1 id="ringcentral-ts">RingCentral-ts</h1>
 				<p><a href="https://travis-ci.org/zengfenfei/ringcentral-ts"><img src="https://travis-ci.org/zengfenfei/ringcentral-ts.svg?branch=master" alt="Build Status"></a></p>
-				<p>This is a library implemented in typescript which provides convenient APIs for typescript/javascript developers to access RingCentral REST API(<a href="https://developer.ringcentral.com/api-docs/latest/index.html">https://developer.ringcentral.com/api-docs/latest/index.html</a>). It can be used in both node.js and browser.</p>
+				<p>This is a library implemented in typescript which provides convenient APIs for typescript/javascript developers to access <a href="https://developer.ringcentral.com/api-docs/latest/index.html">RingCentral REST API</a>. It can be used in both node.js and browser. <a href="https://zengfenfei.github.io/ringcentral-ts/">Full API Reference</a>.</p>
 				<h1 id="table-of-contents">Table of contents</h1>
 				<ul>
 					<li><a href="#getting-started">Getting Started</a></li>
@@ -134,8 +134,8 @@ rc.auth({
 				<p>By default the token is stored in memory, it will be lost when the process exits in node or the web page reloads. You can specify a <code>TokenStore</code> to cache the token in <code>localStorage</code>, file, redis or other databases, etc.</p>
 				<p>Creating Token Store:</p>
 				<pre><code class="lang-javascript"><span class="hljs-comment">// In browser</span>
-<span class="hljs-keyword">import</span> WebTokenStorage <span class="hljs-keyword">from</span> <span class="hljs-string">'ringcentral-ts/WebTokenStorage'</span>;
-<span class="hljs-keyword">let</span> tokenStore = <span class="hljs-keyword">new</span> WebTokenStorage(<span class="hljs-string">'{localStorageKey}'</span>, localStorage);
+<span class="hljs-keyword">import</span> WebTokenStore <span class="hljs-keyword">from</span> <span class="hljs-string">'ringcentral-ts/WebTokenStore'</span>;
+<span class="hljs-keyword">let</span> tokenStore = <span class="hljs-keyword">new</span> WebTokenStore(<span class="hljs-string">'{localStorageKey}'</span>, localStorage);
 
 <span class="hljs-comment">// In node.js</span>
 <span class="hljs-keyword">import</span> FileTotkenStorage <span class="hljs-keyword">from</span> <span class="hljs-string">'ringcentral-ts/FileTokenStore'</span>;
@@ -274,6 +274,12 @@ rc.account().extension().fax().post({
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_client_.html">"<wbr>Client"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_filetokenstore_.html">"<wbr>File<wbr>Token<wbr>Store"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_webtokenstore_.html">"<wbr>Web<wbr>Token<wbr>Store"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ListQuery | ringcentral-ts API Reference</title>
+	<title>&quot;FileTokenStore&quot; | ringcentral-ts API Reference</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,103 +56,26 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_paths_activecalls_.html">&quot;paths/ActiveCalls&quot;</a>
-				</li>
-				<li>
-					<a href="_paths_activecalls_.listquery.html">ListQuery</a>
+					<a href="_filetokenstore_.html">&quot;FileTokenStore&quot;</a>
 				</li>
 			</ul>
-			<h1>Interface ListQuery</h1>
+			<h1>External module &quot;FileTokenStore&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">ListQuery</span>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_paths_activecalls_.listquery.html#direction" class="tsd-kind-icon">direction</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_paths_activecalls_.listquery.html#page" class="tsd-kind-icon">page</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_paths_activecalls_.listquery.html#perpage" class="tsd-kind-icon">per<wbr>Page</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_paths_activecalls_.listquery.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_filetokenstore_.filetokenstore.html" class="tsd-kind-icon">File<wbr>Token<wbr>Store</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="direction" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> direction</h3>
-					<div class="tsd-signature tsd-kind-icon">direction<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Inbound"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Outbound"</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/paths/ActiveCalls.ts#L30">paths/ActiveCalls.ts:30</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The direction for the result records. It is allowed to specify more than one direction. If not specified, both inbound and outbound records are returned. Multiple values are accepted</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="page" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> page</h3>
-					<div class="tsd-signature tsd-kind-icon">page<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/paths/ActiveCalls.ts#L40">paths/ActiveCalls.ts:40</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Indicates the page number to retrieve. Only positive number values are allowed. Default value is &#39;1&#39;.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="perpage" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> per<wbr>Page</h3>
-					<div class="tsd-signature tsd-kind-icon">per<wbr>Page<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/paths/ActiveCalls.ts#L45">paths/ActiveCalls.ts:45</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Indicates the page size (number of items). If not specified, the value is &#39;100&#39; by default.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="type" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Voice"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Fax"</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/paths/ActiveCalls.ts#L35">paths/ActiveCalls.ts:35</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Call type of a record. It is allowed to specify more than one type. If not specified, all call types are returned. Multiple values are accepted</p>
-						</div>
 					</div>
 				</section>
 			</section>
@@ -163,37 +86,16 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_paths_activecalls_.html">"paths/<wbr>Active<wbr>Calls"</a>
+					<li class="current tsd-kind-external-module">
+						<a href="_filetokenstore_.html">"<wbr>File<wbr>Token<wbr>Store"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-external">
-						<a href="../classes/_paths_activecalls_.activecalls.html" class="tsd-kind-icon">Active<wbr>Calls</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_filetokenstore_.filetokenstore.html" class="tsd-kind-icon">File<wbr>Token<wbr>Store</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_paths_activecalls_.listquery.html" class="tsd-kind-icon">List<wbr>Query</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_paths_activecalls_.listquery.html#direction" class="tsd-kind-icon">direction</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_paths_activecalls_.listquery.html#page" class="tsd-kind-icon">page</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_paths_activecalls_.listquery.html#perpage" class="tsd-kind-icon">per<wbr>Page</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_paths_activecalls_.listquery.html#type" class="tsd-kind-icon">type</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
