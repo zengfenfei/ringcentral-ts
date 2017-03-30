@@ -7,7 +7,7 @@
 		"test": "mocha build/test/index.js",
 		"istanbul": "./node_modules/.bin/istanbul cover -x specs.js --dir=./build/coverage --report=lcov --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --reporter spec ./build/test/specs.js",
 		"generate": "mkdir -p src/generated/url-builders; node codegen/generate.js  --out src/generated codegen/swagger.json",
-		"docs": "typedoc --mode file --out ./build/api-docs/ src/ --module es6 -t es6 --exclude **/src/test/**/*.ts --includeDeclarations",
+		"docs": "cd ./src; typedoc --mode modules -m es6 --out ../build/api-docs/ ./Client.ts --ignoreCompilerErrors --excludePrivate --lib lib.es6.d.ts --disableOutputCheck --name 'ringcentral-ts API Reference'",
 		"lint": "tslint test/*.ts src/**/*.ts"
 	},
 	"dependencies": {
