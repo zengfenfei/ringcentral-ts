@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/zengfenfei/ringcentral-ts.svg?branch=master)](https://travis-ci.org/zengfenfei/ringcentral-ts)
 
-This is a library implemented in typescript which provides convenient APIs for typescript/javascript developers to access RingCentral REST API(https://developer.ringcentral.com/api-docs/latest/index.html). It can be used in both node.js and browser.
+This is a library implemented in typescript which provides convenient APIs for typescript/javascript developers to access [RingCentral REST API](https://developer.ringcentral.com/api-docs/latest/index.html). It can be used in both node.js and browser. [Full API Reference](https://zengfenfei.github.io/ringcentral-ts/).
 
 # Table of contents
 
