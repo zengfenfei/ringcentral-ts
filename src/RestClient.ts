@@ -136,7 +136,7 @@ export default class RestClient extends EventEmitter {
 
 		let token = this.getToken();
 		if (!token) {
-			let e = new Error('Cannot perform api calls without login.');
+			let e = new Error(opts.method + ' ' + url + ' failed: Not authenticated');
 			e['code'] = 'NoToken';
 			throw e;
 		}
