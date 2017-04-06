@@ -5,6 +5,9 @@ import { OPERATIONS, CATEGORIES } from 'pubnub';
 import delay from 'delay.ts';
 import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 
+/**
+ * There are 3 ways to subscribe for notifications: by event filters; by subscription id; by subscription data.
+ */
 export default class Subscription extends EventEmitter {
 
 	rest: RestClient;
@@ -97,6 +100,29 @@ export default class Subscription extends EventEmitter {
 		eventFilters = prefixFilters(eventFilters);
 		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
 		let subscription = await res.json();
+		await this.subscribeByData(subscription);
+	}
+
+	/**
+	 * 
+	 * @param id The existing subscription id.
+	 */
+	async subscribeById(id: string) {
+		let res = await this.rest.get('/subscription/' + id);
+		let subscription = await res.json();
+		await this.subscribeByData(subscription);
+	}
+
+	/**
+	 * 
+	 * @param subscription The subscription data returned from REST API.
+	 */
+	async subscribeByData(subscription) {
+		await this.connectToPushServer(subscription);
+		this.subscriptionUpdated(subscription);
+	}
+
+	async connectToPushServer(subscription) {
 		let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey, ssl: true });
 		// Wrong address pubnub won't report error.
 		pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
@@ -150,7 +176,6 @@ export default class Subscription extends EventEmitter {
 		});
 
 		this.pubnub = pubnub;
-		this.subscriptionUpdated(subscription);
 	}
 
 	onMessage(listener: Function) {
