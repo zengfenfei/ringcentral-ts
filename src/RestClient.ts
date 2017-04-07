@@ -199,13 +199,17 @@ export default class RestClient extends EventEmitter {
 	 * Login by oauth. http://ringcentral-api-docs.readthedocs.io/en/latest/oauth/
 	 * @param callbackUrl The full oauth callback url with parameters returned from RingCentral.
 	 */
-	async oauth(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
+	async oauthByUrl(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
 		let parts = callbackUrl.split('?');
 		let params = this.parseOauthCallback(parts[1]);
+		return await this.oauth(params.code, parts[0], opts);
+	}
+
+	async oauth(code: string, redirectUri: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
 		let body = {
 			grant_type: 'authorization_code',
-			code: params.code,
-			redirect_uri: parts[0],
+			code: code,
+			redirect_uri: redirectUri,
 			access_token_ttl: opts && opts.accessTokenTtl,
 			refresh_token_ttl: opts && opts.refreshTokenTtl
 		};

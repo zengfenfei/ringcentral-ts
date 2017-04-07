@@ -36,8 +36,12 @@ export default class RingCentral {
 		return this.rest.oauthUrl(redirect_uri, opts);
 	}
 
-	oauth(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
-		return this.rest.oauth(callbackUrl, opts);
+	oauth(code: string, redirectUri: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
+		return this.rest.oauth(code, redirectUri, opts)
+	}
+
+	oauthByUrl(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
+		return this.rest.oauthByUrl(callbackUrl, opts);
 	}
 
 	restoreToken(ownerInfo?: { username: string, extension?: string }, tokenStore?: TokenStore): Promise<void> {
