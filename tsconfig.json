@@ -17,5 +17,8 @@
 	"files": [
 		"test/index.ts"
 	],
+	"include": [
+		"src/definitions/*.ts"
+	],
 	"compileOnSave": true
 }
