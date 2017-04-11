@@ -13,22 +13,19 @@ export default class WebTokenStore implements TokenStore {
 		this.store = store;
 	}
 
-	save(data: Token) {
+	async save(data: Token) {
 		this.store[this.key] = JSON.stringify(data);
 	}
 
-	get(): Token {
+	async get() {
 		let data = localStorage[this.key];
 		if (data) {
 			return this.token.fromCache(JSON.parse(data));
 		}
 	}
 
-	clear() {
+	async clear() {
 		this.store.removeItem(this.key);
 	}
 
-	async restore() {
-		return this.get();
-	}
 }

@@ -3,32 +3,28 @@ import * as fs from 'fs';
 
 export default class FileTokenStore implements TokenStore {
 	file: string;
-	token = new Token();
+	token: Token;
 
 	constructor(file: string) {
 		this.file = file;
 	}
 
-	async restore() {
-		let json = fs.readFileSync(this.file);
-		let data = JSON.parse(json.toString());
-		this.token.fromCache(data);
-		return this.token;
-	}
-
-	save(data: Token) {
+	async save(data: Token) {
 		this.token = data;
 		fs.writeFileSync(this.file, JSON.stringify(data));
 	}
 
-	get(): Token {
-		if (!this.token.accessToken) {
-			return null;
+	async get() {
+		if (!this.token) {
+			let json = fs.readFileSync(this.file);
+			let data = JSON.parse(json.toString());
+			this.token = new Token();
+			this.token.fromCache(data);
 		}
 		return this.token;
 	}
 
-	clear() {
+	async clear() {
 		this.token = null;
 		fs.unlinkSync(this.file);
 	}

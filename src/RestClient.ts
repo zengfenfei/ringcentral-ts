@@ -6,6 +6,7 @@ import delay from 'delay.ts';
 import * as pkg from './pkg';
 import Token, { TokenStore, MemoryTokenStore } from './Token';
 import isKnownReqBodyType from 'known-fetch-body';
+import RCAccount from "./RCAccount";
 
 const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
 const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
@@ -40,7 +41,7 @@ export default class RestClient extends EventEmitter {
 	private recoverTime: number; // In 429 status
 
 	tokenStore: TokenStore;
-	private refreshingToken: Promise<void>;
+	private gettingToken: Promise<Token>;
 
 	agents = [pkg.name + '/' + pkg.version];
 
@@ -51,34 +52,46 @@ export default class RestClient extends EventEmitter {
 		this.appSecret = opts.appSecret;
 		this.tokenStore = opts.tokenStore || new MemoryTokenStore();
 		this.handleRateLimit = opts.handleRateLimit === false ? false : true;
+
+		let getToken = this.getToken;
+		this.getToken = (ownerInfo?: RCAccount) => {
+			if (!this.gettingToken) {
+				this.gettingToken = getToken.call(this, ownerInfo).then(t => {
+					this.gettingToken = null;
+					return t;
+				}, e => {
+					this.gettingToken = null;
+					throw e;
+				});
+			} else {
+				console.log('Duplicated');
+			}
+			return this.gettingToken;
+		};
 	}
 
 	private basicAuth(): string {
 		return new Buffer(this.appKey + ':' + this.appSecret).toString('base64');
 	}
 
-	getToken(): Token {
-		return this.tokenStore.get();
-	}
-
-	// Alternative for auth
-	async restoreToken(ownerInfo?: { username: string, extension?: string }, tokenStore?: TokenStore): Promise<void> {
-		if (tokenStore) {
-			this.tokenStore = tokenStore;
-		}
-		let token = await this.tokenStore.restore();
-		if (!token) {
-			throw new Error('Token not exists, fail to restore.');
-		} else {
+	/**
+	 * Throw exception if no valid token.
+	 */
+	async getToken(ownerInfo?: RCAccount) {
+		let token = await this.tokenStore.get();
+		if (token) {
 			token.validateOwner(this.appKey, ownerInfo);
-		}
-		if (token.expired()) {
-			if (token.refreshTokenExpired()) {
-				this.tokenStore.clear();
-				throw new Error('Token expired.');
+			if (!token.expired()) {
+				return token;
+			} else if (!token.refreshTokenExpired()) {
+				await this.refreshToken(token);
+				await this.tokenStore.save(token);
+				return token;
 			} else {
-				await this.refreshToken();
+				throw new Error('Token expired.');
 			}
+		} else {
+			throw new Error('Token not exist.');
 		}
 	}
 
@@ -134,20 +147,13 @@ export default class RestClient extends EventEmitter {
 			this.recoverTime = 0;
 		}
 
-		let token = this.getToken();
-		if (!token) {
-			let e = new Error(opts.method + ' ' + url + ' failed: Not authenticated');
+		let token: Token;
+		try {
+			token = await this.getToken();
+		} catch (e) {
+			e.message = opts.method + ' ' + url + ', token error: ' + e.message;
 			e['code'] = 'NoToken';
 			throw e;
-		}
-		if (token.expired()) {
-			if (token.refreshTokenExpired()) {
-				let e = new Error('AccessToken and refreshToken have expired.');
-				e['code'] = 'TokenExpired';
-				throw e;
-			} else {
-				await this.refreshToken();
-			}
 		}
 		let headers = opts.headers = opts.headers || {};
 		headers['Authorization'] = token.type + ' ' + token.accessToken;
@@ -255,9 +261,9 @@ export default class RestClient extends EventEmitter {
 		});
 		if (res.ok) {
 			let resJson = await res.json();
-			let token = this.getToken() || new Token();
+			let token = new Token();
 			token.setOwner(this.appKey, user);
-			this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
+			await this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
 			this.emit(EventLoginSuccess);
 		} else {
 			if (isJsonRes(res)) {
@@ -278,10 +284,7 @@ export default class RestClient extends EventEmitter {
 	}
 
 	async logout(): Promise<void> {
-		let token = this.tokenStore.get();
-		if (!token) {
-			return;
-		}
+		let token = await this.tokenStore.get();
 		this.emit(EventLogoutStart);
 		let res = await fetch(this.server + REVOKE_URL, {
 			method: 'POST',
@@ -293,7 +296,7 @@ export default class RestClient extends EventEmitter {
 			body: stringify({ token: token.accessToken })
 		});
 		if (res.ok) {
-			this.tokenStore.clear();
+			await this.tokenStore.clear();
 			this.emit(EventLogoutSuccess);
 		} else {
 			if (isJsonRes(res)) {
@@ -314,37 +317,7 @@ export default class RestClient extends EventEmitter {
 	}
 
 	/** Only one request will be sent at the same time. */
-	refreshToken(): Promise<void> {
-		if (this.refreshingToken) {
-			return this.refreshingToken;
-		}
-
-		let token = this.getToken();
-		if (!token) {
-			let e = new Error('Cannot refresh token without existing one.');
-			e['code'] = 'NoToken';
-			return Promise.reject(e);
-		}
-
-		this.emit(EventRefreshStart);
-		if (token.refreshTokenExpired()) {
-			let e = new Error('Cannot refresh token, existed refreshToken has expired.');
-			e['code'] = 'RefreshTokenExpired';
-			this.emit(EventRefreshError, e);
-			return Promise.reject(e);
-		}
-
-		this.refreshingToken = this.fetchNewToken().then(() => {
-			this.refreshingToken = null;
-		}, e => {
-			this.refreshingToken = null;
-			throw e;
-		});
-		return this.refreshingToken;
-	}
-
-	private async fetchNewToken(): Promise<void> {
-		let token = this.getToken();
+	private async refreshToken(token: Token): Promise<void> {
 		let body = {
 			refresh_token: token.refreshToken,
 			grant_type: 'refresh_token',
@@ -361,8 +334,7 @@ export default class RestClient extends EventEmitter {
 		});
 		if (res.ok) {
 			let resJson = await res.json();
-			let token = this.getToken();
-			this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
+			token.fromServer(resJson, Date.now() - startTime);
 			this.emit(EventRefreshSuccess);
 		} else {
 			if (isJsonRes(res)) {
@@ -371,8 +343,8 @@ export default class RestClient extends EventEmitter {
 					resJson.error || resJson.errorCode,
 					resJson,
 					res);
-				if (e.code === 'invalid_grant') {    // Token is invalid, clear them.
-					this.tokenStore.clear();
+				if (e.code === 'invalid_grant') {    // Wrong token, clear them.
+					await this.tokenStore.clear();
 				}
 				this.emit(EventRefreshError, e);
 				throw e;
@@ -383,6 +355,7 @@ export default class RestClient extends EventEmitter {
 				throw e;
 			}
 		}
+
 	}
 
 }

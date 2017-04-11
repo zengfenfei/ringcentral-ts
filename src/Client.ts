@@ -1,5 +1,4 @@
 import restClient, { SERVER_PRODUCTION, SERVER_SANDBOX, API_VERSION, ClientOptions } from './RestClient';
-import { TokenStore } from './Token';
 import Account from './paths/Account';
 import ClientInfo from './paths/ClientInfo';
 import Dictionary from './paths/Dictionary';
@@ -7,6 +6,8 @@ import NumberParser from './paths/NumberParser';
 import NumberPool from './paths/Subscription';
 import Subscription from './paths/Subscription';
 import Subscription2 from './Subscription';
+import RCAccount from "./RCAccount";
+import Token from './Token';
 
 export default class RingCentral {
 	rest: restClient;
@@ -40,12 +41,12 @@ export default class RingCentral {
 		return this.rest.oauth(code, redirectUri, opts)
 	}
 
-	oauthByUrl(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
-		return this.rest.oauthByUrl(callbackUrl, opts);
+	getToken(ownerInfo?: RCAccount): Promise<Token> {
+		return this.rest.getToken(ownerInfo);
 	}
 
-	restoreToken(ownerInfo?: { username: string, extension?: string }, tokenStore?: TokenStore): Promise<void> {
-		return this.rest.restoreToken(ownerInfo, tokenStore);
+	oauthByUrl(callbackUrl: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
+		return this.rest.oauthByUrl(callbackUrl, opts);
 	}
 
 	logout(): Promise<void> {

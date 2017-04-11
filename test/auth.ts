@@ -4,16 +4,17 @@ import { TokenStore } from '../src/Token';
 import FileTokenStore from '../src/FileTokenStore';
 import WebTokenStore from '../src/WebTokenStore';
 
-let client = new Client(config.app);
-let store: TokenStore;
+let tokenStore: TokenStore;
 
 if (inNode()) {
-	store = new FileTokenStore(config.tokenCacheFile);
+	tokenStore = new FileTokenStore(config.tokenCacheFile);
 } else {
-	store = new WebTokenStore('ringcentral-ts-test-token', localStorage);
+	tokenStore = new WebTokenStore('ringcentral-ts-test-token', localStorage);
 }
 
-export default client.restoreToken(config.user, store).catch(e => {
+let client = new Client({ ...config.app, tokenStore });
+
+export default client.getToken(config.user).catch(e => {
 	console.log('No existed token, getting a new one');
 	return client.auth(config.user);
 }).then(() => client);

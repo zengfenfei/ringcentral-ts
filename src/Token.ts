@@ -1,13 +1,15 @@
+import RCAccount from "./RCAccount";
+
 export default class Token {
 
-	setOwner(appKey: string, ownerInfo?: { username: string, extension?: string }) {
+	setOwner(appKey: string, ownerInfo?: RCAccount) {
 		this.appKey = appKey;
 		if (ownerInfo) {
 			this.owner = tokenOwner(ownerInfo);
 		}
 	}
 
-	validateOwner(appKey: string, ownerInfo?: { username: string, extension?: string }) {
+	validateOwner(appKey: string, ownerInfo?: RCAccount) {
 		if (this.appKey !== appKey) {
 			throw new Error('Token Restore error, appKey mismatch');
 		}
@@ -81,44 +83,35 @@ function tokenOwner(ownerInfo: { username: string, extension?: string }) {
 }
 
 export interface TokenStore {
-    /**
-     * Fetch token data from localStorage, redis, dababase, or other places
-     * Return serialized token data
-     */
-	restore(): Promise<Token>;
 
     /**
      * Should handle error inside the method
      */
-	save(data: Token): void;
+	save(data: Token): Promise<void>;
 
     /**
-     * Will be called every time making an API call. Should sync method
+     * Will be called every time making an API call.
      */
-	get(): Token;
+	get(): Promise<Token>;
 
     /**
      * Should handle error inside the method
      */
-	clear(): void;
+	clear(): Promise<void>;
 }
 
 export class MemoryTokenStore implements TokenStore {
 	token: Token;
 
-	save(data: Token) {
+	async save(data: Token) {
 		this.token = data;
 	}
 
-	get(): Token {
+	async get() {
 		return this.token;
 	}
 
-	clear() {
+	async clear() {
 		this.token = null;
-	}
-
-	async restore() {
-		return null;
 	}
 }
