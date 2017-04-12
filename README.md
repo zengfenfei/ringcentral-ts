@@ -90,35 +90,35 @@ By default the token is stored in memory, it will be lost when the process exits
 
 Creating Token Store:
 ```javascript
-// In browser
+// In browser, you can cache the token in localStorage
 import WebTokenStore from 'ringcentral-ts/WebTokenStore';
 let tokenStore = new WebTokenStore('{localStorageKey}', localStorage);
 
-// In node.js
+// In node.js, you can cache the token in file
 import FileTotkenStorage from 'ringcentral-ts/FileTokenStore';
 let tokenStore = new FileTotkenStorage('{filePathToStoreTheToken}');
 ```
 
-Restoring token from token store:
+Check token in token store:
 ```javascript
 let rc = new RingCentral({
     tokenStore
     ...
 });
-rc.restoreToken({   // Optionally, you can specify the username and extension to check with after the token is restored.
+rc.getToken({   // Optionally, you can specify the username and extension to check with the stored token.
     username: 'xxx',
     extension: 'xxx'
-}).then(() => {
-    console.log('Load token from tokenStore successfully.');
+}).then((token) => {
+    console.log('Token is valid in the token store', token);
 }, e => {
-    console.error('Fail to load token from tokenStore, possible reasons: the cached token is valid; no token is cached in the store; the cached token is created by a different appKey or RC account.');
-    return rc.auth({
+    console.log('Fail to load token from tokenStore, possible reasons: the access token and refresh token in the store both expire; no token is cached in the store; the cached token is created by a different appKey or RC account.');
+    return rc.auth({	// Create new token by password or oauth
         ...
-    }); // Login with username/password or oauth
+    });
 });
 ```
 
-Except for memory, `localStorage` and file, you can also cache token in other places(redis, sql databases, etc.). You can create your own `TokenStore` by implementing [its interfaces](src/Token.ts#L80).
+Except for memory, `localStorage` and file, you can also implement your own [`TokenStore`](https://zengfenfei.github.io/ringcentral-ts/interfaces/_token_.tokenstore.html) to cache the token in other places.
 
 ## API Call Examples
 
