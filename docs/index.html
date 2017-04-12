@@ -133,32 +133,32 @@ rc.auth({
 				<h2 id="tokenstore">TokenStore</h2>
 				<p>By default the token is stored in memory, it will be lost when the process exits in node or the web page reloads. You can specify a <code>TokenStore</code> to cache the token in <code>localStorage</code>, file, redis or other databases, etc.</p>
 				<p>Creating Token Store:</p>
-				<pre><code class="lang-javascript"><span class="hljs-comment">// In browser</span>
+				<pre><code class="lang-javascript"><span class="hljs-comment">// In browser, you can cache the token in localStorage</span>
 <span class="hljs-keyword">import</span> WebTokenStore <span class="hljs-keyword">from</span> <span class="hljs-string">'ringcentral-ts/WebTokenStore'</span>;
 <span class="hljs-keyword">let</span> tokenStore = <span class="hljs-keyword">new</span> WebTokenStore(<span class="hljs-string">'{localStorageKey}'</span>, localStorage);
 
-<span class="hljs-comment">// In node.js</span>
+<span class="hljs-comment">// In node.js, you can cache the token in file</span>
 <span class="hljs-keyword">import</span> FileTotkenStorage <span class="hljs-keyword">from</span> <span class="hljs-string">'ringcentral-ts/FileTokenStore'</span>;
 <span class="hljs-keyword">let</span> tokenStore = <span class="hljs-keyword">new</span> FileTotkenStorage(<span class="hljs-string">'{filePathToStoreTheToken}'</span>);
 </code></pre>
-				<p>Restoring token from token store:</p>
+				<p>Check token in token store:</p>
 				<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> rc = <span class="hljs-keyword">new</span> RingCentral({
     tokenStore
     ...
 });
-rc.restoreToken({   <span class="hljs-comment">// Optionally, you can specify the username and extension to check with after the token is restored.</span>
+rc.getToken({   <span class="hljs-comment">// Optionally, you can specify the username and extension to check with the stored token.</span>
     username: <span class="hljs-string">'xxx'</span>,
     <span class="hljs-attr">extension</span>: <span class="hljs-string">'xxx'</span>
-}).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Load token from tokenStore successfully.'</span>);
+}).then(<span class="hljs-function">(<span class="hljs-params">token</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Token is valid in the token store'</span>, token);
 }, e =&gt; {
-    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'Fail to load token from tokenStore, possible reasons: the cached token is valid; no token is cached in the store; the cached token is created by a different appKey or RC account.'</span>);
-    <span class="hljs-keyword">return</span> rc.auth({
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Fail to load token from tokenStore, possible reasons: the access token and refresh token in the store both expire; no token is cached in the store; the cached token is created by a different appKey or RC account.'</span>);
+    <span class="hljs-keyword">return</span> rc.auth({    <span class="hljs-comment">// Create new token by password or oauth</span>
         ...
-    }); <span class="hljs-comment">// Login with username/password or oauth</span>
+    });
 });
 </code></pre>
-				<p>Except for memory, <code>localStorage</code> and file, you can also cache token in other places(redis, sql databases, etc.). You can create your own <code>TokenStore</code> by implementing <a href="src/Token.ts#L80">its interfaces</a>.</p>
+				<p>Except for memory, <code>localStorage</code> and file, you can also implement your own <a href="https://zengfenfei.github.io/ringcentral-ts/interfaces/_token_.tokenstore.html"><code>TokenStore</code></a> to cache the token in other places.</p>
 				<h2 id="api-call-examples">API Call Examples</h2>
 				<h3 id="telephony-calls">Telephony Calls</h3>
 				<ol>
@@ -292,6 +292,9 @@ rc.account().extension().fax().post({
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_pathsegment_.html">"<wbr>Path<wbr>Segment"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_rcaccount_.html">"RCAccount"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_restclient_.html">"<wbr>Rest<wbr>Client"</a>

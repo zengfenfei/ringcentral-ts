@@ -113,7 +113,6 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_webtokenstore_.webtokenstore.html#clear" class="tsd-kind-icon">clear</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_webtokenstore_.webtokenstore.html#get" class="tsd-kind-icon">get</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_webtokenstore_.webtokenstore.html#restore" class="tsd-kind-icon">restore</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_webtokenstore_.webtokenstore.html#save" class="tsd-kind-icon">save</a></li>
 							</ul>
 						</section>
@@ -132,7 +131,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L9">WebTokenStore.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L9">WebTokenStore.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -157,7 +156,7 @@
 					<div class="tsd-signature tsd-kind-icon">key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L7">WebTokenStore.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L7">WebTokenStore.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -167,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Storage</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L8">WebTokenStore.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L8">WebTokenStore.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -177,7 +176,7 @@
 					<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <a href="_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol"> =&nbsp;new Token()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L9">WebTokenStore.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L9">WebTokenStore.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -188,17 +187,17 @@
 					<a name="clear" class="tsd-anchor"></a>
 					<h3>clear</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_token_.tokenstore.html">TokenStore</a>.<a href="../interfaces/_token_.tokenstore.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L27">WebTokenStore.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L27">WebTokenStore.ts:27</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -206,32 +205,14 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_token_.token.html" class="tsd-signature-type">Token</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_token_.tokenstore.html">TokenStore</a>.<a href="../interfaces/_token_.tokenstore.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L20">WebTokenStore.ts:20</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="_token_.token.html" class="tsd-signature-type">Token</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="restore" class="tsd-anchor"></a>
-					<h3>restore</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">restore<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_token_.tokenstore.html">TokenStore</a>.<a href="../interfaces/_token_.tokenstore.html#restore">restore</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L31">WebTokenStore.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L20">WebTokenStore.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -242,14 +223,14 @@
 					<a name="save" class="tsd-anchor"></a>
 					<h3>save</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_token_.tokenstore.html">TokenStore</a>.<a href="../interfaces/_token_.tokenstore.html#save">save</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/9320e46/src/WebTokenStore.ts#L16">WebTokenStore.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/WebTokenStore.ts#L16">WebTokenStore.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -258,7 +239,7 @@
 									<h5>data: <a href="_token_.token.html" class="tsd-signature-type">Token</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -299,9 +280,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_webtokenstore_.webtokenstore.html#get" class="tsd-kind-icon">get</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_webtokenstore_.webtokenstore.html#restore" class="tsd-kind-icon">restore</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_webtokenstore_.webtokenstore.html#save" class="tsd-kind-icon">save</a>
