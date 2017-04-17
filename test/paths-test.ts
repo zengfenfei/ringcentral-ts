@@ -288,7 +288,7 @@ describe('PathSegments', function () {
 	describe('Clientinfo', function () {
 
 		it('covers all', function () {
-			return client.clientInfo().customData().put({});
+			return client.clientInfo().customData('testKey').put({ id: 'testId', value: 'testValue' });
 		});
 
 	});
@@ -334,7 +334,7 @@ describe('PathSegments', function () {
 	describe('Department', function () {
 
 		it('covers all', function () {
-			return client.account().department().members().list();
+			return client.account().department('~').members().list();
 		});
 
 	});

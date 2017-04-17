@@ -93,7 +93,7 @@ describe('Binary response', function () {
 
 });
 
-let imgPath = __dirname + '/res/banner_index_logged.png';
+let imgPath = './test/res/banner_index_logged.png';
 describe('Binary request', function () {
 
 	before('Only run in node', function () {

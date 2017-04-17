@@ -39,43 +39,42 @@ describe('Auth', () => {
 	});
 
 	it('invalidates access token and refresh token after logout', async () => {
-		expect(client.getToken()).to.exist;
+		let token = await client.getToken();
+		expect(token.expired()).be.false;
 		await client.logout();
-		expect(client.getToken()).to.not.exist;
+		let e;
+		try {
+			await client.getToken();
+			e = new Error('Token not be available after logout.');
+		} catch (e) {
+			// console.log('get token after logout', e);
+		}
+		if (e) {
+			throw e;
+		}
 		await client.auth(config.user);
-		expect(client.getToken()).to.exist;
 	});
 
-	it('logout with wrong access token', async () => {
+	it('will not report error when logout with wrong access token', async () => {
 		let token = await client.getToken();
 		let testToken = new Token();
 		testToken.fromCache(JSON.stringify(token));
 
-		client.tokenStore.save(testToken);
 		testToken.accessToken += 'xxxxx';
-		await client.logout();
-
 		client.tokenStore.save(testToken);
-		testToken.accessToken = '';
 		await client.logout();
 
-		client.tokenStore.save(token);
+		testToken.accessToken = '';
+		client.tokenStore.save(testToken);
+		await client.logout();
+
+		await client.tokenStore.save(token);
 	});
 
 	let NotLoginError = 'NoToken';
 	it('Call api before login', () => {
 		return client.logout().then(() => {
 			return client.get('/some-api');
-		}).then(() => {
-			throw new Error('Should not success.');
-		}, e => {
-			expect(e.code).to.eq(NotLoginError);
-		});
-	});
-
-	it('Refresh token before login', () => {
-		return client.logout().then(() => {
-			//return client.refreshToken();
 		}).then(() => {
 			throw new Error('Should not success.');
 		}, e => {
