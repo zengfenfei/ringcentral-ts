@@ -29,7 +29,7 @@ export default class RingCentral {
 		refreshTokenTtl?: number;
 		/** List of API permissions to be used with access token (see [Application Permissions](https://developer.ringcentral.com/api-docs/latest/APIPermissions.html)). Can be omitted when requesting all permissions defined during the application registration phase */
 		scope?: string[]
-	}): Promise<void> {
+	}) {
 		return this.rest.auth(opts);
 	}
 

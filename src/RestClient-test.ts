@@ -1,17 +1,69 @@
 import { expect } from 'chai';
 import delay from 'delay.ts';
+import * as fetchMock from 'fetch-mock';
 import RestClient/*, { EventLoginStart, EventLoginError, EventLoginSuccess }*/ from './RestClient';
 import Token from './Token';
 import config from '../test/config';
-import auth from '../test/auth';
+import 'isomorphic-fetch';
 
 let client: RestClient;
 
 before(async () => {
-	client = (await auth).rest;
+	//client = (await auth).rest;
 });
 
 describe('Auth', () => {
+
+	it.only('sends the right request and parse the response correctly for auth by password', async () => {
+		let server = 'https://platform.ringcentral.com';
+		let authUrl = server + '/restapi/oauth/token';
+		let appKey = 'testAppKey';
+		let appSecret = 'testAppSecret';
+		let username = 'testUsername';
+		let password = 'testPassword';
+		let serverToken = {
+			access_token: 'MockAccessToken',
+			token_type: 'bearer',
+			expires_in: 3600,
+			refresh_token: 'MockRefreshToken',
+			refresh_token_expires_in: 604800,
+			scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
+			owner_id: 'MockOwnerId',
+			endpoint_id: 'MockEndpointId'
+		};
+		fetchMock.once('*', serverToken);
+
+		client = new RestClient({
+			server,
+			appKey,
+			appSecret
+		});
+		let token = await client.auth({
+			username,
+			password
+		});
+		// #1 Check the request
+		expect(fetchMock.lastCall()).to.deep.equal([authUrl,
+			{
+				body: 'grant_type=password&username=' + username + '&extension=&password=' + password + '&access_token_ttl=&refresh_token_ttl=&scope=',
+				method: 'POST',
+				headers:
+				{
+					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
+					'X-User-Agent': client.agents.join(' '),
+				}
+			}]);
+		// #2 Check the parsed response
+		let expectedToken = new Token();
+		expectedToken.setOwner(appKey, { username })
+		expectedToken.fromServer(serverToken, 0);
+		expect(token.expiresIn).lt(expectedToken.expiresIn);
+		expect(token.refreshTokenExpiresIn).lt(expectedToken.refreshTokenExpiresIn);
+		expectedToken.expiresIn = token.expiresIn;
+		expectedToken.refreshTokenExpiresIn = token.refreshTokenExpiresIn;
+		expect(token).to.deep.equal(expectedToken);
+	});
 
 	it('fail login, empty credential', () => {
 		return client.auth({ username: '', password: '' }).then(() => {

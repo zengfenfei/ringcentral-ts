@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { format } from 'url';
 import { stringify, parse } from 'querystring';
-import * as fetch from 'isomorphic-fetch';
+import 'isomorphic-fetch';
 import delay from 'delay.ts';
 import * as pkg from './pkg';
 import Token, { TokenStore, MemoryTokenStore } from './Token';
@@ -188,7 +188,7 @@ export default class RestClient extends EventEmitter {
 		return res;
 	}
 
-	auth(opts: { username: string; password: string; extension?: string, accessTokenTtl?: number, refreshTokenTtl?: number, scope?: string[] }): Promise<void> {
+	auth(opts: { username: string; password: string; extension?: string, accessTokenTtl?: number, refreshTokenTtl?: number, scope?: string[] }) {
 		let body = {
 			grant_type: 'password',
 			username: opts.username,
@@ -265,6 +265,7 @@ export default class RestClient extends EventEmitter {
 			token.setOwner(this.appKey, user);
 			await this.tokenStore.save(token.fromServer(resJson, Date.now() - startTime));
 			this.emit(EventLoginSuccess);
+			return token;
 		} else {
 			if (isJsonRes(res)) {
 				let resJson = await res.json();
