@@ -6,7 +6,14 @@ import Token from './Token';
 import config from '../test/config';
 import 'isomorphic-fetch';
 
-let client: RestClient;
+let server = 'https://platform.ringcentral.com';
+let appKey = 'testAppKey';
+let appSecret = 'testAppSecret';
+let client = new RestClient({
+	server,
+	appKey,
+	appSecret
+});
 
 before(async () => {
 	//client = (await auth).rest;
@@ -15,10 +22,7 @@ before(async () => {
 describe('Auth', () => {
 
 	it.only('sends the right request and parse the response correctly for auth by password', async () => {
-		let server = 'https://platform.ringcentral.com';
 		let authUrl = server + '/restapi/oauth/token';
-		let appKey = 'testAppKey';
-		let appSecret = 'testAppSecret';
 		let username = 'testUsername';
 		let password = 'testPassword';
 		let serverToken = {
@@ -33,11 +37,6 @@ describe('Auth', () => {
 		};
 		fetchMock.once('*', serverToken);
 
-		client = new RestClient({
-			server,
-			appKey,
-			appSecret
-		});
 		let token = await client.auth({
 			username,
 			password
@@ -65,7 +64,25 @@ describe('Auth', () => {
 		expect(token).to.deep.equal(expectedToken);
 	});
 
-	it('fail login, empty credential', () => {
+	it.only('reports invalid request error when auth with empty credential', () => {
+		fetchMock.once('*', {
+			status: 400,
+			headers: {
+				server: ['nginx/1.10.2'],
+				date: ['Wed, 19 Apr 2017 08:32:50 GMT'],
+				'content-type': ['application/json;charset=UTF-8'],
+				'content-length': ['74'],
+				connection: ['close'],
+				rcrequestid: ['c6098c70-24da-11e7-95e2-0050569792e2'],
+				routingkey: ['SJC01P07PAS11'],
+				'www-authenticate': ['Basic realm="RingCentral REST API"'],
+				'content-language': ['en']
+			},
+			body: {
+				error: 'invalid_request',
+				error_description: 'Resource Owner credentials are incomplete.'
+			}
+		});
 		return client.auth({ username: '', password: '' }).then(() => {
 			throw 'Should not login';
 		}, e => {
