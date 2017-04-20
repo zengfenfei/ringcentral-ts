@@ -63,8 +63,6 @@ export default class RestClient extends EventEmitter {
 					this.gettingToken = null;
 					throw e;
 				});
-			} else {
-				console.log('Duplicated');
 			}
 			return this.gettingToken;
 		};

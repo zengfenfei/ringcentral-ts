@@ -294,6 +294,10 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 
 	});
 
+	it('allows only one getToken operation at the same time', () => {
+		expect(client.getToken()).to.eq(client.getToken());
+	});
+
 });
 
 describe('429 handling', () => {
