@@ -226,7 +226,7 @@ export default class RestClient extends EventEmitter {
 	 * Parse parameters from oauth.
 	 * @param paramsStr The query part of the RingCentral oauth call back url.
 	 */
-	private parseOauthCallback(paramsStr: string): OauthCallbackParams {
+	parseOauthCallback(paramsStr: string): OauthCallbackParams {
 		let params = parse(paramsStr);
 		if (!params.code) {
 			let e = new Error(params.error_description || params.error || 'No authorization code contained in the callback url.');
