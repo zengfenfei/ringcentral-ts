@@ -27,8 +27,7 @@ let serverToken = {
 };
 
 before(async () => {
-	fetchMock.once('*', serverToken);
-	await client.auth({ username: '', password: '' });
+	await auth();
 });
 
 describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
@@ -199,8 +198,7 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 		if (e) {
 			throw e;
 		}
-		fetchMock.once('*', serverToken);
-		await client.auth({ username: '', password: '' });
+		await auth();
 	});
 
 	/*	it('will not report error when logout with wrong access token', async () => {
@@ -218,18 +216,6 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 	
 			await client.tokenStore.save(token);
 		});*/
-
-	let NotLoginError = 'NoToken';
-	it('Call api before login', () => {
-		fetchMock.once('*', ' ');
-		return client.logout().then(() => {
-			return client.get('/some-api');
-		}).then(() => {
-			throw new Error('Should not success.');
-		}, e => {
-			expect(e.code).to.eq(NotLoginError);
-		});
-	});
 
 	it('creates correct login url for oauth', () => {
 		const redirectUri = 'http://my-app.auth.com/TestOauth.RedirectUri';
@@ -291,7 +277,7 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 			}]);
 		expect(newToken.accessToken).not.eq(accessToken);
 		expect(newToken.refreshToken).not.eq(refreshToken);
-
+		await auth();
 	});
 
 	it('allows only one getToken operation at the same time', () => {
@@ -332,3 +318,80 @@ describe('429 handling', () => {
 	});
 
 });
+
+describe('API calls', () => {
+
+	let NotLoginError = 'NoToken';
+	it('Call api before login', () => {
+		fetchMock.once('*', ' ');
+		return client.logout().then(() => {
+			return client.get('/some-api');
+		}).then(async () => {
+			await auth();
+			throw new Error('Should not success.');
+		}, async e => {
+			expect(e.code).to.eq(NotLoginError);
+			await auth();
+		});
+	});
+
+	it('calls API with correct parameters', async () => {
+		let resData = { responseData: 'samples' };
+		fetchMock.once('*', resData);
+		let res = await client.call('/account/~',
+			{ queryParams: 'value' }, {
+				body: { jsonBody: 'value' },
+				headers: { customHeader: 'customer-headers' }
+			});
+		expect(fetchMock.lastCall()).to.deep.eq(['https://platform.ringcentral.com/restapi/v1.0/account/~?queryParams=value',
+			{
+				body: '{"jsonBody":"value"}',
+				headers:
+				{
+					customHeader: 'customer-headers',
+					Authorization: 'bearer MockAccessToken',
+					'Client-Id': 'testAppKey',
+					'X-User-Agent': client.agents.join(' '),
+					'content-type': 'application/json'
+				},
+				method: 'GET'
+			}]);
+		expect(await res.json()).to.deep.eq(resData);
+	});
+
+	it('throws error correctly when calling API', async () => {
+		fetchMock.once('*', {
+			status: 404,
+			headers: {
+				server: ['nginx/1.10.2'],
+				date: ['Thu, 20 Apr 2017 07:42:57 GMT'],
+				'content-type': ['application/json;charset=UTF-8'],
+				'content-length': ['141'],
+				connection: ['close'],
+				rcrequestid: ['f88750c0-259c-11e7-bfc6-005056977b15'],
+				routingkey: ['SJC01P13PAS05'],
+				'content-language': ['en-US'],
+				'x-rate-limit-group': ['medium'],
+				'x-rate-limit-limit': ['40'],
+				'x-rate-limit-remaining': ['39'],
+				'x-rate-limit-window': ['60']
+			}, body: {
+				errorCode: 'CMN-120',
+				message: 'Invalid URI',
+				errors: [{ errorCode: 'CMN-120', message: 'Invalid URI' }]
+			}
+		});
+		try {
+			await client.call('/some/api/not/exist/', null, { body: 'string body' });
+			throw new Error('Should throw error');
+		} catch (e) {
+			expect(e.code).to.eq('CMN-120');
+		}
+	});
+
+});
+
+async function auth() {
+	fetchMock.once('*', serverToken);
+	await client.auth({ username: '', password: '' });
+}
