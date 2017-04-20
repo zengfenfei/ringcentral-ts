@@ -15,26 +15,29 @@ let client = new RestClient({
 	appSecret
 });
 
+let serverToken = {
+	access_token: 'MockAccessToken',
+	token_type: 'bearer',
+	expires_in: 3600,
+	refresh_token: 'MockRefreshToken',
+	refresh_token_expires_in: 604800,
+	scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
+	owner_id: 'MockOwnerId',
+	endpoint_id: 'MockEndpointId'
+};
+
 before(async () => {
-	//client = (await auth).rest;
+	fetchMock.once('*', serverToken);
+	await client.auth({ username: '', password: '' });
 });
 
 describe('Auth', () => {
 
-	it.only('sends the right request and parse the response correctly for auth by password', async () => {
+	it('sends the right request and parse the response correctly for auth by password', async () => {
 		let authUrl = server + '/restapi/oauth/token';
 		let username = 'testUsername';
 		let password = 'testPassword';
-		let serverToken = {
-			access_token: 'MockAccessToken',
-			token_type: 'bearer',
-			expires_in: 3600,
-			refresh_token: 'MockRefreshToken',
-			refresh_token_expires_in: 604800,
-			scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
-			owner_id: 'MockOwnerId',
-			endpoint_id: 'MockEndpointId'
-		};
+
 		fetchMock.once('*', serverToken);
 
 		let token = await client.auth({
@@ -64,7 +67,7 @@ describe('Auth', () => {
 		expect(token).to.deep.equal(expectedToken);
 	});
 
-	it.only('reports invalid request error when auth with empty credential', () => {
+	it('reports invalid request error when auth with empty credential', () => {
 		fetchMock.once('*', {
 			status: 400,
 			headers: {
@@ -90,7 +93,29 @@ describe('Auth', () => {
 		});
 	});
 
-	it('fail login, wrong credential', () => {
+	it('reports invalid_grant error when auth with wrong credential', () => {
+		fetchMock.once('*', {
+			status: 400,
+			headers: {
+				server: ['nginx/1.10.2'],
+				date: ['Wed, 19 Apr 2017 09:01:56 GMT'],
+				'content-type': ['application/json;charset=UTF-8'],
+				'content-length': ['94'],
+				connection: ['close'],
+				rcrequestid: ['d708a05c-24de-11e7-ab11-00505697317c'],
+				routingkey: ['SJC01P02PAS05'],
+				'www-authenticate': ['Basic realm="RingCentral REST API"'],
+				'x-rate-limit-group': ['auth'],
+				'x-rate-limit-limit': ['200'],
+				'x-rate-limit-remaining': ['200'],
+				'x-rate-limit-window': ['60'],
+				'content-language': ['en']
+			},
+			body: {
+				error: 'invalid_grant',
+				error_description: 'Invalid resource owner credentials.'
+			}
+		});
 		return client.auth({ username: 'xxx', password: 'xxx' }).then(() => {
 			throw 'Should not login';
 		}, e => {
@@ -100,6 +125,41 @@ describe('Auth', () => {
 
 	it('fail login, wrong appKey/appSecret', () => {
 		let service2 = new RestClient({ appKey: 'xx', appSecret: 'xx' });
+		fetchMock.once('*', {
+			status: 400,
+			headers: {
+				server: ['nginx/1.10.2'],
+				date: ['Wed, 19 Apr 2017 09:11:06 GMT'],
+				'content-type': ['application/json;charset=UTF-8'],
+				'transfer-encoding': ['chunked'],
+				connection: ['close'],
+				'x-application-context': ['application:docker:8080'],
+				'content-language': ['en'],
+				'www-authenticate': ['Bearer realm="RingCentral REST API", error="invalid_client", error_description="Invalid client: xx"'],
+				rcrequestid: ['1eb0b524-24e0-11e7-95bf-0050569705a8'],
+				aceroutingkey: ['sjc01-c01-ace01.dc004051-234c-11e7-9232-00505697c5a6'],
+				'x-server-name': ['sjc01-c01-hlb01'],
+				'x-request-time': ['0.020'],
+				'x-upstream-server': ['10.13.121.174:60876'],
+				'x-upstream-status': ['400'],
+				'x-upstream-htime': ['0.020'],
+				'x-upstream-rtime': ['1492593066.424'],
+				'x-upstream-ctime': ['0.000'],
+				'x-tcpinfo': ['1000, 500, 10, 28960']
+			},
+			body: {
+				"error": "invalid_client",
+				"errors": [{
+					"errorCode": "OAU-153",
+					"message": "Invalid client: xx",
+					"parameters": [{
+						"parameterName": "client_id",
+						"parameterValue": "xx"
+					}]
+				}],
+				"error_description": "Invalid client: xx"
+			}
+		});
 		return service2.auth(config.user).then(() => {
 			throw 'Should not login:';
 		}, e => {
@@ -108,8 +168,26 @@ describe('Auth', () => {
 	});
 
 	it('invalidates access token and refresh token after logout', async () => {
-		let token = await client.getToken();
-		expect(token.expired()).be.false;
+		fetchMock.once('*', {
+			status: 200, headers: {
+				server: ['nginx/1.10.2'],
+				date: ['Wed, 19 Apr 2017 09:22:16 GMT'],
+				'content-length': ['0'],
+				connection: ['close'],
+				'x-application-context': ['application:docker:8080'],
+				aceroutingkey: ['sjc01-c01-ace01.dc008e73-234c-11e7-9232-00505697c5a6'],
+				rcrequestid: ['ae2763dc-24e1-11e7-9a55-005056979a38'],
+				'x-server-name': ['sjc01-c01-hlb01'],
+				'x-request-time': ['0.010'],
+				'x-upstream-server': ['10.13.122.54:54579'],
+				'x-upstream-status': ['200'],
+				'x-upstream-htime': ['0.010'],
+				'x-upstream-rtime': ['1492593736.616'],
+				'x-upstream-ctime': ['0.000'],
+				'x-tcpinfo': ['1000, 500, 10, 28960']
+			},
+			body: ''
+		});
 		await client.logout();
 		let e;
 		try {
@@ -121,27 +199,29 @@ describe('Auth', () => {
 		if (e) {
 			throw e;
 		}
-		await client.auth(config.user);
+		fetchMock.once('*', serverToken);
+		await client.auth({ username: '', password: '' });
 	});
 
-	it('will not report error when logout with wrong access token', async () => {
-		let token = await client.getToken();
-		let testToken = new Token();
-		testToken.fromCache(JSON.stringify(token));
-
-		testToken.accessToken += 'xxxxx';
-		client.tokenStore.save(testToken);
-		await client.logout();
-
-		testToken.accessToken = '';
-		client.tokenStore.save(testToken);
-		await client.logout();
-
-		await client.tokenStore.save(token);
-	});
+	/*	it('will not report error when logout with wrong access token', async () => {
+			let token = await client.getToken();
+			let testToken = new Token();
+			testToken.fromCache(JSON.stringify(token));
+	
+			testToken.accessToken += 'xxxxx';
+			client.tokenStore.save(testToken);
+			await client.logout();
+	
+			testToken.accessToken = '';
+			client.tokenStore.save(testToken);
+			await client.logout();
+	
+			await client.tokenStore.save(token);
+		});*/
 
 	let NotLoginError = 'NoToken';
 	it('Call api before login', () => {
+		fetchMock.once('*', ' ');
 		return client.logout().then(() => {
 			return client.get('/some-api');
 		}).then(() => {
@@ -150,53 +230,6 @@ describe('Auth', () => {
 			expect(e.code).to.eq(NotLoginError);
 		});
 	});
-
-	it('login with right credential', () => {
-		return client.auth(config.user).then(async () => {
-			let token = await client.getToken();
-			expect(token.expired()).to.be.false;
-			expect(token.refreshTokenExpired()).to.be.false;
-		});
-	});
-
-    /*it('Login will try to use cached token', () => {
-        let cachedAccessToken;
-        let service2 = new RestClient(.app);
-        return service.login(authConfig.user).then(() => {
-            cachedAccessToken = service.tokenStore.get().token.accessToken;
-            return service2.login(authConfig.user);
-        }).then(() => {
-            let cur = service2.tokenStore.get().token.accessToken;
-            expect(cachedAccessToken).to.eql(cur);
-        });
-    });*/
-
-	/*	it('Allow only one refresh token request at the same time.', () => {
-			let p1 = client.refreshToken();
-			let p2 = client.refreshToken();
-			expect(p1).to.eq(p2);
-			return p1;
-		});*/
-
-	/*	it('should get different access token after refresh.', async () => {
-			let token = client.getToken();
-			await client.refreshToken();
-			expect(token.accessToken).not.eq(client.getToken().accessToken);
-		});*/
-
-	/*	it('Refresh token with wrong refreshToken', () => {
-			let token = client.getToken();
-			let testToken = new Token();
-			testToken.fromCache(JSON.stringify(token));
-			testToken.refreshToken = 'xxxxx';
-			client.tokenStore.save(testToken);
-			return client.refreshToken().then(() => {
-				throw new Error('Refresh token should not success with wrong refresh token.');
-			}, e => {
-				expect(e.code).to.eq('invalid_grant');
-				client.tokenStore.save(token);
-			});
-		});*/
 
 });
 
