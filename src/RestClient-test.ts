@@ -31,7 +31,7 @@ before(async () => {
 	await client.auth({ username: '', password: '' });
 });
 
-describe('Auth', () => {
+describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 
 	it('sends the right request and parse the response correctly for auth by password', async () => {
 		let authUrl = server + '/restapi/oauth/token';
@@ -229,6 +229,69 @@ describe('Auth', () => {
 		}, e => {
 			expect(e.code).to.eq(NotLoginError);
 		});
+	});
+
+	it('creates correct login url for oauth', () => {
+		const redirectUri = 'http://my-app.auth.com/TestOauth.RedirectUri';
+		const state = 'Test.Oauth.State';
+		const force = true;
+		const loginUrl = client.oauthUrl(redirectUri, { state, force });
+		expect(loginUrl).to.eq(`https://platform.ringcentral.com/restapi/oauth/authorize?response_type=code&client_id=testAppKey&redirect_uri=${encodeURIComponent(redirectUri)}&force=${force}&state=${encodeURIComponent(state)}`);
+	});
+
+	it('parses parameters from oauth callback', () => {
+		const code = 'U0pDMDFQMDlQQVMwMnxBQURNTUd';
+		const state = 'My:Code'
+		const params = client.parseOauthCallback('code=' + code + '&state=' + encodeURIComponent(state));
+		expect(params.code).to.eq(code);
+		expect(params.state).to.eq(state);
+	});
+
+	it('reports error specified in the oauth callback url', () => {
+		try {
+			client.parseOauthCallback('error=access_denied&error_description=The%2Buser%2Bdenied%2Baccess%2Bto%2Byour%2Bapplication');
+			throw new Error('Should throw error');
+		} catch (e) {
+			expect(e.code).to.eq('access_denied');
+			expect(e.message).to.eq('The+user+denied+access+to+your+application');
+		}
+	});
+
+	it('login by oauth callback url', () => {
+		fetchMock.once('*', serverToken);
+		client.oauthByUrl('https://your-app.github.io/email-manipulator/?code=TheTestOauthCode');
+		expect(fetchMock.lastCall()).to.deep.eq(['https://platform.ringcentral.com/restapi/oauth/token',
+			{
+				body: 'grant_type=authorization_code&code=TheTestOauthCode&redirect_uri=https%3A%2F%2Fyour-app.github.io%2Femail-manipulator%2F&access_token_ttl=&refresh_token_ttl=',
+				method: 'POST',
+				headers:
+				{
+					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
+					'X-User-Agent': client.agents.join(' ')
+				}
+			}]);
+	});
+
+	it('should refresh token automatically if accessToken is invalid when getting token', async () => {
+		let token = await client.getToken();
+		const { accessToken, refreshToken } = token;
+		token.expiresIn = Date.now() - 10;
+		fetchMock.once('*', { ...serverToken, access_token: 'RefreshedAcessToken', refresh_token: 'newRefreshToken', });
+		let newToken = await client.getToken();
+		expect(fetchMock.lastCall()).to.deep.eq(['https://platform.ringcentral.com/restapi/oauth/token',
+			{
+				method: 'POST',
+				body: 'refresh_token=MockRefreshToken&grant_type=refresh_token&endpoint_id=MockEndpointId',
+				headers:
+				{
+					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0'
+				}
+			}]);
+		expect(newToken.accessToken).not.eq(accessToken);
+		expect(newToken.refreshToken).not.eq(refreshToken);
+
 	});
 
 });
