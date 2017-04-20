@@ -285,7 +285,7 @@ export default class RestClient extends EventEmitter {
 	}
 
 	async logout(): Promise<void> {
-		let token = await this.tokenStore.get();
+		let token = await this.getToken();
 		this.emit(EventLogoutStart);
 		let res = await fetch(this.server + REVOKE_URL, {
 			method: 'POST',
