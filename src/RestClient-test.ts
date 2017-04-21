@@ -3,7 +3,6 @@ import delay from 'delay.ts';
 import * as fetchMock from 'fetch-mock';
 import RestClient/*, { EventLoginStart, EventLoginError, EventLoginSuccess }*/ from './RestClient';
 import Token from './Token';
-import config from '../test/config';
 import 'isomorphic-fetch';
 
 let server = 'https://platform.ringcentral.com';
@@ -159,7 +158,7 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 				"error_description": "Invalid client: xx"
 			}
 		});
-		return service2.auth(config.user).then(() => {
+		return service2.auth({ username: '', password: '' }).then(() => {
 			throw 'Should not login:';
 		}, e => {
 			expect(e.code).to.equal('invalid_client');
