@@ -463,6 +463,27 @@ describe('API calls', () => {
 		}
 		client.handleRateLimit = true;
 	});
+
+	it('sends right request with shorthand methods', async () => {
+		fetchMock.mock('*', { fake: 'data' }, { times: 3 });
+		let endpoint = '/endpoint/for/delete';
+		let query = { q: 'data' };
+		let body = { p: 'body data' };
+		let url = '/endpoint/for/delete?q=data';
+
+		await client.delete(endpoint, query);
+		expect(fetchMock.lastOptions()).to.have.property('method', 'DELETE');
+		expect(fetchMock.lastUrl().endsWith(url)).to.be.true;
+
+		await client.post(endpoint, body, query);
+		expect(fetchMock.lastOptions()).to.have.property('method', 'POST')
+		expect(fetchMock.lastUrl().endsWith(url)).to.be.true;
+
+		await client.put(endpoint, body, query);
+		expect(fetchMock.lastOptions().method).to.eq('PUT');
+		expect(fetchMock.lastUrl().endsWith(url)).to.be.true;
+	});
+
 });
 
 async function auth() {
