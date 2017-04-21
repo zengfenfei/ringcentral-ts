@@ -484,6 +484,11 @@ describe('API calls', () => {
 		expect(fetchMock.lastUrl().endsWith(url)).to.be.true;
 	});
 
+	it('disables handleRatelimit by constructor', () => {
+		let rc = new RestClient({ appKey: '', appSecret: '', handleRateLimit: false });
+		expect(rc.handleRateLimit).to.be.false;
+	});
+
 });
 
 async function auth() {
