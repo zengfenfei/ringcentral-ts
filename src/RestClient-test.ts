@@ -389,6 +389,80 @@ describe('API calls', () => {
 		}
 	});
 
+	it('will delay API request automatically when rate limit hit', async () => {
+		fetchMock.once('*', {
+			status: 429,
+			headers: {
+				'Access-Control-Allow-Credentials': true,
+				'Access-Control-Allow-Origin': 'http://localhost:3000',
+				'Access-Control-Expose-Headers': 'Date, RoutingKey, Content-Length, Content-Encoding',
+				'Connection': 'keep-alive',
+				'Content-Language': 'en',
+				'Content-Length': 161,
+				'Content-Type': 'application/json',
+				Date: 'Wed, 29 Mar 2017 08:24:41 GMT',
+				RCRequestId: '2844943a-1459-11e7-b99f-0050569792e2',
+				'Retry-After': 1,
+				Server: 'nginx/1.10.2',
+				'WWW-Authenticate': 'Bearer realm="RingCentral REST API", error="CMN-301", error_description="Request rate exceeded"',
+				'X-Rate-Limit-Group': 'medium',
+				'X-Rate-Limit-Limit': 40,
+				'X-Rate-Limit-Remaining': 0
+			},
+			body: {
+				"errorCode": "CMN-301",
+				"message": "Request rate exceeded",
+				"errors": [{ "errorCode": "CMN-301", "message": "Request rate exceeded" }]
+			}
+		});
+		let delayedPromise = client.call('/some/api');
+		let delayedSampleData = 'Delayed result';
+		fetchMock.once('*', delayedSampleData);
+		let res = await delayedPromise;
+		expect(await res.text()).to.eq(delayedSampleData);
+	});
+
+	it('will throw error immediately if client is in 429 state and the handle rate limit option is off when sending API request.', async () => {
+		client.handleRateLimit = false;
+		fetchMock.once('*', {
+			status: 429,
+			headers: {
+				'Access-Control-Allow-Credentials': true,
+				'Access-Control-Allow-Origin': 'http://localhost:3000',
+				'Access-Control-Expose-Headers': 'Date, RoutingKey, Content-Length, Content-Encoding',
+				'Connection': 'keep-alive',
+				'Content-Language': 'en',
+				'Content-Length': 161,
+				'Content-Type': 'application/json',
+				Date: 'Wed, 29 Mar 2017 08:24:41 GMT',
+				RCRequestId: '2844943a-1459-11e7-b99f-0050569792e2',
+				'Retry-After': 1,
+				Server: 'nginx/1.10.2',
+				'WWW-Authenticate': 'Bearer realm="RingCentral REST API", error="CMN-301", error_description="Request rate exceeded"',
+				'X-Rate-Limit-Group': 'medium',
+				'X-Rate-Limit-Limit': 40,
+				'X-Rate-Limit-Remaining': 0
+			},
+			body: {
+				"errorCode": "CMN-301",
+				"message": "Request rate exceeded",
+				"errors": [{ "errorCode": "CMN-301", "message": "Request rate exceeded" }]
+			}
+		});
+		try {
+			await client.get('/some/api/429');
+		} catch (e) {
+			expect(e.code).to.eq('CMN-301');
+			expect(e.retryAfter).to.gt(0);
+		}
+		try {
+			await client.get('/some/api/429');
+		} catch (e) {
+			expect(e.code).to.eq('CMN-301');
+			expect(e.retryAfter).to.gt(0);
+		}
+		client.handleRateLimit = true;
+	});
 });
 
 async function auth() {
