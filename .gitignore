@@ -2,6 +2,7 @@ node_modules/
 build/
 coverage/
 typings/
+.nyc_output/
 
 # Configuration and generated runtime data for test.
 data/

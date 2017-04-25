@@ -4,8 +4,9 @@
 	"scripts": {
 		"build": "./script/build.sh",
 		"watch": "tsc -w",
-		"test": "mocha build/test/index.js",
-		"coverage": "istanbul cover _mocha -- ./build/test/index.js",
+		"test": "nyc _mocha -- build/test/index.js",
+		"coveralls": "nyc report --reporter=text-lcov | coveralls",
+		"coverage-html": "npm test && nyc report --reporter=html",
 		"generate": "node ../rc-codegen/ -l typescript -o src/ -t codegen/templates/ -c codegen/config.json",
 		"docs": "cd ./src; typedoc --mode modules -m es6 --out ../docs ./Client.ts ./FileTokenStore.ts ./WebTokenStore.ts --ignoreCompilerErrors --excludePrivate --lib lib.es6.d.ts --disableOutputCheck --name 'ringcentral-ts API Reference'",
 		"lint": "tslint test/*.ts src/**/*.ts"
@@ -24,10 +25,10 @@
 	},
 	"devDependencies": {
 		"chai": "^3.0.0",
+		"coveralls": "^2.13.0",
 		"fetch-mock": "^5.10.0",
-		"istanbul": "^0.4.0",
-		"minimist": "^1.2.0",
 		"mocha": "^3.2.0",
+		"nyc": "^10.2.0",
 		"sinon": "^2.1.0",
 		"sinon-chai": "^2.9.0",
 		"tslint": "^5.0.0",

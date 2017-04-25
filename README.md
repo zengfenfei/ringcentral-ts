@@ -1,6 +1,7 @@
 # RingCentral-ts
 
 [![Build Status](https://travis-ci.org/zengfenfei/ringcentral-ts.svg?branch=master)](https://travis-ci.org/zengfenfei/ringcentral-ts)
+[![Coverage Status](https://coveralls.io/repos/github/zengfenfei/ringcentral-ts/badge.svg?branch=master)](https://coveralls.io/github/zengfenfei/ringcentral-ts?branch=master)
 
 This is a library implemented in typescript which provides convenient APIs for typescript/javascript developers to access [RingCentral REST API](https://developer.ringcentral.com/api-docs/latest/index.html). It can be used in both node.js and browser. [Full API Reference](https://zengfenfei.github.io/ringcentral-ts/).
 
