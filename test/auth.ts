@@ -1,24 +1,17 @@
-import Client from '../src/Client';
-import config from './config';
-import { TokenStore } from '../src/Token';
-import FileTokenStore from '../src/FileTokenStore';
-import WebTokenStore from '../src/WebTokenStore';
+import RingCentral from '../src/Client';
+import * as fetchMock from 'fetch-mock';
 
-let tokenStore: TokenStore;
+let rc = new RingCentral({ appKey: 'testAppKey', appSecret: 'testAppSecret' });
 
-if (inNode()) {
-	tokenStore = new FileTokenStore(config.tokenCacheFile);
-} else {
-	tokenStore = new WebTokenStore('ringcentral-ts-test-token', localStorage);
-}
-
-let client = new Client({ ...config.app, tokenStore });
-
-export default client.getToken(config.user).catch(e => {
-	console.log('No existed token, getting a new one');
-	return client.auth(config.user);
-}).then(() => client);
-
-function inNode() {
-	return typeof process !== 'undefined' && process.versions && process.versions.node;
-}
+let serverToken = {
+	access_token: 'MockAccessToken',
+	token_type: 'bearer',
+	expires_in: 3600,
+	refresh_token: 'MockRefreshToken',
+	refresh_token_expires_in: 604800,
+	scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
+	owner_id: 'MockOwnerId',
+	endpoint_id: 'MockEndpointId'
+};
+fetchMock.once('*', serverToken);
+export default rc.auth({ username: 'testUserName', password: 'testPassword' }).then(() => rc);

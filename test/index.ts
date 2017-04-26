@@ -1,29 +1,19 @@
 import { expect } from 'chai';
 import { createReadStream } from 'fs';
 import * as fetchMock from 'fetch-mock';
-// import auth from './auth';
+import auth from './auth';
 import Client from '../src/Client';
 import '../src/Client-test';
 import '../src/RestClient-test';
 import '../src/Subscription-test';
 import './paths-test';
 
-let client = new Client({ appKey: '', appSecret: '' });
+let client: Client;
 const inNode = !!createReadStream;
 
-let serverToken = {
-	access_token: 'MockAccessToken',
-	token_type: 'bearer',
-	expires_in: 3600,
-	refresh_token: 'MockRefreshToken',
-	refresh_token_expires_in: 604800,
-	scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
-	owner_id: 'MockOwnerId',
-	endpoint_id: 'MockEndpointId'
-};
+
 before(async () => {
-	fetchMock.once('*', serverToken);
-	await client.auth({ username: '', password: '' });
+	client = await auth;
 });
 
 describe('Account', function () {
