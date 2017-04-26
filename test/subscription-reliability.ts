@@ -45,7 +45,7 @@ async function test() {
 
 	/**
 	 * Subscribe sms and presence event.
-	 * 
+	 *
 	 * Presence can't be updated by API, so use sms to trigger subscription.
 	 */
 	async function checkStatus() {
@@ -77,9 +77,9 @@ async function test() {
 				to: [{ phoneNumber }],
 				from: { phoneNumber: config.user.username },
 				text: 'Subsription reliability test:' + msg + '. duration:' + duration()
-			})
+			});
 		}
-	};
+	}
 
 	function duration() {
 		return ((Date.now() - startTime) / 1000 / 60 / 60 / 24).toFixed(2) + ' days';

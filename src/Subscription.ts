@@ -166,6 +166,8 @@ export default class Subscription extends EventEmitter {
 					}
 				}
 				if (status.error) {
+					// Try to fix error.
+					pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
 					let e = new Error('PubNub error status, category: ' + status.category);
 					e['detail'] = status;
 					this.emit(EventStatusError, e);
