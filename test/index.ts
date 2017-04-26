@@ -2,18 +2,18 @@ import { expect } from 'chai';
 import { createReadStream } from 'fs';
 import * as fetchMock from 'fetch-mock';
 import auth from './auth';
-import Client from '../src/Client';
+import RingCentral from '../src/Client';
 import '../src/Client-test';
 import '../src/RestClient-test';
 import '../src/Subscription-test';
 import './paths-test';
 
-let client: Client;
+let rc: RingCentral;
 const inNode = !!createReadStream;
 
 
 before(async () => {
-	client = await auth();
+	rc = await auth();
 });
 
 describe('Account', function () {
@@ -92,7 +92,7 @@ describe('Account', function () {
 			}
 		};
 		fetchMock.getOnce('end:/account/~', { body: sampleData });
-		const account = await client.account().get();
+		const account = await rc.account().get();
 		expect(account).to.deep.eq(sampleData);
 	});
 
@@ -110,7 +110,7 @@ describe('Account', function () {
 		};
 		fetchMock.getOnce('end:/account/accountIdNotExist', { status: 404, body: sampleData, headers: { 'content-type': 'application/json' } });
 		try {
-			await client.account('accountIdNotExist').get();
+			await rc.account('accountIdNotExist').get();
 		} catch (e) {
 			expect(e.detail).to.deep.eq(sampleData);
 			expect(e.rawRes.status).to.eq(404);
@@ -430,14 +430,14 @@ describe('Extension', function () {
 			}
 		};
 		fetchMock.getOnce('end:/account/~/extension/~', { body: sampleData });
-		return client.account().extension().get().then(ext => {
+		return rc.account().extension().get().then(ext => {
 			expect(ext).to.deep.eq(sampleData);
 		});
 	});
 
 	it('Get extension list', function () {
 		fetchMock.getOnce('end:/account/~/extension', { fake: 'data' });
-		return client.account().extension().list().then(exts => {
+		return rc.account().extension().list().then(exts => {
 			// shouldBePagingResult(exts);
 			// expect(exts.records[0]).to.has.keys(extensionProps);
 		});
@@ -446,7 +446,7 @@ describe('Extension', function () {
 	it('Union type parameters, update extension info', function () {
 		fetchMock.putOnce('end:/account/~/extension/~', { fake: 'data' });
 		let reqBody = { status: 'Enabled' };
-		return client.account().extension().put(reqBody).then(ext => {
+		return rc.account().extension().put(reqBody).then(ext => {
 			expect(fetchMock.lastOptions().body).to.deep.eq(JSON.stringify(reqBody));
 			// expect(ext).to.contain.keys(extensionProps);
 		});
@@ -457,15 +457,15 @@ describe('Binary response', function () {
 	it('Get message content as binary', async () => {
 		let dateFrom = new Date().toISOString();
 		fetchMock.getOnce('end:/account/~/extension/~/message-store?dateFrom=' + encodeURIComponent(dateFrom), { fake: 'data' });
-		await client.account().extension().messageStore().list({ dateFrom });
+		await rc.account().extension().messageStore().list({ dateFrom });
 
 		fetchMock.getOnce('end:/account/~/extension/~/message-store/the-message-id/content/content-id', { fake: 'data' });
-		await client.account().extension().messageStore('the-message-id').content('content-id').get();
+		await rc.account().extension().messageStore('the-message-id').content('content-id').get();
 	});
 
 	it('Get recording content', async () => {
 		fetchMock.getOnce('end:/account/~/recording/recording-id/content', { fake: 'data' });
-		await client.account().recording('recording-id').content().get();
+		await rc.account().recording('recording-id').content().get();
 	});
 
 });
@@ -481,17 +481,17 @@ describe('Binary request', function () {
 
 	it('Put profile image, input binary, response is empty.', async () => {
 		fetchMock.putOnce('end:/account/~/extension/~/profile-image', { fake: 'data' });
-		await client.account().extension().profileImage().put(createReadStream(imgPath));
+		await rc.account().extension().profileImage().put(createReadStream(imgPath));
 	});
 
 	it('Post profile image, input binary, response is empty.', function () {
 		fetchMock.putOnce('end:/account/~/extension/~/profile-image', { fake: 'data' });
-		return client.account().extension().profileImage().post(createReadStream(imgPath));
+		return rc.account().extension().profileImage().post(createReadStream(imgPath));
 	});
 
 	it('gets current profile image', function () {
 		fetchMock.getOnce('end:/account/~/extension/~/profile-image', { fake: 'data' });
-		return client.account().extension().profileImage().get();
+		return rc.account().extension().profileImage().get();
 	});
 
 });
@@ -506,7 +506,7 @@ describe('Fax', function () {
 		} else {
 			attachments = ['Test fax test sent from browser, ' + navigator.userAgent];
 		}
-		await client.account().extension().fax().post({ to: [{ phoneNumber: '+16507411666' }] }, attachments);
+		await rc.account().extension().fax().post({ to: [{ phoneNumber: '+16507411666' }] }, attachments);
 	});
 
 	/*it('send fax fail, empty parameter', () => {
@@ -522,12 +522,12 @@ describe('Call Log', () => {
 	it('Get call log', async () => {
 		let dateFrom = new Date().toISOString();
 		fetchMock.getOnce(`end:/account/~/extension/~/call-log?dateFrom=${encodeURIComponent(dateFrom)}&withRecording=true`, { fake: 'data' });
-		await client.account().extension().callLog().list({ dateFrom, withRecording: true });
+		await rc.account().extension().callLog().list({ dateFrom, withRecording: true });
 	});
 
 	it('delete today\'s call log', () => {
 		fetchMock.deleteOnce('end:/account/~/extension/~/call-log', { fake: 'data' });
-		return client.account().extension().callLog().delete();
+		return rc.account().extension().callLog().delete();
 	});
 });
 
@@ -540,7 +540,7 @@ describe('post', () => {
 			text: 'test sms text content.',
 			to: [{ phoneNumber: '+16507411615' }],
 		};
-		return client.account().extension().sms().post(reqBody).then(sms => {
+		return rc.account().extension().sms().post(reqBody).then(sms => {
 			expect(fetchMock.lastOptions().body).to.deep.eq(JSON.stringify(reqBody));
 		});
 	});

@@ -1,12 +1,12 @@
 import * as fetchMock from 'fetch-mock';
 import auth from './auth';
-import Client from '../src/Client';
+import RingCentral from '../src/Client';
 
 
-let client: Client;
+let rc: RingCentral;
 
 before(async () => {
-	client = await auth();
+	rc = await auth();
 });
 
 describe('PathSegments', function () {
@@ -48,31 +48,31 @@ describe('PathSegments', function () {
 				callerId: '+46843216868'
 			}]
 		};
-		await client.account().extension().answeringRule().post(reqBody);
+		await rc.account().extension().answeringRule().post(reqBody);
 
 		fetchMock.deleteOnce('end:/account/~/extension/~/answering-rule/rule-id-to-delete', {});
-		await client.account().extension().answeringRule('rule-id-to-delete').delete();
+		await rc.account().extension().answeringRule('rule-id-to-delete').delete();
 
 		fetchMock.putOnce('end:/account/~/extension/~/answering-rule/rule-id-to-change', {});
-		await client.account().extension().answeringRule('rule-id-to-change').put({ name: 'updated.' });
+		await rc.account().extension().answeringRule('rule-id-to-change').put({ name: 'updated.' });
 
 
 		fetchMock.getOnce('end:/account/~/extension/~/answering-rule/rule-id', {});
-		await client.account().extension().answeringRule('rule-id').get();
+		await rc.account().extension().answeringRule('rule-id').get();
 
 		fetchMock.getOnce('end:/account/~/extension/~/answering-rule', {});
-		await client.account().extension().answeringRule().list();
+		await rc.account().extension().answeringRule().list();
 	});
 
 	it('gets business hours rule', function () {
 		fetchMock.getOnce('end:/account/~/extension/~/business-hours', {});
-		return client.account().extension().businessHours().get();
+		return rc.account().extension().businessHours().get();
 	});
 
 	describe('BlockedNumber', function () {
 
 		it('covers all', async () => {
-			let ext = client.account().extension();
+			let ext = rc.account().extension();
 			let createdId = 'BlockNumberId';
 			let createdBlockedPhoneNumber = '+18989999';
 			fetchMock.once('*', {});
@@ -90,7 +90,7 @@ describe('PathSegments', function () {
 	describe('Contacts', function () {
 
 		it('covers all', async () => {
-			let addressBook = client.account().extension().addressBook();
+			let addressBook = rc.account().extension().addressBook();
 			let createdId = 'addressId';
 			fetchMock.once('*', {});
 			await addressBook.contact().post({ firstName: 'Test' });
@@ -112,16 +112,16 @@ describe('PathSegments', function () {
 		it('covers all', async () => {
 			let createdId = 'subscriptionId';
 			fetchMock.once('*', {});
-			await client.subscription().post({
+			await rc.subscription().post({
 				eventFilters: ['/restapi/v1.0/account/~/extension/~/presence?detailedTelephonyState=true'],
 				deliveryMode: { transportType: 'PubNub', encryption: true }
 			});
 			fetchMock.once('*', {});
-			await client.subscription(createdId).get();
+			await rc.subscription(createdId).get();
 			fetchMock.once('*', {});
-			await client.subscription(createdId).put({ eventFilters: ['/restapi/v1.0/account/~/extension/~/message-store'] });
+			await rc.subscription(createdId).put({ eventFilters: ['/restapi/v1.0/account/~/extension/~/message-store'] });
 			fetchMock.once('*', {});
-			client.subscription(createdId).delete();
+			rc.subscription(createdId).delete();
 		});
 
 	});
@@ -131,7 +131,7 @@ describe('PathSegments', function () {
 		it.skip('covers all', function () {
 			fetchMock.once('*', {});
 			let createdId: string;
-			let ext = client.account().extension();
+			let ext = rc.account().extension();
 			return ext.meeting().post({ meetingType: 'Instant' })   // Error reported, 'errorCode' : 'CMN-408',\n  'message' : '[Meetings] permission required', maybe sandbox doesn't support meetings API yet.
 				.then(res => createdId = res.id)
 				.then(res => ext.meeting(createdId).delete()).catch(e => console.log(e));
@@ -139,7 +139,7 @@ describe('PathSegments', function () {
 
 		it('service info', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().meeting().serviceInfo().get().catch(e => console.log(e.detail));
+			return rc.account().extension().meeting().serviceInfo().get().catch(e => console.log(e.detail));
 		});
 
 	});
@@ -149,15 +149,15 @@ describe('PathSegments', function () {
 		it('covers all', async () => {
 			let id = 'ringoutId';
 			fetchMock.once('*', {});
-			await client.account().extension().ringout().post({
+			await rc.account().extension().ringout().post({
 				from: { phoneNumber: '+16507411615' },
 				to: { phoneNumber: '+16507411615' }
 			});
 			fetchMock.once('*', {});
-			await client.account().extension().ringout(id).get();
+			await rc.account().extension().ringout(id).get();
 
 			fetchMock.once('*', {});
-			await client.account().extension().ringout(id).delete();
+			await rc.account().extension().ringout(id).delete();
 		});
 
 	});
@@ -166,7 +166,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().forwardingNumber().list();
+			return rc.account().extension().forwardingNumber().list();
             /* let id: string;
              return client.account().extension().forwardingNumber().post({ label: 'test', phoneNumber: '+16507411615' })
                  .then(res => client.account().extension().forwardingNumber());*/
@@ -178,7 +178,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			let addressBook = client.account().extension().addressBook();
+			let addressBook = rc.account().extension().addressBook();
 			return addressBook.group().list();
 		});
 
@@ -204,9 +204,9 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', { records: [{ id: 'testid' }] });
-			return client.dictionary().country().list().then(res => {
+			return rc.dictionary().country().list().then(res => {
 				fetchMock.once('*', {});
-				return client.dictionary().country(res.records[0].id).get();
+				return rc.dictionary().country(res.records[0].id).get();
 			});
 		});
 
@@ -216,9 +216,9 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', { records: [{ id: 'testid' }] });
-			return client.dictionary().state().list().then(res => {
+			return rc.dictionary().state().list().then(res => {
 				fetchMock.once('*', {});
-				return client.dictionary().state(res.records[0].id).get();
+				return rc.dictionary().state(res.records[0].id).get();
 			});
 		});
 
@@ -228,9 +228,9 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', { records: [{ id: 'testid' }] });
-			return client.account().device().list().then(res => {
+			return rc.account().device().list().then(res => {
 				fetchMock.once('*', {});
-				return client.account().device(res.records[0].id).get();
+				return rc.account().device(res.records[0].id).get();
 			});
 		});
 
@@ -240,9 +240,9 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', { records: [{ id: 'testid' }] });
-			return client.dictionary().timezone().list().then(res => {
+			return rc.dictionary().timezone().list().then(res => {
 				fetchMock.once('*', {});
-				return client.dictionary().timezone(res.records[0].id).get();
+				return rc.dictionary().timezone(res.records[0].id).get();
 
 			});
 		});
@@ -253,10 +253,10 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', { records: [{ id: 'testid' }] });
-			return client.account().phoneNumber().list().then(res => {
+			return rc.account().phoneNumber().list().then(res => {
 				if (res.records.length > 0) {
 					fetchMock.once('*', {});
-					return client.account().phoneNumber(res.records[0].id).get();
+					return rc.account().phoneNumber(res.records[0].id).get();
 				}
 			});
 		});
@@ -267,10 +267,10 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', { records: [{ id: 'test-id' }] });
-			return client.dictionary().language().list().then(res => {
+			return rc.dictionary().language().list().then(res => {
 				if (res.records.length > 0) {
 					fetchMock.once('*', {});
-					return client.dictionary().language(res.records[0].id).get();
+					return rc.dictionary().language(res.records[0].id).get();
 				}
 			});
 		});
@@ -282,21 +282,21 @@ describe('PathSegments', function () {
 		it('covers all', async () => {
 			let id = 'message-id';
 			fetchMock.once('*', {});
-			await client.account().extension().companyPager().post({
+			await rc.account().extension().companyPager().post({
 				to: [{ extensionNumber: '101' }],
 				text: 'js-client unit test.'
 			});
 			fetchMock.once('*', {});
-			client.account().extension().messageStore(id).delete();
+			rc.account().extension().messageStore(id).delete();
 			fetchMock.once('*', {});
-			client.account().extension().messageStore(id).put({ readStatus: 'Read' });
+			rc.account().extension().messageStore(id).put({ readStatus: 'Read' });
 			fetchMock.once('*', {});
-			client.account().extension().messageStore().list();
+			rc.account().extension().messageStore().list();
 		});
 
 		it('gets sync message', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().messageSync().list();
+			return rc.account().extension().messageSync().list();
 		});
 
 	});
@@ -305,9 +305,9 @@ describe('PathSegments', function () {
 
 		it('covers all', async () => {
 			fetchMock.once('*', {});
-			await client.account().extension().authzProfile().get();
+			await rc.account().extension().authzProfile().get();
 			fetchMock.once('*', {});
-			await client.account().extension().authzProfile().check().get();
+			await rc.account().extension().authzProfile().check().get();
 		});
 
 	});
@@ -316,7 +316,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.clientInfo().customData('testKey').put({ id: 'testId', value: 'testValue' });
+			return rc.clientInfo().customData('testKey').put({ id: 'testId', value: 'testValue' });
 		});
 
 	});
@@ -325,7 +325,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().activeCalls().list();
+			return rc.account().extension().activeCalls().list();
 		});
 
 	});
@@ -334,7 +334,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().grant().list();
+			return rc.account().extension().grant().list();
 		});
 
 	});
@@ -343,9 +343,9 @@ describe('PathSegments', function () {
 
 		it('covers all', async () => {
 			fetchMock.once('*', {});
-			await client.dictionary().state().list();
+			await rc.dictionary().state().list();
 			fetchMock.once('*', {});
-			await client.dictionary().location().list({ stateId: 'testId' });
+			await rc.dictionary().location().list({ stateId: 'testId' });
 		});
 
 	});
@@ -363,7 +363,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().department('~').members().list();
+			return rc.account().department('~').members().list();
 		});
 
 	});
@@ -372,9 +372,9 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().businessAddress().get().then(res => {
+			return rc.account().businessAddress().get().then(res => {
 				fetchMock.once('*', {});
-				return client.account().businessAddress().put({ email: 'js-client-test@ringcentral.com' });
+				return rc.account().businessAddress().put({ email: 'js-client-test@ringcentral.com' });
 			});
 		});
 
@@ -384,7 +384,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().dialingPlan().list();
+			return rc.account().dialingPlan().list();
 		});
 
 	});
@@ -393,7 +393,7 @@ describe('PathSegments', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().presence().get();
+			return rc.account().extension().presence().get();
 		});
 
 	});
@@ -402,7 +402,7 @@ describe('PathSegments', function () {
 
 		it('gets call log sync', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().callLogSync().list({ recordCount: 5 });
+			return rc.account().extension().callLogSync().list({ recordCount: 5 });
 		});
 
 	});
@@ -411,7 +411,7 @@ describe('PathSegments', function () {
 
 		it('gets address book sync', function () {
 			fetchMock.once('*', {});
-			return client.account().extension().addressBookSync().list();
+			return rc.account().extension().addressBookSync().list();
 		});
 	});
 
@@ -419,7 +419,7 @@ describe('PathSegments', function () {
 
 		it('parses number', function () {
 			fetchMock.once('*', {});
-			return client.numberParser().parse().post({ originalStrings: ['+8618657118272'] });
+			return rc.numberParser().parse().post({ originalStrings: ['+8618657118272'] });
 		});
 
 	});
