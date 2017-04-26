@@ -53,8 +53,8 @@ export default class RingCentral {
 		return this.rest.logout();
 	}
 
-	createSubscription() {
-		return new Subscription2(this.rest);
+	createSubscription(opts?: { debug?: boolean }) {
+		return new Subscription2(this.rest, opts);
 	}
 
 

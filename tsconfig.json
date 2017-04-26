@@ -15,7 +15,8 @@
 		"importHelpers": true
 	},
 	"files": [
-		"test/index.ts"
+		"test/index.ts",
+		"test/subscription-reliability.ts"
 	],
 	"include": [
 		"src/definitions/*.ts"
