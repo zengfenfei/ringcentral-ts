@@ -23,9 +23,12 @@ export default class Subscription extends EventEmitter {
 	refreshTimer: NodeJS.Timer;
 	pubnub: any;
 
-	constructor(restClient: RestClient) {
+	debug: boolean;
+
+	constructor(restClient: RestClient, debug?: boolean) {
 		super();
 		this.rest = restClient;
+		this.debug = debug;
 	}
 
     /**
@@ -123,7 +126,7 @@ export default class Subscription extends EventEmitter {
 	}
 
 	async connectToPushServer(subscription) {
-		let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey, ssl: true });
+		let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey, ssl: true, keepAlive: true, logVerbosity: this.debug });
 		// Wrong address pubnub won't report error.
 		pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
 		await new Promise((resolve, reject) => {
