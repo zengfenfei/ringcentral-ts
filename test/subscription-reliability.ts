@@ -27,6 +27,10 @@ async function test() {
 	checkStatus();
 	setInterval(checkStatus, 24 * 60 * 60 * 1000);
 
+	subscription.onMessage(msg => {
+		console.log('@@@@Subscription message arrived', msg);
+	});
+
 	subscription.on('StatusError', err => {
 		console.log('@@@@Subscription status error', err);
 		notify('Subscription status error:' + JSON.stringify(err.detail, null, 4));
