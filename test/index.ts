@@ -13,7 +13,7 @@ const inNode = !!createReadStream;
 
 
 before(async () => {
-	client = await auth;
+	client = await auth();
 });
 
 describe('Account', function () {

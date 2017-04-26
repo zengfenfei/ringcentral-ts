@@ -3,57 +3,58 @@ import delay from 'delay.ts';
 import * as fetchMock from 'fetch-mock';
 import RestClient/*, { EventLoginStart, EventLoginError, EventLoginSuccess }*/ from './RestClient';
 import Token from './Token';
+import auth from '../test/auth';
 import 'isomorphic-fetch';
 
-let server = 'https://platform.ringcentral.com';
-let appKey = 'testAppKey';
-let appSecret = 'testAppSecret';
-let client = new RestClient({
-	server,
-	appKey,
-	appSecret
-});
 
-let serverToken = {
-	access_token: 'MockAccessToken',
-	token_type: 'bearer',
-	expires_in: 3600,
-	refresh_token: 'MockRefreshToken',
-	refresh_token_expires_in: 604800,
-	scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
-	owner_id: 'MockOwnerId',
-	endpoint_id: 'MockEndpointId'
-};
-
+let client: RestClient;
 before(async () => {
-	await auth();
+	client = (await auth()).rest;
 });
 
-describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
+describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods', () => {
+
+	const server = 'https://platform.ringcentral.com';
+	const appKey = 'testAppKey';
+	const appSecret = 'testAppSecret';
+	const authUrl = server + '/restapi/oauth/token';
+	const serverToken = {
+		access_token: 'MockAccessToken',
+		token_type: 'bearer',
+		expires_in: 3600,
+		refresh_token: 'MockRefreshToken',
+		refresh_token_expires_in: 604800,
+		scope: 'ReadMessages Faxes ReadPresence EditCallLog VoipCalling ReadClientInfo Glip Interoperability Contacts ReadAccounts EditExtensions RingOut SMS InternalMessages SubscriptionWebhook EditMessages',
+		owner_id: 'MockOwnerId',
+		endpoint_id: 'MockEndpointId'
+	};
 
 	it('sends the right request and parse the response correctly for auth by password', async () => {
-		let authUrl = server + '/restapi/oauth/token';
+		let client = new RestClient({
+			server,
+			appKey,
+			appSecret
+		});
+
 		let username = 'testUsername';
 		let password = 'testPassword';
 
-		fetchMock.once('*', serverToken);
-
+		fetchMock.postOnce(authUrl, serverToken);
 		let token = await client.auth({
 			username,
 			password
 		});
 		// #1 Check the request
-		expect(fetchMock.lastCall()).to.deep.equal([authUrl,
+		expect(fetchMock.lastOptions()).to.deep.equal({
+			body: 'grant_type=password&username=' + username + '&extension=&password=' + password + '&access_token_ttl=&refresh_token_ttl=&scope=',
+			method: 'POST',
+			headers:
 			{
-				body: 'grant_type=password&username=' + username + '&extension=&password=' + password + '&access_token_ttl=&refresh_token_ttl=&scope=',
-				method: 'POST',
-				headers:
-				{
-					'Content-Type': 'application/x-www-form-urlencoded',
-					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
-					'X-User-Agent': client.agents.join(' '),
-				}
-			}]);
+				'Content-Type': 'application/x-www-form-urlencoded',
+				Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
+				'X-User-Agent': client.agents.join(' '),
+			}
+		});
 		// #2 Check the parsed response
 		let expectedToken = new Token();
 		expectedToken.setOwner(appKey, { username })
@@ -66,7 +67,12 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 	});
 
 	it('reports invalid request error when auth with empty credential', () => {
-		fetchMock.once('*', {
+		let client = new RestClient({
+			server,
+			appKey,
+			appSecret
+		});
+		fetchMock.postOnce(authUrl, {
 			status: 400,
 			headers: {
 				server: ['nginx/1.10.2'],
@@ -113,6 +119,11 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 				error: 'invalid_grant',
 				error_description: 'Invalid resource owner credentials.'
 			}
+		});
+		let client = new RestClient({
+			server,
+			appKey,
+			appSecret
 		});
 		return client.auth({ username: 'xxx', password: 'xxx' }).then(() => {
 			throw 'Should not login';
@@ -166,6 +177,7 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 	});
 
 	it('invalidates access token and refresh token after logout', async () => {
+		let client = (await auth()).rest;
 		fetchMock.once('*', {
 			status: 200, headers: {
 				server: ['nginx/1.10.2'],
@@ -197,7 +209,6 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 		if (e) {
 			throw e;
 		}
-		await auth();
 	});
 
 	/*	it('will not report error when logout with wrong access token', async () => {
@@ -243,6 +254,11 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 	});
 
 	it('login by oauth callback url', () => {
+		let client = new RestClient({
+			server,
+			appKey,
+			appSecret
+		});
 		fetchMock.once('*', serverToken);
 		client.oauthByUrl('https://your-app.github.io/email-manipulator/?code=TheTestOauthCode');
 		expect(fetchMock.lastCall()).to.deep.eq(['https://platform.ringcentral.com/restapi/oauth/token',
@@ -259,6 +275,7 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 	});
 
 	it('should refresh token automatically if accessToken is invalid when getting token', async () => {
+		let client = (await auth()).rest;
 		let token = await client.getToken();
 		const { accessToken, refreshToken } = token;
 		token.expiresIn = Date.now() - 10;
@@ -276,7 +293,6 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 			}]);
 		expect(newToken.accessToken).not.eq(accessToken);
 		expect(newToken.refreshToken).not.eq(refreshToken);
-		await auth();
 	});
 
 	it('allows only one getToken operation at the same time', () => {
@@ -285,7 +301,7 @@ describe('Auth: auth, oauth, refreshToken, logout and related methods', () => {
 
 });
 
-describe('429 handling', () => {
+describe('RestClient 429 handling', () => {
 
 	it.skip('Check if requests in 429 state will postpone the recovering time.', async () => {
 		let startTime = Date.now();
@@ -318,19 +334,18 @@ describe('429 handling', () => {
 
 });
 
-describe('API calls', () => {
+describe('RestClient API call methods', () => {
 
 	let NotLoginError = 'NoToken';
-	it('Call api before login', () => {
+	it('Call api before login', async () => {
+		let client = (await auth()).rest;
 		fetchMock.once('*', ' ');
 		return client.logout().then(() => {
 			return client.get('/some-api');
 		}).then(async () => {
-			await auth();
 			throw new Error('Should not success.');
 		}, async e => {
 			expect(e.code).to.eq(NotLoginError);
-			await auth();
 		});
 	});
 
@@ -489,8 +504,3 @@ describe('API calls', () => {
 	});
 
 });
-
-async function auth() {
-	fetchMock.once('*', serverToken);
-	await client.auth({ username: '', password: '' });
-}

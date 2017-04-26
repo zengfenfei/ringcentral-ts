@@ -6,7 +6,7 @@ import Client from '../src/Client';
 let client: Client;
 
 before(async () => {
-	client = await auth;
+	client = await auth();
 });
 
 describe('PathSegments', function () {
