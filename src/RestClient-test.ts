@@ -3,7 +3,7 @@ import delay from 'delay.ts';
 import * as fetchMock from 'fetch-mock';
 import RestClient/*, { EventLoginStart, EventLoginError, EventLoginSuccess }*/ from './RestClient';
 import Token from './Token';
-import auth from '../test/auth';
+import { auth } from '../test/setup';
 import 'isomorphic-fetch';
 
 

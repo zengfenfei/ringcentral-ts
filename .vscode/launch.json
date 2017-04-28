@@ -12,9 +12,7 @@
 			"cwd": "${workspaceRoot}",
 			"sourceMaps": true,
 			"args": [
-				"${workspaceRoot}/build/src/Subscription-test.js",
-				"--no-timeouts",
-				"--no-exit"
+				"${workspaceRoot}/build/src/Subscription-test.js"
 			],
 			"outFiles": [
 				"${workspaceRoot}/build/**/*.js"

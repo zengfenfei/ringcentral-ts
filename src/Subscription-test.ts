@@ -1,20 +1,17 @@
 import delay from 'delay.ts';
-import RestClient from './RestClient';
+import * as fetchMock from 'fetch-mock';
+import { expect } from 'chai';
+import * as sinon from 'sinon';
+import { auth } from '../test/setup';
+import { getLastPubnub } from "../test/pubnub-mock";
 import Subscription from './Subscription';
-// import config from '../test/config';
 
-/*
- Please run mocha with option --no-exit.
-*/
-
-let restClient: RestClient;
 let subscription: Subscription;
 
 before(async () => {
-	subscription = new Subscription(restClient);
-	subscription.onMessage(msg => {
-		console.log('>>>Subscription message', msg);
-	});
+	let rc = await auth();
+	subscription = rc.createSubscription();
+
 	subscription.on('StatusError', err => {
 		console.log('!!!Subscription status error', err);
 	});
@@ -31,9 +28,60 @@ before(async () => {
 
 describe('Subscription', () => {
 
-	it.skip('should receive notifications forever', async () => {
+	it('receives notifications after subscribe', async () => {
 		let sub = subscription;
+		let expiresIn = 899;	// seconds
+		// POST https://platform.ringcentral.com/restapi/v1.0/subscription
+		fetchMock.postOnce('end:/subscription', {
+			body: {
+				"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/8c9ee34f-8096-4941",
+				"id": "8c9ee34f-8096-4941",
+				"creationTime": "2017-03-20T06:04:01.726Z",
+				"status": "Active",
+				"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
+				"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
+				expiresIn,
+				"deliveryMode": {
+					"transportType": "PubNub",
+					"encryption": true,
+					"address": "601167281631840_012c504c",
+					"subscriberKey": "sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe",
+					"encryptionAlgorithm": "AES",
+					"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
+				}
+			}
+		});
+
 		await sub.subscribe(['/account/~/extension/~/presence']);
+		let spy = sinon.spy();
+		sub.onMessage(spy);
+		let pubnub = getLastPubnub();
+		let testMsg = {
+			"uuid": "1088719898803550582-8036702296129764",
+			"event": "/restapi/v1.0/account/37439510/extension/924428020/presence",
+			"timestamp": "2017-02-09T11:21:07.074Z",
+			"subscriptionId": "24dcfdcf-e7d0-4930-9edb-555ec11843b9",
+			"body": {
+				"extensionId": 924428020,
+				"telephonyStatus": "Ringing",
+				"presenceStatus": "Available",
+				"userStatus": "Available",
+				"dndStatus": "TakeAllCalls",
+				"message": "custom",
+				"allowSeeMyPresence": true,
+				"ringOnMonitoredCall": false,
+				"pickUpCallsOnHold": false
+			}
+		};
+		let encrypted = pubnub.realPubnub.encrypt(JSON.stringify(testMsg), sub.encryptionKey, {
+			encryptKey: false,
+			keyEncoding: 'base64',
+			keyLength: 128,
+			mode: 'ecb'
+		});
+		pubnub.mockMessage(encrypted);
+
+		expect(spy.calledWith(testMsg)).to.be.true;
 	});
 
 	it.skip('should not receive notification after subscription canceled', async () => {

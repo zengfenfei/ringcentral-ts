@@ -1,5 +1,5 @@
 import * as fetchMock from 'fetch-mock';
-import auth from './auth';
+import { auth } from './setup';
 import RingCentral from '../src/Client';
 
 

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { createReadStream } from 'fs';
 import * as fetchMock from 'fetch-mock';
-import auth from './auth';
+import { auth } from './setup';
 import RingCentral from '../src/Client';
 import '../src/Client-test';
 import '../src/RestClient-test';

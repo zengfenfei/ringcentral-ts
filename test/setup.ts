@@ -1,7 +1,13 @@
+import './pubnub-mock';
 import RingCentral from '../src/Client';
 import * as fetchMock from 'fetch-mock';
 
-export default async function auth() {
+/*
+Attention: Please make sure this file is included before all tests.
+*/
+
+
+export async function auth() {
 	let rc = new RingCentral({ appKey: 'testAppKey', appSecret: 'testAppSecret' });
 
 	let serverToken = {
