@@ -5,31 +5,18 @@ import * as sinon from 'sinon';
 import { auth } from '../test/setup';
 import { getLastPubnub } from "../test/pubnub-mock";
 import Subscription from './Subscription';
+import RingCentral from './Client';
 
-let subscription: Subscription;
+let rc: RingCentral;
 
 before(async () => {
-	let rc = await auth();
-	subscription = rc.createSubscription();
-
-	subscription.on('StatusError', err => {
-		console.log('!!!Subscription status error', err);
-	});
-	subscription.on('status', status => {
-		console.log('Subscription pubnub status', status);
-	});
-	subscription.on('RefreshError', err => {
-		console.log('Subscription refresh error:' + err);
-	});
-	subscription.on('RefreshSuccess', () => {
-		console.log('Subscription refresh RefreshSuccess');
-	});
+	rc = await auth();
 });
 
 describe('Subscription', () => {
 
 	it('receives notifications after subscribe', async () => {
-		let sub = subscription;
+		let sub = rc.createSubscription();
 		let expiresIn = 899;	// seconds
 		// POST https://platform.ringcentral.com/restapi/v1.0/subscription
 		fetchMock.postOnce('end:/subscription', {
@@ -82,6 +69,39 @@ describe('Subscription', () => {
 		pubnub.mockMessage(encrypted);
 
 		expect(spy.calledWith(testMsg)).to.be.true;
+	});
+
+	it('subscribeById', async () => {
+		let sub = rc.createSubscription();
+		let expiresIn = 899;	// seconds
+		let subId = '8c9ee34f-8096-4941';
+		let subData = {
+			"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/" + subId,
+			"id": subId,
+			"creationTime": "2017-03-20T06:04:01.726Z",
+			"status": "Active",
+			"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
+			"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
+			expiresIn,
+			"deliveryMode": {
+				"transportType": "PubNub",
+				"encryption": true,
+				"address": "601167281631840_012c504c",
+				"subscriberKey": "sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe",
+				"encryptionAlgorithm": "AES",
+				"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
+			}
+		};
+		fetchMock.getOnce('end:/subscription/' + subId, {
+			body: subData
+		});
+		await sub.subscribeById(subId);
+		expect(sub.id).to.eq(subId);
+		expect(sub.expirationTime).to.eq(Date.parse(subData.expirationTime));
+		expect(subData.eventFilters[0].endsWith(sub.eventFilters[0])).to.be.true;
+		expect(sub.subscribeKey).to.eq(subData.deliveryMode.subscriberKey);
+		expect(sub.address).to.eq(subData.deliveryMode.address);
+		expect(sub.encryptionKey).to.eq(subData.deliveryMode.encryptionKey);
 	});
 
 	it.skip('should not receive notification after subscription canceled', async () => {

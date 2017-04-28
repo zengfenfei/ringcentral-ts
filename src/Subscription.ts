@@ -32,9 +32,9 @@ export default class Subscription extends EventEmitter {
 		this.debug = opts.debug;
 	}
 
-	/**
-	 * TODO Retry after refresh error.
-	 */
+    /**
+     * TODO Retry after refresh error.
+     */
 	private subscriptionUpdated(subscription) {
 		if (!this.pubnub) {
 			// The subscription is canceled.
@@ -44,8 +44,8 @@ export default class Subscription extends EventEmitter {
 		}
 		if (!this.id) {
 			this.id = subscription.id;
-			this.subscribeKey = subscription.subscribeKey;
-			this.address = subscription.address;
+			this.subscribeKey = subscription.deliveryMode.subscriberKey;
+			this.address = subscription.deliveryMode.address;
 			this.encryptionKey = subscription.deliveryMode.encryptionKey;
 		} else {
 			assert(this.id === subscription.id, 'Subscription id should not change');
