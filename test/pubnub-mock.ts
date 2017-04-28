@@ -27,6 +27,14 @@ export class MockedPubNub {
 		setTimeout(() => this.mockedConnected(), 0);
 	}
 
+	removeAllListeners() {
+		this.listeners = [];
+	}
+
+	destroy() {
+		this.realPubnub = null;
+	}
+
 
 	// Methods to do mocking operations
 	mockedConnected() {

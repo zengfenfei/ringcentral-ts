@@ -69,27 +69,28 @@ describe('Subscription', () => {
 		expect(spy.calledWith(testMsg)).to.be.true;
 	});
 
+	let expiresIn = 899;	// seconds
+	let subId = '8c9ee34f-8096-4941';
+	let subData = {
+		"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/" + subId,
+		"id": subId,
+		"creationTime": "2017-03-20T06:04:01.726Z",
+		"status": "Active",
+		"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
+		"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
+		expiresIn,
+		"deliveryMode": {
+			"transportType": "PubNub",
+			"encryption": true,
+			"address": "601167281631840_012c504c",
+			"subscriberKey": "sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe",
+			"encryptionAlgorithm": "AES",
+			"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
+		}
+	};
+
 	it('subscribeById', async () => {
 		let sub = rc.createSubscription();
-		let expiresIn = 899;	// seconds
-		let subId = '8c9ee34f-8096-4941';
-		let subData = {
-			"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/" + subId,
-			"id": subId,
-			"creationTime": "2017-03-20T06:04:01.726Z",
-			"status": "Active",
-			"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
-			"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
-			expiresIn,
-			"deliveryMode": {
-				"transportType": "PubNub",
-				"encryption": true,
-				"address": "601167281631840_012c504c",
-				"subscriberKey": "sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe",
-				"encryptionAlgorithm": "AES",
-				"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
-			}
-		};
 		fetchMock.getOnce('end:/subscription/' + subId, {
 			body: subData
 		});
@@ -100,6 +101,16 @@ describe('Subscription', () => {
 		expect(sub.subscribeKey).to.eq(subData.deliveryMode.subscriberKey);
 		expect(sub.address).to.eq(subData.deliveryMode.address);
 		expect(sub.encryptionKey).to.eq(subData.deliveryMode.encryptionKey);
+	});
+
+	it('cancel subscription', async () => {
+		let sub = rc.createSubscription();
+		fetchMock.postOnce('end:/subscription', { body: subData });
+		await sub.subscribe(['/test/subscription']);
+		fetchMock.deleteOnce('end:/subscription/' + subId, ' ');
+		await sub.cancel();
+		expect(sub.id).to.be.null;
+		expect(sub.pubnub).to.be.null;
 	});
 
 });
