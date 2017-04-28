@@ -1,7 +1,5 @@
 import { EventEmitter } from 'events';
-import * as assert from 'assert';
 import * as PubNub from 'pubnub';
-import { OPERATIONS, CATEGORIES } from 'pubnub';
 import delay from 'delay.ts';
 import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 
@@ -13,6 +11,8 @@ export default class Subscription extends EventEmitter {
 	rest: RestClient;
 	maxRefreshRetries = 10;
 
+
+	// Subscription data
 	id: string;
 	expirationTime: number; // Epoch time in ms.
 	eventFilters: string[]; // Without REST base url, can be set by user
@@ -32,30 +32,49 @@ export default class Subscription extends EventEmitter {
 		this.debug = opts.debug;
 	}
 
-    /**
-     * TODO Retry after refresh error.
-     */
-	private subscriptionUpdated(subscription) {
-		if (!this.pubnub) {
-			// The subscription is canceled.
-			// If you try to cancel while the refresh is ongoing and the cancel request ends bofere the refresh request, when the refresh finishes, subscription id is deleted and the pubnub is also deleted.
-			// We should not check subscription id to tell if the subscription is canceled, because the subscription id does not exist before subscribe.
-			return;
+	/**
+	 * expiresIn Optional. Subscription lifetime in seconds. Max value is 7 days (604800 sec)
+	 * The 'expiresIn' is not supported.
+	 *
+	 * Errors migh occur:
+	 * errorCode: 'SUB-505',
+	 * message: 'Subscriptions limit exceeded'
+	 */
+	async subscribe(eventFilters: string[]) {
+		if (this.pubnub) {
+			await this.cancel();
 		}
-		if (!this.id) {
+		eventFilters = prefixFilters(eventFilters);
+		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
+		let subscription = await res.json();
+		this.setSubscription(subscription);
+	}
+
+	/**
+	 * 
+	 * @param id The existing subscription id.
+	 */
+	async subscribeById(id: string) {
+		let res = await this.rest.get('/subscription/' + id);
+		let subscription = await res.json();
+		await this.setSubscription(subscription);
+	}
+
+    /**
+     * Set subscription data from referesh, newly created or get by id.
+     */
+	setSubscription(subscription) { // This functions is the only place to parse subscription data.
+		if (subscription.id !== this.id) {
 			this.id = subscription.id;
 			this.subscribeKey = subscription.deliveryMode.subscriberKey;
 			this.address = subscription.deliveryMode.address;
 			this.encryptionKey = subscription.deliveryMode.encryptionKey;
-		} else {
-			assert(this.id === subscription.id, 'Subscription id should not change');
-			assert(this.subscribeKey === subscription.subscribeKey, 'SubscribeKey should not change');
-			assert(this.address === subscription.address, 'Subscription channel should not change');
-			assert(this.encryptionKey === subscription.encryptionKey, 'Subscription AES key should not change');
+			this.connectPushServer();
 		}
 		this.expirationTime = Date.parse(subscription.expirationTime);
 		this.eventFilters = unprefixFilters(subscription.eventFilters);
 
+		this.clearRefreshTimer();
 		this.refreshTimer = setTimeout(async () => {
 			this.refreshTimer = null;
 			this.refresh().catch(async e => {
@@ -77,120 +96,86 @@ export default class Subscription extends EventEmitter {
 		}, this.expirationTime - Date.now() - refreshHandicap);
 	}
 
-	private subscriptionDeleted() {
-		this.id = '';
-		this.expirationTime = 0;
-		if (this.refreshTimer) {
-			clearTimeout(this.refreshTimer);
-			this.refreshTimer = null;
-		}
-		this.pubnub.removeAllListeners();
-		this.pubnub.destroy();
-		this.pubnub = null;
-	}
-
-	/**
-	 * expiresIn Optional. Subscription lifetime in seconds. Max value is 7 days (604800 sec)
-	 * The 'expiresIn' is not supported.
-	 *
-	 * Errors migh occur:
-	 * errorCode: 'SUB-505',
-	 * message: 'Subscriptions limit exceeded'
-	 */
-	async subscribe(eventFilters: string[]) {
-		if (this.pubnub) {
-			throw new Error('Subscription exists.');
-		}
-		eventFilters = prefixFilters(eventFilters);
-		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
-		let subscription = await res.json();
-		await this.subscribeByData(subscription);
-	}
-
-	/**
-	 * 
-	 * @param id The existing subscription id.
-	 */
-	async subscribeById(id: string) {
-		let res = await this.rest.get('/subscription/' + id);
-		let subscription = await res.json();
-		await this.subscribeByData(subscription);
-	}
-
-	/**
-	 * 
-	 * @param subscription The subscription data returned from REST API.
-	 */
-	async subscribeByData(subscription) {
-		await this.connectToPushServer(subscription);
-		this.subscriptionUpdated(subscription);
-	}
-
-	async connectToPushServer(subscription) {
-		let pubnub = new PubNub({ subscribeKey: subscription.deliveryMode.subscriberKey, ssl: true, logVerbosity: this.debug });
-		// Wrong address pubnub won't report error.
-		pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
-		await new Promise((resolve, reject) => {
-			let message = msg => {
-				let decrypted = pubnub.decrypt(msg.message, subscription.deliveryMode.encryptionKey, {
-					encryptKey: false,
-					keyEncoding: 'base64',
-					keyLength: 128,
-					mode: 'ecb'
-				});
-				// TODO Filter out duplicated notifications by uuid.
-				this.emit(EventMessage, decrypted);
-			};
-			let status = status => {
-				/*
-				Good response:
-				{   category: 'PNConnectedCategory',
-					operation: 'PNSubscribeOperation'... }
-
-				Wrong subscribeKey:
-				{   error: true,
-					operation: 'PNSubscribeOperation',
-					category: 'PNBadRequestCategory'... }
-				*/
-				if (status.operation === OPERATIONS.PNSubscribeOperation) {
-					if (status.category === CATEGORIES.PNConnectedCategory) {
-						resolve();
-						return;
-					} else if (status.error) {
-						let e = new Error('PubNub subscribe failed, ' + status.category);
-						e['detail'] = status;
-						pubnub.removeAllListeners();
-						pubnub.destroy();
-						reject(e);
-						return;
-					}
-				}
-				if (status.error) {
-					// Try to fix error.
-					pubnub.subscribe({ channels: [subscription.deliveryMode.address] });
-					let e = new Error('PubNub error status, category: ' + status.category);
-					e['detail'] = status;
-					this.emit(EventStatusError, e);
-				} else {
-					this.emit(EventStatus, status);
-				}
-			};
-			pubnub.addListener({
-				message,
-				status
-			});
-		});
-
-		this.pubnub = pubnub;
+	async cancel() {
+		this.clearRefreshTimer();
+		this.disconnectPushServer();
+		await this.rest.delete('/subscription/' + this.id);
+		this.subscriptionDeleted();
 	}
 
 	onMessage(listener: Function) {
 		this.on(EventMessage, listener);
 	}
 
-	async cancel() {
-		await this.rest.delete('/subscription/' + this.id);
-		this.subscriptionDeleted();
+
+	private clearRefreshTimer() {
+		if (this.refreshTimer) {
+			clearTimeout(this.refreshTimer);
+			this.refreshTimer = null;
+		}
+	}
+
+    /**
+     * Subscription deleted from the RC Platform
+     */
+	private subscriptionDeleted() {
+		this.id = null;
+		this.address = null;
+		this.encryptionKey = null;
+		this.expirationTime = 0;
+		this.subscribeKey = null;
+	}
+
+	private connectPushServer() {
+		this.disconnectPushServer();
+		let pubnub = new PubNub({ subscribeKey: this.subscribeKey, ssl: true, logVerbosity: this.debug });
+		// Wrong address pubnub won't report error.
+		pubnub.subscribe({ channels: [this.address] });
+		let message = msg => {
+			let decrypted = pubnub.decrypt(msg.message, this.encryptionKey, {
+				encryptKey: false,
+				keyEncoding: 'base64',
+				keyLength: 128,
+				mode: 'ecb'
+			});
+			// TODO Filter out duplicated notifications by uuid.
+			this.emit(EventMessage, decrypted);
+		};
+		let status = status => {
+            /*
+            Subscribe success event:
+            {   category: 'PNConnectedCategory',
+                operation: 'PNSubscribeOperation'... }
+
+            Subscribe fail event:
+            {   error: true,
+                operation: 'PNSubscribeOperation',
+                category: 'PNBadRequestCategory'... }
+            */
+			if (status.error) {
+				let e = new Error('PubNub error status, category: ' + status.category);
+				e['detail'] = status;
+				this.emit(EventStatusError, e);
+				pubnub.reconnect();
+			} else {
+				this.emit(EventStatus, status);
+			}
+		};
+		pubnub.addListener({
+			message,
+			status
+		});
+
+		this.pubnub = pubnub;
+	}
+
+	private disconnectPushServer() {
+		if (!this.pubnub) {
+			return;
+		}
+		this.pubnub.removeAllListeners();
+		this.pubnub.destroy();
+		this.pubnub = null;
 	}
 
 	private async refresh() {
@@ -202,7 +187,10 @@ export default class Subscription extends EventEmitter {
 		}
 		let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
 		let subscription = await res.json();
-		this.subscriptionUpdated(subscription);
+		if (!this.pubnub) {  // Check if subscription is canceled. Ignore refreshed data if canceled
+			return;
+		}
+		this.setSubscription(subscription);
 		this.emit(EventRefreshSuccess);
 	}
 
