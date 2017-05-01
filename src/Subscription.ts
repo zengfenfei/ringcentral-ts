@@ -9,8 +9,6 @@ import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 export default class Subscription extends EventEmitter {
 
 	rest: RestClient;
-	maxRefreshRetries = 10;
-
 
 	// Subscription data
 	id: string;
@@ -63,7 +61,6 @@ export default class Subscription extends EventEmitter {
     /**
      * Set subscription data from referesh, newly created or get by id.
      */
-
 	setData(subscription) { // This functions is the only place to parse subscription data.
 		if (subscription.id !== this.id) {
 			this.id = subscription.id;
@@ -87,16 +84,16 @@ export default class Subscription extends EventEmitter {
 		this.refreshTimer = setTimeout(async () => {
 			this.refreshTimer = null;
 			this.refresh().catch(async e => {
-				e.message = 'Subscription refresh failed, will retry ' + this.maxRefreshRetries + ' times. Cause:' + e.message;
+				e.message = 'Subscription refresh failed, will retry. Cause:' + e.message;
 				this.emit(EventRefreshError, e);
-				for (let i = 1; i <= this.maxRefreshRetries; i++) {
+				for (let i = 1; ; i++) {
 					try {
-						await delay(3 * 1000);
-						await this.subscribe(this.eventFilters);
+						await delay(5 * 1000);
+						await this.refresh();
 						this.emit(EventRefreshSuccess);
 						break;
 					} catch (e2) {
-						e2.message = 'Subscription refresh retry ' + i + '/' + this.maxRefreshRetries + ' failed. Cause:' + e2.message;
+						e2.message = 'Subscription refresh retry ' + i + ' times failed. Cause:' + e2.message;
 						this.emit(EventRefreshError, e2);
 					}
 				}
@@ -187,14 +184,25 @@ export default class Subscription extends EventEmitter {
 	}
 
 	private async refresh() {
-		if (!this.id) {
+		if (!this.pubnub || !this.id) {
 			return;
 		}
 		if (Date.now() >= this.expirationTime) {
-			throw Error('Subscription expired, can not refresh.');
+			await this.subscribe(this.eventFilters);
+			return;
 		}
-		let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
-		let subscription = await res.json();
+		let subscription;
+		try {
+			let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
+			subscription = await res.json();
+		} catch (e) {
+			if (e.rawRes) { // Network is ok, but server return error, the subscription may be invalidated.
+				await this.subscribe(this.eventFilters);
+				return;
+			}
+			throw e;
+		}
+
 		if (!this.pubnub) {  // Check if subscription is canceled. Ignore refreshed data if canceled
 			return;
 		}
