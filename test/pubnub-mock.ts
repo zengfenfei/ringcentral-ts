@@ -55,7 +55,7 @@ export class MockedPubNub {
 			timetoken: '14933652238078468',
 			publisher: undefined,
 			message: msg
-		}
+		};
 		this.listeners.forEach(l => l.message(pubnubMsg));
 	}
 
