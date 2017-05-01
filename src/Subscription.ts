@@ -47,7 +47,7 @@ export default class Subscription extends EventEmitter {
 		eventFilters = prefixFilters(eventFilters);
 		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
 		let subscription = await res.json();
-		this.setSubscription(subscription);
+		this.setData(subscription);
 	}
 
 	/**
@@ -57,13 +57,14 @@ export default class Subscription extends EventEmitter {
 	async subscribeById(id: string) {
 		let res = await this.rest.get('/subscription/' + id);
 		let subscription = await res.json();
-		await this.setSubscription(subscription);
+		await this.setData(subscription);
 	}
 
     /**
      * Set subscription data from referesh, newly created or get by id.
      */
-	setSubscription(subscription) { // This functions is the only place to parse subscription data.
+
+	setData(subscription) { // This functions is the only place to parse subscription data.
 		if (subscription.id !== this.id) {
 			this.id = subscription.id;
 			this.subscribeKey = subscription.deliveryMode.subscriberKey;
@@ -75,10 +76,17 @@ export default class Subscription extends EventEmitter {
 		this.eventFilters = unprefixFilters(subscription.eventFilters);
 
 		this.clearRefreshTimer();
+		let timeout = this.expirationTime - Date.now() - refreshHandicap;
+		if (timeout <= 0) {
+			timeout += refreshHandicap;
+			timeout *= 0.8;
+		}
+		if (timeout <= 0) {
+			timeout = 1000;
+		}
 		this.refreshTimer = setTimeout(async () => {
 			this.refreshTimer = null;
 			this.refresh().catch(async e => {
-				this.subscriptionDeleted();
 				e.message = 'Subscription refresh failed, will retry ' + this.maxRefreshRetries + ' times. Cause:' + e.message;
 				this.emit(EventRefreshError, e);
 				for (let i = 1; i <= this.maxRefreshRetries; i++) {
@@ -93,7 +101,7 @@ export default class Subscription extends EventEmitter {
 					}
 				}
 			});
-		}, this.expirationTime - Date.now() - refreshHandicap);
+		}, timeout);
 	}
 
 	async cancel() {
@@ -190,7 +198,7 @@ export default class Subscription extends EventEmitter {
 		if (!this.pubnub) {  // Check if subscription is canceled. Ignore refreshed data if canceled
 			return;
 		}
-		this.setSubscription(subscription);
+		this.setData(subscription);
 		this.emit(EventRefreshSuccess);
 	}
 

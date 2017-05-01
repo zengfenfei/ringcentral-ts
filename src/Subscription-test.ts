@@ -1,4 +1,5 @@
 import * as fetchMock from 'fetch-mock';
+import delay from 'delay.ts';
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import { auth } from '../test/setup';
@@ -67,14 +68,63 @@ describe('Subscription', () => {
 		pubnub.mockMessage(encrypted);
 
 		expect(spy.calledWith(testMsg)).to.be.true;
+		fetchMock.once('*', ' ');
+		await sub.cancel();
 	});
 
 	let expiresIn = 899;	// seconds
 	let subId = '8c9ee34f-8096-4941';
-	let subData = {
+
+	it('subscribeById', async () => {
+		let sub = rc.createSubscription();
+		let subData = createSubscriptionData(expiresIn, subId);
+		fetchMock.getOnce('end:/subscription/' + subId, {
+			body: subData
+		});
+		await sub.subscribeById(subId);
+		expect(sub.id).to.eq(subId);
+		expect(sub.expirationTime).to.eq(Date.parse(subData.expirationTime));
+		expect(subData.eventFilters[0].endsWith(sub.eventFilters[0])).to.be.true;
+		expect(sub.subscribeKey).to.eq(subData.deliveryMode.subscriberKey);
+		expect(sub.address).to.eq(subData.deliveryMode.address);
+		expect(sub.encryptionKey).to.eq(subData.deliveryMode.encryptionKey);
+
+		fetchMock.once('*', ' ');
+		await sub.cancel();
+	});
+
+	it('cancel subscription', async () => {
+		let sub = rc.createSubscription();
+		let subData = createSubscriptionData(expiresIn, subId);
+		fetchMock.postOnce('end:/subscription', { body: subData });
+		await sub.subscribe(['/test/subscription']);
+		fetchMock.deleteOnce('end:/subscription/' + subId, ' ');
+		await sub.cancel();
+		expect(sub.id).to.be.null;
+		expect(sub.pubnub).to.be.null;
+	});
+
+	it('refresh subscription', async () => {
+		let sub = rc.createSubscription();
+		let subData = createSubscriptionData(0.5, subId);
+		fetchMock.postOnce('end:/subscription', { body: subData });
+		await sub.subscribe(['/test/subscription']);
+		let { expirationTime } = sub;
+		fetchMock.putOnce('end:/subscription/' + subId, { body: createSubscriptionData(60, subId) });
+		await delay(0.6 * 1000);
+		expect(sub.expirationTime).to.not.eq(expirationTime);
+
+		fetchMock.once('*', ' ');
+		await sub.cancel();
+	});
+
+});
+
+function createSubscriptionData(expiresIn: number, subId: string) {
+	return {
 		"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/" + subId,
 		"id": subId,
-		"creationTime": "2017-03-20T06:04:01.726Z",
+		"creationTime": new Date().toISOString(),
 		"status": "Active",
 		"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
 		"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
@@ -88,32 +138,7 @@ describe('Subscription', () => {
 			"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
 		}
 	};
-
-	it('subscribeById', async () => {
-		let sub = rc.createSubscription();
-		fetchMock.getOnce('end:/subscription/' + subId, {
-			body: subData
-		});
-		await sub.subscribeById(subId);
-		expect(sub.id).to.eq(subId);
-		expect(sub.expirationTime).to.eq(Date.parse(subData.expirationTime));
-		expect(subData.eventFilters[0].endsWith(sub.eventFilters[0])).to.be.true;
-		expect(sub.subscribeKey).to.eq(subData.deliveryMode.subscriberKey);
-		expect(sub.address).to.eq(subData.deliveryMode.address);
-		expect(sub.encryptionKey).to.eq(subData.deliveryMode.encryptionKey);
-	});
-
-	it('cancel subscription', async () => {
-		let sub = rc.createSubscription();
-		fetchMock.postOnce('end:/subscription', { body: subData });
-		await sub.subscribe(['/test/subscription']);
-		fetchMock.deleteOnce('end:/subscription/' + subId, ' ');
-		await sub.cancel();
-		expect(sub.id).to.be.null;
-		expect(sub.pubnub).to.be.null;
-	});
-
-});
+}
 
 /*
 errorCode: 'TokenInvalid',
