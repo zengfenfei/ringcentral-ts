@@ -118,6 +118,19 @@ describe('Subscription', () => {
 		await sub.cancel();
 	});
 
+	it('should cancel existing subscription when subscribe', async () => {
+		let sub = rc.createSubscription();
+		let subData = createSubscriptionData(0.5, subId);
+		fetchMock.postOnce('end:/subscription', { body: subData });
+		await sub.subscribe(['/test/subscription']);
+		fetchMock.once('*', ' ');	// delete subscription
+		fetchMock.postOnce('end:/subscription', { body: subData });
+		await sub.subscribe(['/test/subscription']);
+
+		fetchMock.once('*', ' ');
+		await sub.cancel();
+	});
+
 });
 
 function createSubscriptionData(expiresIn: number, subId: string) {
