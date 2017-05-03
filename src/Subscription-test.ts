@@ -131,6 +131,25 @@ describe('Subscription', () => {
 		await sub.cancel();
 	});
 
+	it('should stop refreshing after cancel', async () => {
+		let sub = rc.createSubscription();
+		let subData = createSubscriptionData(0.5, subId);
+		fetchMock.postOnce('end:/subscription', { body: subData });
+		await sub.subscribe(['/test/subscription']);
+
+		fetchMock.putOnce('end:/subscription/' + subId, async () => {
+			await delay(200);
+			return { body: createSubscriptionData(1, subId) };
+		});
+
+		await delay(600);
+		sub.pubnub = null;
+		console.log('>>Canceling subscription.');
+
+		fetchMock.once('*', ' ');
+		await sub.cancel();
+	});
+
 });
 
 function createSubscriptionData(expiresIn: number, subId: string) {
