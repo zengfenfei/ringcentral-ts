@@ -3,10 +3,10 @@ import Account from './paths/Account';
 import ClientInfo from './paths/ClientInfo';
 import Dictionary from './paths/Dictionary';
 import NumberParser from './paths/NumberParser';
-import NumberPool from './paths/Subscription';
+import NumberPool from './paths/NumberPool';
 import Subscription from './paths/Subscription';
 import Subscription2 from './Subscription';
-import RCAccount from "./RCAccount";
+import RCAccount from './RCAccount';
 import Token from './Token';
 
 export default class RingCentral {
@@ -38,7 +38,7 @@ export default class RingCentral {
 	}
 
 	oauth(code: string, redirectUri: string, opts?: { accessTokenTtl: string; refreshTokenTtl: string }) {
-		return this.rest.oauth(code, redirectUri, opts)
+		return this.rest.oauth(code, redirectUri, opts);
 	}
 
 	getToken(ownerInfo?: RCAccount): Promise<Token> {

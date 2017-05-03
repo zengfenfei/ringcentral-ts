@@ -3,7 +3,7 @@ import delay from 'delay.ts';
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import { auth } from '../test/setup';
-import { getLastPubnub } from "../test/pubnub-mock";
+import { getLastPubnub } from '../test/pubnub-mock';
 import RingCentral from './Client';
 
 let rc: RingCentral;
@@ -20,20 +20,20 @@ describe('Subscription', () => {
 		// POST https://platform.ringcentral.com/restapi/v1.0/subscription
 		fetchMock.postOnce('end:/subscription', {
 			body: {
-				"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/8c9ee34f-8096-4941",
-				"id": "8c9ee34f-8096-4941",
-				"creationTime": "2017-03-20T06:04:01.726Z",
-				"status": "Active",
-				"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
-				"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
+				'uri': 'https://platform.ringcentral.com/restapi/v1.0/subscription/8c9ee34f-8096-4941',
+				'id': '8c9ee34f-8096-4941',
+				'creationTime': '2017-03-20T06:04:01.726Z',
+				'status': 'Active',
+				'eventFilters': ['/restapi/v1.0/account/305655028/extension/305655028/presence'],
+				'expirationTime': new Date(Date.now() + expiresIn * 1000).toISOString(),
 				expiresIn,
-				"deliveryMode": {
-					"transportType": "PubNub",
-					"encryption": true,
-					"address": "601167281631840_012c504c",
-					"subscriberKey": "sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe",
-					"encryptionAlgorithm": "AES",
-					"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
+				'deliveryMode': {
+					'transportType': 'PubNub',
+					'encryption': true,
+					'address': '601167281631840_012c504c',
+					'subscriberKey': 'sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe',
+					'encryptionAlgorithm': 'AES',
+					'encryptionKey': 'zcyzmb4ZcGKCCdr5IidJhA=='
 				}
 			}
 		});
@@ -43,20 +43,20 @@ describe('Subscription', () => {
 		sub.onMessage(spy);
 		let pubnub = getLastPubnub();
 		let testMsg = {
-			"uuid": "1088719898803550582-8036702296129764",
-			"event": "/restapi/v1.0/account/37439510/extension/924428020/presence",
-			"timestamp": "2017-02-09T11:21:07.074Z",
-			"subscriptionId": "24dcfdcf-e7d0-4930-9edb-555ec11843b9",
-			"body": {
-				"extensionId": 924428020,
-				"telephonyStatus": "Ringing",
-				"presenceStatus": "Available",
-				"userStatus": "Available",
-				"dndStatus": "TakeAllCalls",
-				"message": "custom",
-				"allowSeeMyPresence": true,
-				"ringOnMonitoredCall": false,
-				"pickUpCallsOnHold": false
+			'uuid': '1088719898803550582-8036702296129764',
+			'event': '/restapi/v1.0/account/37439510/extension/924428020/presence',
+			'timestamp': '2017-02-09T11:21:07.074Z',
+			'subscriptionId': '24dcfdcf-e7d0-4930-9edb-555ec11843b9',
+			'body': {
+				'extensionId': 924428020,
+				'telephonyStatus': 'Ringing',
+				'presenceStatus': 'Available',
+				'userStatus': 'Available',
+				'dndStatus': 'TakeAllCalls',
+				'message': 'custom',
+				'allowSeeMyPresence': true,
+				'ringOnMonitoredCall': false,
+				'pickUpCallsOnHold': false
 			}
 		};
 		let encrypted = pubnub.realPubnub.encrypt(JSON.stringify(testMsg), sub.encryptionKey, {
@@ -154,20 +154,20 @@ describe('Subscription', () => {
 
 function createSubscriptionData(expiresIn: number, subId: string) {
 	return {
-		"uri": "https://platform.ringcentral.com/restapi/v1.0/subscription/" + subId,
-		"id": subId,
-		"creationTime": new Date().toISOString(),
-		"status": "Active",
-		"eventFilters": ["/restapi/v1.0/account/305655028/extension/305655028/presence"],
-		"expirationTime": new Date(Date.now() + expiresIn * 1000).toISOString(),
+		'uri': 'https://platform.ringcentral.com/restapi/v1.0/subscription/' + subId,
+		'id': subId,
+		'creationTime': new Date().toISOString(),
+		'status': 'Active',
+		'eventFilters': ['/restapi/v1.0/account/305655028/extension/305655028/presence'],
+		'expirationTime': new Date(Date.now() + expiresIn * 1000).toISOString(),
 		expiresIn,
-		"deliveryMode": {
-			"transportType": "PubNub",
-			"encryption": true,
-			"address": "601167281631840_012c504c",
-			"subscriberKey": "sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe",
-			"encryptionAlgorithm": "AES",
-			"encryptionKey": "zcyzmb4ZcGKCCdr5IidJhA=="
+		'deliveryMode': {
+			'transportType': 'PubNub',
+			'encryption': true,
+			'address': '601167281631840_012c504c',
+			'subscriberKey': 'sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe',
+			'encryptionAlgorithm': 'AES',
+			'encryptionKey': 'zcyzmb4ZcGKCCdr5IidJhA=='
 		}
 	};
 }

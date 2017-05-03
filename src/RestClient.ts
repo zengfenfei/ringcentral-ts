@@ -6,7 +6,7 @@ import delay from 'delay.ts';
 import * as pkg from './pkg';
 import Token, { TokenStore, MemoryTokenStore } from './Token';
 import isKnownReqBodyType from 'known-fetch-body';
-import RCAccount from "./RCAccount";
+import RCAccount from './RCAccount';
 
 const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
 const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
@@ -408,4 +408,4 @@ export {
 	EventLogoutStart,
 	EventLogoutSuccess,
 	EventLogoutError
-}
+};

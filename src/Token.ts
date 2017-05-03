@@ -1,4 +1,4 @@
-import RCAccount from "./RCAccount";
+import RCAccount from './RCAccount';
 
 export default class Token {
 

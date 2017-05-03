@@ -9,7 +9,7 @@
 		"coverage-html": "npm test && nyc report --reporter=html",
 		"generate": "node ../rc-codegen/ -l typescript -o src/ -t codegen/templates/ -c codegen/config.json",
 		"docs": "cd ./src; typedoc --mode modules -m es6 --out ../docs ./Client.ts ./FileTokenStore.ts ./WebTokenStore.ts --ignoreCompilerErrors --excludePrivate --lib lib.es6.d.ts --disableOutputCheck --name 'ringcentral-ts API Reference'",
-		"lint": "tslint test/*.ts src/**/*.ts"
+		"lint": "tslint test/*.ts src/*.ts src/**/*.ts"
 	},
 	"dependencies": {
 		"@types/chai": "^3.4.35",

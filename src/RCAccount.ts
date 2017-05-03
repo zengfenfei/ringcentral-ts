@@ -4,6 +4,6 @@
 interface RingCentralAccount {
 	username: string;
 	extension?: string;
-};
+}
 
 export default RingCentralAccount;

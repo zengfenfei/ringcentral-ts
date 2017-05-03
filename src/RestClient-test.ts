@@ -57,7 +57,7 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 		});
 		// #2 Check the parsed response
 		let expectedToken = new Token();
-		expectedToken.setOwner(appKey, { username })
+		expectedToken.setOwner(appKey, { username });
 		expectedToken.fromServer(serverToken, 0);
 		expect(token.expiresIn).lt(expectedToken.expiresIn);
 		expect(token.refreshTokenExpiresIn).lt(expectedToken.refreshTokenExpiresIn);
@@ -157,16 +157,16 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 				'x-tcpinfo': ['1000, 500, 10, 28960']
 			},
 			body: {
-				"error": "invalid_client",
-				"errors": [{
-					"errorCode": "OAU-153",
-					"message": "Invalid client: xx",
-					"parameters": [{
-						"parameterName": "client_id",
-						"parameterValue": "xx"
+				'error': 'invalid_client',
+				'errors': [{
+					'errorCode': 'OAU-153',
+					'message': 'Invalid client: xx',
+					'parameters': [{
+						'parameterName': 'client_id',
+						'parameterValue': 'xx'
 					}]
 				}],
-				"error_description": "Invalid client: xx"
+				'error_description': 'Invalid client: xx'
 			}
 		});
 		return service2.auth({ username: '', password: '' }).then(() => {
@@ -215,15 +215,15 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 			let token = await client.getToken();
 			let testToken = new Token();
 			testToken.fromCache(JSON.stringify(token));
-	
+
 			testToken.accessToken += 'xxxxx';
 			client.tokenStore.save(testToken);
 			await client.logout();
-	
+
 			testToken.accessToken = '';
 			client.tokenStore.save(testToken);
 			await client.logout();
-	
+
 			await client.tokenStore.save(token);
 		});*/
 
@@ -237,7 +237,7 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 
 	it('parses parameters from oauth callback', () => {
 		const code = 'U0pDMDFQMDlQQVMwMnxBQURNTUd';
-		const state = 'My:Code'
+		const state = 'My:Code';
 		const params = client.parseOauthCallback('code=' + code + '&state=' + encodeURIComponent(state));
 		expect(params.code).to.eq(code);
 		expect(params.state).to.eq(state);
@@ -424,9 +424,9 @@ describe('RestClient API call methods', () => {
 				'X-Rate-Limit-Remaining': 0
 			},
 			body: {
-				"errorCode": "CMN-301",
-				"message": "Request rate exceeded",
-				"errors": [{ "errorCode": "CMN-301", "message": "Request rate exceeded" }]
+				'errorCode': 'CMN-301',
+				'message': 'Request rate exceeded',
+				'errors': [{ 'errorCode': 'CMN-301', 'message': 'Request rate exceeded' }]
 			}
 		});
 		let delayedPromise = client.call('/some/api');
@@ -458,9 +458,9 @@ describe('RestClient API call methods', () => {
 				'X-Rate-Limit-Remaining': 0
 			},
 			body: {
-				"errorCode": "CMN-301",
-				"message": "Request rate exceeded",
-				"errors": [{ "errorCode": "CMN-301", "message": "Request rate exceeded" }]
+				'errorCode': 'CMN-301',
+				'message': 'Request rate exceeded',
+				'errors': [{ 'errorCode': 'CMN-301', 'message': 'Request rate exceeded' }]
 			}
 		});
 		try {
@@ -490,7 +490,7 @@ describe('RestClient API call methods', () => {
 		expect(fetchMock.lastUrl().endsWith(url)).to.be.true;
 
 		await client.post(endpoint, body, query);
-		expect(fetchMock.lastOptions()).to.have.property('method', 'POST')
+		expect(fetchMock.lastOptions()).to.have.property('method', 'POST');
 		expect(fetchMock.lastUrl().endsWith(url)).to.be.true;
 
 		await client.put(endpoint, body, query);

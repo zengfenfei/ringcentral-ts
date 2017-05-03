@@ -49,7 +49,7 @@ export default class Subscription extends EventEmitter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id The existing subscription id.
 	 */
 	async subscribeById(id: string) {
@@ -58,9 +58,9 @@ export default class Subscription extends EventEmitter {
 		await this.setData(subscription);
 	}
 
-    /**
-     * Set subscription data from referesh, newly created or get by id.
-     */
+	/**
+	 * Set subscription data from referesh, newly created or get by id.
+	 */
 	setData(subscription) { // This functions is the only place to parse subscription data.
 		if (subscription.id !== this.id) {
 			this.id = subscription.id;
@@ -120,9 +120,9 @@ export default class Subscription extends EventEmitter {
 		}
 	}
 
-    /**
-     * Subscription deleted from the RC Platform
-     */
+	/**
+	 * Subscription deleted from the RC Platform
+	 */
 	private subscriptionDeleted() {
 		this.id = null;
 		this.address = null;
@@ -147,16 +147,16 @@ export default class Subscription extends EventEmitter {
 			this.emit(EventMessage, decrypted);
 		};
 		let status = status => {
-            /*
-            Subscribe success event:
-            {   category: 'PNConnectedCategory',
-                operation: 'PNSubscribeOperation'... }
+			/*
+			Subscribe success event:
+			{   category: 'PNConnectedCategory',
+				operation: 'PNSubscribeOperation'... }
 
-            Subscribe fail event:
-            {   error: true,
-                operation: 'PNSubscribeOperation',
-                category: 'PNBadRequestCategory'... }
-            */
+			Subscribe fail event:
+			{   error: true,
+				operation: 'PNSubscribeOperation',
+				category: 'PNBadRequestCategory'... }
+			*/
 			if (status.error) {
 				let e = new Error('PubNub error status, category: ' + status.category);
 				e['detail'] = status;
