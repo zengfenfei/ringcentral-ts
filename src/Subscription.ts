@@ -133,7 +133,7 @@ export default class Subscription extends EventEmitter {
 
 	private connectPushServer() {
 		this.disconnectPushServer();
-		let pubnub = new PubNub({ subscribeKey: this.subscribeKey, ssl: true, logVerbosity: this.debug });
+		let pubnub = new PubNub({ subscribeKey: this.subscribeKey, reconnect: true, ssl: true, logVerbosity: this.debug });
 		// Wrong address pubnub won't report error.
 		pubnub.subscribe({ channels: [this.address] });
 		let message = msg => {
@@ -161,7 +161,7 @@ export default class Subscription extends EventEmitter {
 				let e = new Error('PubNub error status, category: ' + status.category);
 				e['detail'] = status;
 				this.emit(EventStatusError, e);
-				pubnub.reconnect();
+				// pubnub.reconnect();
 			} else {
 				this.emit(EventStatus, status);
 			}
