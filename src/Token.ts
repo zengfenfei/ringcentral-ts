@@ -68,10 +68,6 @@ export default class Token {
 		return Date.now() >= this.refreshTokenExpiresIn;
 	}
 
-	clone() {
-		let newToken = new Token();
-		return newToken;
-	}
 }
 
 function tokenOwner(ownerInfo: { username: string, extension?: string }) {

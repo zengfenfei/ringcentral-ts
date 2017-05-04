@@ -3,6 +3,7 @@ import { createReadStream } from 'fs';
 import * as fetchMock from 'fetch-mock';
 import { auth } from './setup';
 import RingCentral from '../src/Client';
+import '../src/Token-test';
 import '../src/Client-test';
 import '../src/RestClient-test';
 import '../src/Subscription-test';
