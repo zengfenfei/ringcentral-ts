@@ -55,7 +55,7 @@ export default class Subscription extends EventEmitter {
 	async subscribeById(id: string) {
 		let res = await this.rest.get('/subscription/' + id);
 		let subscription = await res.json();
-		await this.setData(subscription);
+		this.setData(subscription);
 	}
 
 	/**
@@ -133,7 +133,7 @@ export default class Subscription extends EventEmitter {
 
 	private connectPushServer() {
 		this.disconnectPushServer();
-		let pubnub = new PubNub({ subscribeKey: this.subscribeKey, reconnect: true, ssl: true, logVerbosity: this.debug });
+		let pubnub = new PubNub({ subscribeKey: this.subscribeKey, restore: true, ssl: true, logVerbosity: this.debug });
 		// Wrong address pubnub won't report error.
 		pubnub.subscribe({ channels: [this.address] });
 		let message = msg => {

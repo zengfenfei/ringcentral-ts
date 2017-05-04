@@ -1,6 +1,7 @@
 import delay from 'delay.ts';
 import RingCentral from '../src/Client';
 import FileTokenStore from '../src/FileTokenStore';
+import WebTokenStore from '../src/WebTokenStore';
 
 /*
 This file is to test the reliability and stability of the subscription.
@@ -13,7 +14,8 @@ async function test() {
 	let startTime = Date.now();
 	let config = require('../../data/test-config.json');
 	let rc = new RingCentral(config.app);
-	rc.rest.tokenStore = new FileTokenStore(config.tokenCacheFile);
+
+	rc.rest.tokenStore = typeof window === 'undefined' ? new FileTokenStore(config.tokenCacheFile) : new WebTokenStore('rc-ts-sdk-test-token', localStorage);
 	try {
 		await rc.getToken();
 	} catch (e) {
@@ -63,7 +65,7 @@ async function test() {
 			to: [{ phoneNumber: config.user.username }],
 			text: 'Test sms to trigger subscription.'
 		});
-		await delay(5 * 1000);
+		await delay(10 * 1000);
 		subscription.removeListener('message', messageListener);
 		if (receivedSms) {
 			notify('The subscription is alive');
@@ -71,7 +73,8 @@ async function test() {
 			rc.account().extension().messageStore(sentSms.id).delete({ purge: true });
 		} else {
 			await notify('The subscription is dead');
-			process.exit(1);
+			await subscription.cancel();
+			throw new Error('Subscription died unexpectedly.');
 		}
 	}
 

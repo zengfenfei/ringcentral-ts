@@ -8,4 +8,4 @@ tsc
 cp README.md $outDir
 
 ./script/setup.sh
-webpack
+webpack -p

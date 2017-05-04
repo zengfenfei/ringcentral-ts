@@ -1,40 +1,23 @@
-const webpack = require("webpack");
-
-module.exports = [/*{
-    entry: "./build/src/Client.js",
+module.exports = [{
+    entry: ["babel-polyfill", "./build/test/index.js"],
     output: {
-        path: "./build",
-        filename: "ringcentral-client.js",
-        library: "ringcentral",
-        libraryTarget: "umd"
+        path: __dirname + "/build",
+        filename: "tests.js"
     },
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-            },
-            output: {
-                comments: false,
-            },
-        }),
-    ],
     module: {
         loaders: [
-            { test: /\.css$/, loader: "style!css" }
         ]
+    },
+    node: {
+        fs: "empty"
     }
-}, */{
-		entry: ["babel-polyfill", "./build/test/index.js"],
-		output: {
-			path: __dirname + "/build",
-			filename: "tests.js"
-		},
-		module: {
-			loaders: [
-			]
-		},
-		node: {
-			fs: "empty"
-		},
-		plugins: [new webpack.optimize.UglifyJsPlugin({})]
-	}];
+}, {
+    entry: ["./build/test/subscription-reliability.js"],
+    output: {
+        path: __dirname + "/build/",
+        filename: "subscription-test.js"
+    },
+    node: {
+        fs: "empty"
+    }
+}];
