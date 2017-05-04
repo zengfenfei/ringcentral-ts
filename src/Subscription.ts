@@ -196,7 +196,7 @@ export default class Subscription extends EventEmitter {
 			let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
 			subscription = await res.json();
 		} catch (e) {
-			if (e.rawRes) { // Network is ok, but server return error, the subscription may be invalidated.
+			if (e.code === ErrorNotFound) { // Network is ok, but server return error, the subscription may be invalidated.
 				await this.subscribe(this.eventFilters);
 				return;
 			}
@@ -226,7 +226,7 @@ const deliveryMode = { transportType: 'PubNub', encryption: true };
 const refreshHandicap = 30 * 1000;
 // In seconds
 // export const MAX_LIFETIME = 604800;
-// const ErrorNotFound = 'CMN-102';
+const ErrorNotFound = 'CMN-102';
 
 // The list of events the subscription may emit.
 const EventMessage = 'message';
