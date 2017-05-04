@@ -19,6 +19,7 @@ export default class Subscription extends EventEmitter {
 	encryptionKey: string;	// AES encryptionKey
 
 	refreshTimer: NodeJS.Timer;
+	retryInterval = 5000;
 	pubnub: any;
 
 	debug: boolean;
@@ -39,9 +40,6 @@ export default class Subscription extends EventEmitter {
 	 * message: 'Subscriptions limit exceeded'
 	 */
 	async subscribe(eventFilters: string[]) {
-		if (this.pubnub) {
-			await this.cancel();
-		}
 		eventFilters = prefixFilters(eventFilters);
 		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
 		let subscription = await res.json();
@@ -88,7 +86,7 @@ export default class Subscription extends EventEmitter {
 				this.emit(EventRefreshError, e);
 				for (let i = 1; ; i++) {
 					try {
-						await delay(5 * 1000);
+						await delay(this.retryInterval);
 						await this.refresh();
 						this.emit(EventRefreshSuccess);
 						break;

@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "./script/build.sh",
 		"watch": "tsc -w",
-		"test": "nyc _mocha -- build/test/index.js",
+		"test": "nyc mocha --no-timeouts build/test/index.js",
 		"coveralls": "nyc report --reporter=text-lcov | coveralls",
 		"coverage-html": "npm test && nyc report --reporter=html",
 		"generate": "node ../rc-codegen/ -l typescript -o src/ -t codegen/templates/ -c codegen/config.json",

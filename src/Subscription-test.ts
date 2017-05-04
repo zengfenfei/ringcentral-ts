@@ -73,9 +73,9 @@ describe('Subscription', () => {
 	});
 
 	let expiresIn = 899;	// seconds
-	let subId = '8c9ee34f-8096-4941';
 
 	it('subscribeById', async () => {
+		let subId = genSubId();
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(expiresIn, subId);
 		fetchMock.getOnce('end:/subscription/' + subId, {
@@ -94,6 +94,7 @@ describe('Subscription', () => {
 	});
 
 	it('cancel subscription', async () => {
+		let subId = genSubId();
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(expiresIn, subId);
 		fetchMock.postOnce('end:/subscription', { body: subData });
@@ -105,6 +106,7 @@ describe('Subscription', () => {
 	});
 
 	it('refresh subscription', async () => {
+		let subId = genSubId();
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(0.5, subId);
 		fetchMock.postOnce('end:/subscription', { body: subData });
@@ -118,7 +120,7 @@ describe('Subscription', () => {
 		await sub.cancel();
 	});
 
-	it('should cancel existing subscription when subscribe', async () => {
+	/*it('should cancel existing subscription when subscribe', async () => {
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(0.5, subId);
 		fetchMock.postOnce('end:/subscription', { body: subData });
@@ -129,9 +131,10 @@ describe('Subscription', () => {
 
 		fetchMock.once('*', ' ');
 		await sub.cancel();
-	});
+	});*/
 
 	it('should stop refreshing after cancel', async () => {
+		let subId = genSubId();
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(0.5, subId);
 		fetchMock.postOnce('end:/subscription', { body: subData });
@@ -144,12 +147,47 @@ describe('Subscription', () => {
 
 		await delay(600);
 		sub.pubnub = null;
-		console.log('>>Canceling subscription.');
 
 		fetchMock.once('*', ' ');
 		await sub.cancel();
 	});
 
+	it('should resubscribe for expired subscription', async () => {
+		let subId = genSubId();
+		let sub = rc.createSubscription();
+		let subData = createSubscriptionData(-0.5, subId);
+		sub.setData(subData);
+		fetchMock.postOnce('end:/subscription', { body: subData });	// For the resubscribe of the refresh
+		await delay(1100);
+
+		fetchMock.deleteOnce('*', ' ');
+		await sub.cancel();
+	});
+
+	it('retry after refresh error', async () => {
+		let subId = genSubId();
+		// let it retry 2 times
+		let sub = rc.createSubscription();
+		sub.retryInterval = 900;
+		let subData = createSubscriptionData(0.2, subId);
+		sub.setData(subData);
+		// refresh
+		fetchMock.putOnce('end:/subscription/' + subData.id, {
+			throws: { code: 'MockedRefreshError' }
+		});
+		// first retry
+		fetchMock.once('*', {
+			throws: { code: 'MockedRefreshErrorForRetry1' }
+		});
+		// second retry
+		fetchMock.once('*', {
+			body: createSubscriptionData(1, subId)
+		});
+		await delay(sub.retryInterval * 2 + 500);
+
+		fetchMock.deleteOnce('*', ' ');
+		await sub.cancel();
+	});
 });
 
 function createSubscriptionData(expiresIn: number, subId: string) {
@@ -172,29 +210,8 @@ function createSubscriptionData(expiresIn: number, subId: string) {
 	};
 }
 
-/*
-errorCode: 'TokenInvalid',
-message: 'Access token corrupted'
-
-async function testRefreshExpiredSubscription() {
-    let restClient = new RestClient(config.app);
-    await restClient.restoreToken(new FileTokenStore(config.tokenCacheFile));
-    let sub = new Subscription(restClient);
-    try {
-        await sub.subscribe(['/account/~/extension/~/presence']);
-        sub.on('notification', msg => {
-            console.log('>>>notification', msg.body.telephonyStatus, msg);
-        });
-        setTimeout(() => {
-            console.log('The subscription should expire now.');
-            restClient.get('/subscription/' + sub.id).then(res => res.json()).then(subscription => {
-                console.log('get subscription', subscription);
-            });
-            sub.refresh().catch(e => {
-                console.error('Refresh error', e);
-            });
-        }, sub.expirationTime - Date.now());
-    } catch (e) {
-        console.error(e);
-    }
-}*/
+let subIdx = 0;
+function genSubId() {
+	subIdx++;
+	return 'test-sub-id-' + subIdx;
+}
