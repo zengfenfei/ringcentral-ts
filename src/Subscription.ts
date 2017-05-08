@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
 import * as PubNub from 'pubnub';
-import delay from 'delay.ts';
 import RestClient, { BASE_URL, API_VERSION } from './RestClient';
 
 /**
@@ -10,10 +9,11 @@ export default class Subscription extends EventEmitter {
 
 	rest: RestClient;
 
-	// Subscription data
 	id: string;
-	expirationTime: number; // Epoch time in ms.
 	eventFilters: string[]; // Without REST base url, can be set by user
+
+	// Readonly Subscription data
+	expirationTime: number; // Epoch time in ms.
 	subscribeKey: string;
 	address: string;	// PubNub channels
 	encryptionKey: string;	// AES encryptionKey
@@ -39,19 +39,25 @@ export default class Subscription extends EventEmitter {
 	 * errorCode: 'SUB-505',
 	 * message: 'Subscriptions limit exceeded'
 	 */
-	async subscribe(eventFilters: string[]) {
-		eventFilters = prefixFilters(eventFilters);
-		let res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
-		let subscription = await res.json();
-		this.setData(subscription);
-	}
+	async subscribe(filters?: string[]) {
+		if (filters) {
+			this.eventFilters = filters;
+		}
 
-	/**
-	 *
-	 * @param id The existing subscription id.
-	 */
-	async subscribeById(id: string) {
-		let res = await this.rest.get('/subscription/' + id);
+		let { eventFilters, id } = this;
+		if (!eventFilters && !id) {
+			throw new Error('Event filter or subscription id is needed.');
+		}
+		if (eventFilters && id) {
+			await this.refresh();
+			return;
+		}
+		let res: Response;
+		if (eventFilters) {
+			res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
+		} else {
+			res = await this.rest.get('/subscription/' + id);
+		}
 		let subscription = await res.json();
 		this.setData(subscription);
 	}
@@ -60,7 +66,7 @@ export default class Subscription extends EventEmitter {
 	 * Set subscription data from referesh, newly created or get by id.
 	 */
 	setData(subscription) { // This functions is the only place to parse subscription data.
-		if (subscription.id !== this.id) {
+		if (subscription.id !== this.id || !this.subscribeKey) {
 			this.id = subscription.id;
 			this.subscribeKey = subscription.deliveryMode.subscriberKey;
 			this.address = subscription.deliveryMode.address;
@@ -70,7 +76,6 @@ export default class Subscription extends EventEmitter {
 		this.expirationTime = Date.parse(subscription.expirationTime);
 		this.eventFilters = unprefixFilters(subscription.eventFilters);
 
-		this.clearRefreshTimer();
 		let timeout = this.expirationTime - Date.now() - refreshHandicap;
 		if (timeout <= 0) {
 			timeout += refreshHandicap;
@@ -79,24 +84,7 @@ export default class Subscription extends EventEmitter {
 		if (timeout <= 0) {
 			timeout = 1000;
 		}
-		this.refreshTimer = setTimeout(async () => {
-			this.refreshTimer = null;
-			this.refresh().catch(async e => {
-				e.message = 'Subscription refresh failed, will retry. Cause:' + e.message;
-				this.emit(EventRefreshError, e);
-				for (let i = 1; ; i++) {
-					try {
-						await delay(this.retryInterval);
-						await this.refresh();
-						this.emit(EventRefreshSuccess);
-						break;
-					} catch (e2) {
-						e2.message = 'Subscription refresh retry ' + i + ' times failed. Cause:' + e2.message;
-						this.emit(EventRefreshError, e2);
-					}
-				}
-			});
-		}, timeout);
+		this.scheduleRefresh(timeout);
 	}
 
 	async cancel() {
@@ -181,11 +169,30 @@ export default class Subscription extends EventEmitter {
 		this.pubnub = null;
 	}
 
+	private scheduleRefresh(timeout: number) {
+		this.clearRefreshTimer();
+		this.refreshTimer = setTimeout(async () => {
+			this.refreshTimer = null;
+			this.refresh().catch(async e => {
+				e.message = `Subscription refresh failed, will retry in ${this.retryInterval}ms. Cause:' + e.message`;
+				this.emit(EventRefreshError, e);
+				this.scheduleRefresh(this.retryInterval);
+			});
+		}, timeout);
+	}
+
+	/**
+	 * Cases for cancel not working:
+	 *		refresh:	|----put----|----delay(error)----|----put(retry)----|
+	 *				1.	 |--del--|
+	 *				2.	               |--del--|
+	 */
 	private async refresh() {
-		if (!this.pubnub || !this.id) {
+		if (!this.id) {
 			return;
 		}
 		if (Date.now() >= this.expirationTime) {
+			this.id = null;
 			await this.subscribe(this.eventFilters);
 			return;
 		}
@@ -194,15 +201,12 @@ export default class Subscription extends EventEmitter {
 			let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
 			subscription = await res.json();
 		} catch (e) {
-			if (e.code === ErrorNotFound) { // Network is ok, but server return error, the subscription may be invalidated.
+			if (e.code === ErrorNotFound) { // The subscription is invalidated, resubscribe
+				this.id = null;
 				await this.subscribe(this.eventFilters);
 				return;
 			}
 			throw e;
-		}
-
-		if (!this.pubnub) {  // Check if subscription is canceled. Ignore refreshed data if canceled
-			return;
 		}
 		this.setData(subscription);
 		this.emit(EventRefreshSuccess);

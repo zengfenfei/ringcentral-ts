@@ -74,14 +74,15 @@ describe('Subscription', () => {
 
 	let expiresIn = 899;	// seconds
 
-	it('subscribeById', async () => {
+	it('subscribe by id', async () => {
 		let subId = genSubId();
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(expiresIn, subId);
 		fetchMock.getOnce('end:/subscription/' + subId, {
 			body: subData
 		});
-		await sub.subscribeById(subId);
+		sub.id = subId;
+		await sub.subscribe();
 		expect(sub.id).to.eq(subId);
 		expect(sub.expirationTime).to.eq(Date.parse(subData.expirationTime));
 		expect(subData.eventFilters[0].endsWith(sub.eventFilters[0])).to.be.true;
@@ -133,23 +134,19 @@ describe('Subscription', () => {
 		await sub.cancel();
 	});*/
 
-	it('should stop refreshing after cancel', async () => {
+	it('cancel should stop retry timer', async () => {
+		// refresh: |--post(subscribe)--|----delay 0.4s-----|--put(refresh)--|--delay(error, retry)--|
+		// cancel:                        |--del(cancel)--|
 		let subId = genSubId();
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(0.5, subId);
+		let subData = createSubscriptionData(0.8, subId);
 		fetchMock.postOnce('end:/subscription', { body: subData });
+		fetchMock.putOnce('end:/subscription/' + subId, {throws:{error: 'MockedError', desc:'stop retry timer'}});
 		await sub.subscribe(['/test/subscription']);
 
-		fetchMock.putOnce('end:/subscription/' + subId, async () => {
-			await delay(200);
-			return { body: createSubscriptionData(1, subId) };
-		});
-
-		await delay(600);
-		sub.pubnub = null;
-
-		fetchMock.once('*', ' ');
-		await sub.cancel();
+		await delay(400);
+		fetchMock.deleteOnce('*', ' ');
+		sub.cancel();
 	});
 
 	it('should resubscribe for expired subscription', async () => {
