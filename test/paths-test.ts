@@ -128,13 +128,25 @@ describe('PathSegments', function () {
 
 	describe('Meeting', function () {
 
-		it.skip('covers all', function () {
-			fetchMock.once('*', {});
-			let createdId: string;
-			let ext = rc.account().extension();
-			return ext.meeting().post({ meetingType: 'Instant' })   // Error reported, 'errorCode' : 'CMN-408',\n  'message' : '[Meetings] permission required', maybe sandbox doesn't support meetings API yet.
-				.then(res => createdId = res.id)
-				.then(res => ext.meeting(createdId).delete()).catch(e => console.log(e));
+		it('covers all', async () => {
+			let meetingId = 'MockMeetingId';
+			fetchMock.postOnce('end:/account/~/extension/~/meeting/MockMeetingId/end', {});
+			rc.account().extension().meeting(meetingId).end().post();
+
+			fetchMock.postOnce('end:/account/~/extension/~/meeting', {});
+			rc.account().extension().meeting().post({});
+
+			fetchMock.getOnce('end:/account/~/extension/~/meeting', {});
+			rc.account().extension().meeting().list();
+
+			fetchMock.getOnce('end:/account/~/extension/~/meeting/' + meetingId, {});
+			rc.account().extension().meeting(meetingId).get();
+
+			fetchMock.deleteOnce('end:/account/~/extension/~/meeting/' + meetingId, {});
+			rc.account().extension().meeting(meetingId).delete();
+
+			fetchMock.putOnce('end:/account/~/extension/~/meeting/' + meetingId, {});
+			rc.account().extension().meeting(meetingId).put({});
 		});
 
 		it('service info', function () {
