@@ -96,7 +96,7 @@ describe('Subscription', () => {
 
 	it('throws error when subscribing without id and event filters', () => {
 		let sub = rc.createSubscription();
-		sub.subscribe().then(() => { throw new Error('Should not resolve') }, e => { });
+		sub.subscribe().then(() => { throw new Error('Should not resolve'); }, e => { });
 	});
 
 	it('subscribe by id and event filters', async () => {
@@ -180,7 +180,7 @@ describe('Subscription', () => {
 		let sub = rc.createSubscription();
 		sub.setData(createSubscriptionData(0.4, genSubId()));
 		fetchMock.putOnce('end:/subscription/' + sub.id, { throws: { code: 'CMN-102', desc: 'Subscription not found' } });
-		fetchMock.postOnce('end:/subscription', { body: createSubscriptionData(1, genSubId()) })
+		fetchMock.postOnce('end:/subscription', { body: createSubscriptionData(1, genSubId()) });
 		await delay(450);
 
 		fetchMock.deleteOnce('*', ' ');
