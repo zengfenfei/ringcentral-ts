@@ -503,4 +503,19 @@ describe('RestClient API call methods', () => {
 		expect(rc.handleRateLimit).to.be.false;
 	});
 
+	it('throws error when getting expired token', async () => {
+		let rc = new RestClient({ appKey: '', appSecret: '' });
+		let t = new Token();
+		t.setOwner('');
+		t.expiresIn = Date.now() - 5000;
+		t.refreshTokenExpiresIn = Date.now() - 5000;
+		await rc.tokenStore.save(t);
+		try {
+			await rc.getToken();
+			throw new Error('Should throw error');
+		} catch (e) {
+			expect(e.message).to.match(/Token expired/);
+		}
+	});
+
 });
