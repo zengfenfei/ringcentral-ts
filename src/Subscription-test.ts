@@ -14,7 +14,7 @@ before(async () => {
 
 describe('Subscription', () => {
 
-	it('receives notifications after subscribe', async () => {
+	it('receives notifications after subscribe by event filters', async () => {
 		let sub = rc.createSubscription();
 		let expiresIn = 899;	// seconds
 		// POST https://platform.ringcentral.com/restapi/v1.0/subscription
@@ -90,7 +90,22 @@ describe('Subscription', () => {
 		expect(sub.address).to.eq(subData.deliveryMode.address);
 		expect(sub.encryptionKey).to.eq(subData.deliveryMode.encryptionKey);
 
-		fetchMock.once('*', ' ');
+		fetchMock.deleteOnce('*', ' ');
+		await sub.cancel();
+	});
+
+	it('throws error when subscribing without id and event filters', () => {
+		let sub = rc.createSubscription();
+		sub.subscribe().then(() => { throw new Error('Should not resolve') }, e => { });
+	});
+
+	it('subscribe by id and event filters', async () => {
+		let sub = rc.createSubscription();
+		sub.id = genSubId();
+		fetchMock.putOnce('end:/subscription/' + sub.id, { body: createSubscriptionData(1, sub.id) });
+		await sub.subscribe(['/presence']);
+
+		fetchMock.deleteOnce('*', ' ');
 		await sub.cancel();
 	});
 
@@ -141,7 +156,7 @@ describe('Subscription', () => {
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(0.8, subId);
 		fetchMock.postOnce('end:/subscription', { body: subData });
-		fetchMock.putOnce('end:/subscription/' + subId, {throws:{error: 'MockedError', desc:'stop retry timer'}});
+		fetchMock.putOnce('end:/subscription/' + subId, { throws: { error: 'MockedError', desc: 'stop retry timer' } });
 		await sub.subscribe(['/test/subscription']);
 
 		await delay(400);
