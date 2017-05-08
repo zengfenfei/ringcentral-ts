@@ -164,13 +164,24 @@ describe('Subscription', () => {
 		sub.cancel();
 	});
 
-	it('should resubscribe for expired subscription', async () => {
+	it('resubscribe for expired subscription', async () => {
 		let subId = genSubId();
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(-0.5, subId);
 		sub.setData(subData);
 		fetchMock.postOnce('end:/subscription', { body: subData });	// For the resubscribe of the refresh
 		await delay(1100);
+
+		fetchMock.deleteOnce('*', ' ');
+		await sub.cancel();
+	});
+
+	it('resubscribe for not found error', async () => {
+		let sub = rc.createSubscription();
+		sub.setData(createSubscriptionData(0.4, genSubId()));
+		fetchMock.putOnce('end:/subscription/' + sub.id, { throws: { code: 'CMN-102', desc: 'Subscription not found' } });
+		fetchMock.postOnce('end:/subscription', { body: createSubscriptionData(1, genSubId()) })
+		await delay(450);
 
 		fetchMock.deleteOnce('*', ' ');
 		await sub.cancel();
