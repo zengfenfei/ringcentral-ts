@@ -11,35 +11,14 @@ before(async () => {
 
 describe('PathSegments', function () {
 
-    /**
-     * AnsweringRule list:
-     { uri: 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/130829004/extension/130829004/answering-rule?page=1&perPage=100',
-  records:
-   [ { uri: 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/130829004/extension/130829004/answering-rule/business-hours-rule',
-       id: 'business-hours-rule',
-       type: 'BusinessHours',
-       enabled: true,
-       callHandlingAction: 'ForwardCalls' },
-     { uri: 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/130829004/extension/130829004/answering-rule/36288004',
-       id: '36288004',
-       type: 'Custom',
-       name: 'TestRule1',
-       enabled: true,
-       schedule: [Object],
-       callers: [Object],
-       callHandlingAction: 'ForwardCalls' } ],
-  paging:
-   { page: 1,
-     totalPages: 1,
-     perPage: 100,
-     totalElements: 2,
-     pageStart: 0,
-     pageEnd: 1 },
-  navigation:
-   { firstPage: { uri: 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/130829004/extension/130829004/answering-rule?page=1&perPage=100' },
-     lastPage: { uri: 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/130829004/extension/130829004/answering-rule?page=1&perPage=100' } } }
+	it('Account', () => {
+		rc.account().activeCalls();
+		rc.account().serviceInfo();
 
-     */
+		rc.account().extension().device();
+		rc.account().extension().phoneNumber();
+	});
+
 	it('AnsweringRule', async () => {
 		fetchMock.postOnce('end:/account/~/extension/~/answering-rule', {});
 		let reqBody = {
@@ -77,6 +56,8 @@ describe('PathSegments', function () {
 			let createdBlockedPhoneNumber = '+18989999';
 			fetchMock.once('*', {});
 			await ext.blockedNumber().post({ phoneNumber: createdBlockedPhoneNumber });
+			fetchMock.once('*', {});
+			await ext.blockedNumber().put({ phoneNumber: createdBlockedPhoneNumber });
 			fetchMock.once('*', {});
 			await ext.blockedNumber(createdId).get();
 			fetchMock.once('*', {});
@@ -121,7 +102,9 @@ describe('PathSegments', function () {
 			fetchMock.once('*', {});
 			await rc.subscription(createdId).put({ eventFilters: ['/restapi/v1.0/account/~/extension/~/message-store'] });
 			fetchMock.once('*', {});
-			rc.subscription(createdId).delete();
+			await rc.subscription(createdId).delete();
+			fetchMock.once('*', {});
+			await rc.subscription(createdId).list();
 		});
 
 	});
@@ -176,12 +159,12 @@ describe('PathSegments', function () {
 
 	describe('ForwardingNumber', function () {
 
-		it('covers all', function () {
+		it('covers all', async () => {
 			fetchMock.once('*', {});
-			return rc.account().extension().forwardingNumber().list();
-            /* let id: string;
-             return client.account().extension().forwardingNumber().post({ label: 'test', phoneNumber: '+16507411615' })
-                 .then(res => client.account().extension().forwardingNumber());*/
+			await rc.account().extension().forwardingNumber().list();
+
+			fetchMock.once('*', {});
+			await rc.account().extension().forwardingNumber().post({});
 		});
 
 	});
@@ -299,11 +282,13 @@ describe('PathSegments', function () {
 				text: 'js-client unit test.'
 			});
 			fetchMock.once('*', {});
-			rc.account().extension().messageStore(id).delete();
+			await rc.account().extension().messageStore(id).delete();
 			fetchMock.once('*', {});
-			rc.account().extension().messageStore(id).put({ readStatus: 'Read' });
+			await rc.account().extension().messageStore(id).put({ readStatus: 'Read' });
 			fetchMock.once('*', {});
-			rc.account().extension().messageStore().list();
+			await rc.account().extension().messageStore().list();
+			fetchMock.once('*', {});
+			await rc.account().extension().messageStore('id').get();
 		});
 
 		it('gets sync message', function () {
@@ -364,9 +349,9 @@ describe('PathSegments', function () {
 
 	describe('NumberPool', function () {
 
-		it('covers all', function () {
-			// FIXME fix lookup error.
-			// return client.numberPool().lookup().post({ countryCode: 'cn' });
+		it('covers all', () => {
+			fetchMock.once('*', {});
+			return rc.numberPool().lookup().post({ countryCode: 'cn' });
 		});
 
 	});
@@ -417,6 +402,11 @@ describe('PathSegments', function () {
 			return rc.account().extension().callLogSync().list({ recordCount: 5 });
 		});
 
+		it('get call log by id', () => {
+			fetchMock.once('*', {});
+			return rc.account().callLog().get();
+		});
+
 	});
 
 	describe('AddressBook', function () {
@@ -434,6 +424,40 @@ describe('PathSegments', function () {
 			return rc.numberParser().parse().post({ originalStrings: ['+8618657118272'] });
 		});
 
+	});
+
+	it('Order', async () => {
+		fetchMock.once('*', {});
+		await rc.account().order().post({});
+
+		fetchMock.once('*', {});
+		await rc.account().order('orderId').get();
+	});
+
+	it('Greetings', async () => {
+		fetchMock.once('*', {});
+		await rc.account().extension().greeting().get();
+
+		fetchMock.once('*', {});
+		await rc.account().extension().greeting().post({});
+	});
+
+	it('Conferencing', async () => {
+		fetchMock.once('*', {});
+		await rc.account().extension().conferencing().get();
+
+		fetchMock.once('*', {});
+		await rc.account().extension().conferencing().put({});
+	});
+
+	it('Reserve', () => {
+		fetchMock.once('*', {});
+		return rc.numberPool().reserve().post({});
+	});
+
+	it('Recording', () => {
+		fetchMock.once('*', {});
+		return rc.account().recording().get();
 	});
 
 });
