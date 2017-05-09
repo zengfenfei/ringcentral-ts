@@ -473,12 +473,9 @@ describe('Binary response', function () {
 
 let imgPath = './test/res/banner_index_logged.png';
 describe('Binary request', function () {
-
-	before('Only run in node', function () {
-		if (!inNode) {
-			this.skip();
-		}
-	});
+	if (!inNode) {
+		return;
+	}
 
 	it('Put profile image, input binary, response is empty.', async () => {
 		fetchMock.putOnce('end:/account/~/extension/~/profile-image', { fake: 'data' });
