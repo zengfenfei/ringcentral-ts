@@ -42,11 +42,14 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 		fetchMock.postOnce(authUrl, serverToken);
 		let token = await client.auth({
 			username,
-			password
+			password,
+			scope: ['scp'],
+			accessTokenTtl: 90,
+			refreshTokenTtl: 360
 		});
 		// #1 Check the request
 		expect(fetchMock.lastOptions()).to.deep.equal({
-			body: 'grant_type=password&username=' + username + '&extension=&password=' + password + '&access_token_ttl=&refresh_token_ttl=&scope=',
+			body: 'grant_type=password&username=' + username + '&extension=&password=' + password + '&access_token_ttl=90&refresh_token_ttl=360&scope=scp',
 			method: 'POST',
 			headers:
 			{
@@ -211,21 +214,18 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 		}
 	});
 
-	/*	it('will not report error when logout with wrong access token', async () => {
-			let token = await client.getToken();
-			let testToken = new Token();
-			testToken.fromCache(JSON.stringify(token));
+	it('logout throws error', async () => {
+		let client = (await auth()).rest;
+		fetchMock.postOnce('end:/restapi/oauth/revoke', { status: 500, body: 'Internal error' });
+		await client.logout().then(() => { throw new Error('Should throw'); }, e => { });
 
-			testToken.accessToken += 'xxxxx';
-			client.tokenStore.save(testToken);
-			await client.logout();
-
-			testToken.accessToken = '';
-			client.tokenStore.save(testToken);
-			await client.logout();
-
-			await client.tokenStore.save(token);
-		});*/
+		fetchMock.postOnce('end:/restapi/oauth/revoke', {
+			status: 500,
+			headers: { 'content-type': ['application/json;charset=UTF-8'] },
+			body: { code: 429, desc: 'Too many requests' }
+		});
+		await client.logout().then(() => { throw new Error('Should throw'); }, e => { });
+	});
 
 	it('creates correct login url for oauth', () => {
 		const redirectUri = 'http://my-app.auth.com/TestOauth.RedirectUri';
@@ -293,6 +293,32 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 			}]);
 		expect(newToken.accessToken).not.eq(accessToken);
 		expect(newToken.refreshToken).not.eq(refreshToken);
+	});
+
+	it('handles refresh token error', async () => {
+		let client = (await auth()).rest;
+		let token = await client.getToken();
+		token.expiresIn = Date.now() - 10;
+
+		fetchMock.postOnce('end:/oauth/token', {
+			status: 401,
+			body: { errorCode: 'some_error', error_description: 'Wrong credentials' },
+			headers: { 'content-type': ['application/json;charset=UTF-8'], }
+		});
+		await client.getToken().then(() => { throw new Error('Should throw.'); }, e => { expect(e.code).to.eq('some_error'); });
+
+		fetchMock.postOnce('end:/oauth/token', {
+			status: 500,
+			body: 'Unknown server error'
+		});
+		await client.getToken().then(() => { throw new Error('Should throw.'); }, e => { expect(e.code).to.eq('Unknown'); });
+
+		fetchMock.postOnce('end:/oauth/token', {
+			status: 401,
+			body: { errorCode: 'invalid_grant', error_description: 'Wrong credentials' },
+			headers: { 'content-type': ['application/json;charset=UTF-8'], }
+		});
+		await client.getToken().then(() => { throw new Error('Should throw.'); }, e => { expect(e.code).to.eq('invalid_grant'); });
 	});
 
 	it('allows only one getToken operation at the same time', () => {
@@ -401,6 +427,10 @@ describe('RestClient API call methods', () => {
 		} catch (e) {
 			expect(e.code).to.eq('CMN-120');
 		}
+
+		let testEndpoint = '/throw/text/exception';
+		fetchMock.getOnce('end:' + testEndpoint, { status: 500, body: 'Some text error' });
+		await client.call(testEndpoint).then(() => { throw new Error('Should throw'); }, e => { });
 	});
 
 	it('will delay API request automatically when rate limit hit', async () => {
