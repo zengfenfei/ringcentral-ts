@@ -10,4 +10,8 @@ describe('client', () => {
 function runCoverage() {
 	client.clientInfo();
 	client.numberPool();
+	client.oauthUrl('redirectUrl');
+	client.oauth('some-code', 'redirectUrl');
+	client.getToken();
+	client.logout();
 }
