@@ -15,7 +15,6 @@
 		"@types/chai": "^3.4.35",
 		"@types/mocha": "^2.2.39",
 		"@types/node": "^7.0.12",
-		"babel-polyfill": "^6.23.0",
 		"delay.ts": "^1.1.0",
 		"form-data": "^2.1.2",
 		"isomorphic-fetch": "^2.2.1",
@@ -32,7 +31,7 @@
 		"sinon": "^2.1.0",
 		"tslint": "^5.0.0",
 		"typedoc": "^0.6.0",
-		"typescript": "^2.2.2",
+		"typescript": "^2.3.2",
 		"webpack": "^2.3.2"
 	},
 	"preferGlobal": false,
