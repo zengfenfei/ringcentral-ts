@@ -11,6 +11,8 @@ Run it in a server as long as possible, it will tell you the status periodically
 test();
 
 async function test() {
+	let notificationTimeout = parseInt(process.argv[2]) || 1;
+	console.log('Notification timeout in minutes ' + notificationTimeout);
 	let startTime = Date.now();
 	let config = require('../../data/test-config.json');
 	let rc = new RingCentral(config.app);
@@ -58,6 +60,7 @@ async function test() {
 		let receivedSms;
 		let messageListener = evt => {
 			receivedSms = evt.body;
+			subscription.removeListener('message', messageListener);
 			notify('The subscription is alive. Notification delay:' + (Date.now() - sentTime));
 			rc.account().extension().messageStore(receivedSms.id).delete({ purge: true });
 			rc.account().extension().messageStore(sentSms.id).delete({ purge: true });
@@ -69,12 +72,12 @@ async function test() {
 			text: 'Test sms to trigger subscription.'
 		});
 		let sentTime = Date.now();
-		await delay(60 * 1000);
-		subscription.removeListener('message', messageListener);
+		await delay(notificationTimeout * 60 * 1000);
 		if (!receivedSms) {
-			await notify('The subscription is dead');
+			let msg = 'The notification does not arrive in ' + notificationTimeout + ' minutes.';
+			await notify(msg);
 			await subscription.cancel();
-			throw new Error('Subscription died unexpectedly.');
+			process.exit(1);
 		}
 	}
 
