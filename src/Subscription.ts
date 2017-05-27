@@ -54,7 +54,7 @@ export default class Subscription extends EventEmitter {
 		}
 		let res: Response;
 		if (eventFilters) {
-			res = await this.rest.post('/subscription', { eventFilters, deliveryMode });
+			res = await this.rest.post('/subscription', { eventFilters: prefixFilters(eventFilters), deliveryMode });
 		} else {
 			res = await this.rest.get('/subscription/' + id);
 		}
