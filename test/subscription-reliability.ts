@@ -22,7 +22,7 @@ async function test() {
 		await rc.auth(config.user);
 	}
 
-	let subscription = rc.createSubscription({ debug: true });
+	let subscription = rc.createSubscription();
 
 	await subscription.subscribe(['/account/~/extension/~/presence', '/account/~/extension/~/message-store/instant?type=SMS']);
 
@@ -58,6 +58,9 @@ async function test() {
 		let receivedSms;
 		let messageListener = evt => {
 			receivedSms = evt.body;
+			notify('The subscription is alive. Notification delay:' + (Date.now() - sentTime));
+			rc.account().extension().messageStore(receivedSms.id).delete({ purge: true });
+			rc.account().extension().messageStore(sentSms.id).delete({ purge: true });
 		};
 		subscription.onMessage(messageListener);
 		let sentSms = await rc.account().extension().sms().post({
@@ -65,13 +68,10 @@ async function test() {
 			to: [{ phoneNumber: config.user.username }],
 			text: 'Test sms to trigger subscription.'
 		});
-		await delay(10 * 1000);
+		let sentTime = Date.now();
+		await delay(60 * 1000);
 		subscription.removeListener('message', messageListener);
-		if (receivedSms) {
-			notify('The subscription is alive');
-			rc.account().extension().messageStore(receivedSms.id).delete({ purge: true });
-			rc.account().extension().messageStore(sentSms.id).delete({ purge: true });
-		} else {
+		if (!receivedSms) {
 			await notify('The subscription is dead');
 			await subscription.cancel();
 			throw new Error('Subscription died unexpectedly.');
