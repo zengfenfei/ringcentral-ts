@@ -9,7 +9,7 @@ import 'isomorphic-fetch';
 
 let client: RestClient;
 before(async () => {
-	client = (await auth()).rest;
+	client = (await auth());
 });
 
 describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods', () => {
@@ -180,7 +180,7 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 	});
 
 	it('invalidates access token and refresh token after logout', async () => {
-		let client = (await auth()).rest;
+		let client = (await auth());
 		fetchMock.once('*', {
 			status: 200, headers: {
 				server: ['nginx/1.10.2'],
@@ -215,7 +215,7 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 	});
 
 	it('logout throws error', async () => {
-		let client = (await auth()).rest;
+		let client = (await auth());
 		fetchMock.postOnce('end:/restapi/oauth/revoke', { status: 500, body: 'Internal error' });
 		await client.logout().then(() => { throw new Error('Should throw'); }, e => { });
 
@@ -275,7 +275,7 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 	});
 
 	it('should refresh token automatically if accessToken is invalid when getting token', async () => {
-		let client = (await auth()).rest;
+		let client = (await auth());
 		let token = await client.getToken();
 		const { accessToken, refreshToken } = token;
 		token.expiresIn = Date.now() - 10;
@@ -296,7 +296,7 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 	});
 
 	it('handles refresh token error', async () => {
-		let client = (await auth()).rest;
+		let client = (await auth());
 		let token = await client.getToken();
 		token.expiresIn = Date.now() - 10;
 
@@ -364,7 +364,7 @@ describe('RestClient API call methods', () => {
 
 	let NotLoginError = 'NoToken';
 	it('Call api before login', async () => {
-		let client = (await auth()).rest;
+		let client = (await auth());
 		fetchMock.once('*', ' ');
 		return client.logout().then(() => {
 			return client.get('/some-api');

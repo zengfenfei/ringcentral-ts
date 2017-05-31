@@ -17,7 +17,7 @@ async function test() {
 	let config = require('../../data/test-config.json');
 	let rc = new RingCentral(config.app);
 
-	rc.rest.tokenStore = typeof window === 'undefined' ? new FileTokenStore(config.tokenCacheFile) : new WebTokenStore('rc-ts-sdk-test-token', localStorage);
+	rc.tokenStore = typeof window === 'undefined' ? new FileTokenStore(config.tokenCacheFile) : new WebTokenStore('rc-ts-sdk-test-token', localStorage);
 	try {
 		await rc.getToken();
 	} catch (e) {
