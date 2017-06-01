@@ -86,7 +86,7 @@ async function test() {
 			await rc.account().extension().sms().post({
 				to: [{ phoneNumber }],
 				from: { phoneNumber: config.user.username },
-				text: 'Subsription reliability test:' + msg + '. \nTest instance:' + config.testId + ' \nTest duration:' + duration()
+				text: 'Subsription reliability test:' + msg + ' \nTest instance:' + config.testId + '\nTest duration:' + duration()
 			});
 		}
 	}
