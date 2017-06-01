@@ -8,8 +8,8 @@ import Token, { TokenStore, MemoryTokenStore } from './Token';
 import isKnownReqBodyType from 'known-fetch-body';
 import RCAccount from './RCAccount';
 
-const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
-const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
+export const SERVER_PRODUCTION = 'https://platform.ringcentral.com';
+export const SERVER_SANDBOX = 'https://platform.devtest.ringcentral.com';
 
 export const API_VERSION = 'v1.0';
 export const BASE_URL = '/restapi/';
@@ -18,15 +18,15 @@ const REVOKE_URL = BASE_URL + 'oauth/revoke';
 const AUTHORIZE_URL = BASE_URL + 'oauth/authorize';
 
 // Auth events
-const EventLoginStart = 'LoginStart';
-const EventLoginSuccess = 'LoginSuccess';
-const EventLoginError = 'LoginError';
-const EventRefreshStart = 'RefreshStart';
-const EventRefreshSuccess = 'RefreshSuccess';
-const EventRefreshError = 'RefreshError';
-const EventLogoutStart = 'LogoutStart';
-const EventLogoutSuccess = 'LogoutSuccess';
-const EventLogoutError = 'LogoutError';
+export const EventLoginStart = 'LoginStart';
+export const EventLoginSuccess = 'LoginSuccess';
+export const EventLoginError = 'LoginError';
+export const EventRefreshStart = 'RefreshStart';
+export const EventRefreshSuccess = 'RefreshSuccess';
+export const EventRefreshError = 'RefreshError';
+export const EventLogoutStart = 'LogoutStart';
+export const EventLogoutSuccess = 'LogoutSuccess';
+export const EventLogoutError = 'LogoutError';
 
 
 /**
@@ -399,19 +399,3 @@ export interface ClientOptions {
 	tokenStore?: TokenStore;
 	handleRateLimit?: boolean;
 }
-
-
-export {
-	SERVER_PRODUCTION,
-	SERVER_SANDBOX,
-
-	EventLoginStart,
-	EventLoginSuccess,
-	EventLoginError,
-	EventRefreshStart,
-	EventRefreshSuccess,
-	EventRefreshError,
-	EventLogoutStart,
-	EventLogoutSuccess,
-	EventLogoutError
-};

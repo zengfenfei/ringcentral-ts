@@ -1,4 +1,4 @@
-import RestClient, { SERVER_PRODUCTION, SERVER_SANDBOX, API_VERSION, ClientOptions } from './RestClient';
+import RestClient, { ClientOptions } from './RestClient';
 import Account from './paths/Account';
 import ClientInfo from './paths/ClientInfo';
 import Dictionary from './paths/Dictionary';
@@ -44,9 +44,7 @@ export default class RingCentral extends RestClient {
 }
 
 export {
-	RingCentral,    // For commonjs
-
-	SERVER_PRODUCTION,
-	SERVER_SANDBOX,
-	API_VERSION
+	RingCentral    // For commonjs
 };
+
+export * from './RestClient';
