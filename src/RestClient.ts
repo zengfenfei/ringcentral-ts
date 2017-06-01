@@ -133,7 +133,13 @@ export default class RestClient extends EventEmitter {
 	private async sendApiCall(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
 		opts = opts || {};
 		opts.method = opts.method || 'GET';
-		let url = format({ pathname: this.server + BASE_URL + API_VERSION + endpoint, query });
+		let pathname: string;
+		if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+			pathname = endpoint;
+		} else {
+			pathname = this.server + BASE_URL + API_VERSION + endpoint;
+		}
+		let url = format({ pathname, query });
 
 		if (this.recoverTime) {
 			let timeLeft = this.recoverTime - Date.now();
