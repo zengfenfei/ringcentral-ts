@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { format } from 'url';
 import { stringify, parse } from 'querystring';
+import { TOO_MANY_REQUESTS } from 'http-status';
 import 'isomorphic-fetch';
 import delay from 'delay.ts';
 import * as pkg from './pkg';
@@ -38,7 +39,7 @@ export default class RestClient extends EventEmitter {
 	appSecret: string;
 
 	handleRateLimit: boolean;
-	private recoverTime: number; // In 429 status
+	private recoverTime = 0; // In 429 status
 
 	tokenStore: TokenStore;
 	private gettingToken: Promise<Token>;
@@ -119,8 +120,8 @@ export default class RestClient extends EventEmitter {
 		try {
 			return await this.sendApiCall(endpoint, query, opts);
 		} catch (e) {
-			if (this.handleRateLimit && e.code === ErrorRateExceeded) {
-				await delay(this.recoverTime - Date.now());
+			if (this.handleRateLimit && e.code === TOO_MANY_REQUESTS) {
+				await delay(e['retryAfter']);
 				return await this.call(endpoint, query, opts);
 			}
 			throw e;
@@ -144,7 +145,7 @@ export default class RestClient extends EventEmitter {
 		if (this.recoverTime) {
 			let timeLeft = this.recoverTime - Date.now();
 			if (timeLeft > 0) {
-				let e = new RestError(opts.method + ' ' + url + ': Throttled by rate limit', ErrorRateExceeded, 'Please retry after ' + timeLeft + ' milliseconds');
+				let e = new RestError(opts.method + ' ' + url + ': Throttled by rate limit', TOO_MANY_REQUESTS, 'Please retry after ' + timeLeft + ' milliseconds');
 				e['retryAfter'] = timeLeft;
 				throw e;
 			}
@@ -170,24 +171,26 @@ export default class RestClient extends EventEmitter {
 		let res = await fetch(url, opts);
 		if (!res.ok) {
 			let errorMessage = opts.method + ' ' + url + ': ';
+			let resBody, code;
 			if (isJsonRes(res)) {
-				let resJson = await res.json();
-				let e = new RestError(errorMessage + (resJson.message || resJson.error_description),
-					resJson.errorCode || resJson.error,
-					resJson,
-					res);
-				if (e.code === ErrorRateExceeded) {
-					// FIXME retry-after is custom header, by default, it can't be retrieved. Server should add header: 'Access-Control-Expose-Headers: retry-after'.
-					let retryAfter = parseInt(res.headers.get('retry-after') || '60') * 1000;
-					this.recoverTime = Date.now() + retryAfter;
-					e['retryAfter'] = retryAfter;
-				}
-				throw e;
+				resBody = await res.json();
+				errorMessage += resBody.message || resBody.error_description;
+				code = resBody.errorCode || resBody.error;
 			} else {
-				let resText = await res.text();
-				let e = new RestError(errorMessage + resText, 'Unknown', resText, res);
-				throw e;
+				resBody = await res.text();
+				errorMessage += resBody;
+				code = 'Unknown';
 			}
+			let e = new RestError(errorMessage, code, resBody, res);
+			if (res.status === TOO_MANY_REQUESTS) {
+				e.code = TOO_MANY_REQUESTS;
+				// FIXME retry-after is custom header, by default, it can't be retrieved. Server should add header: 'Access-Control-Expose-Headers: retry-after'.
+				let retryAfter = parseInt(res.headers.get('retry-after') || '60') * 1000;
+				let newRecoverTime = Date.now() + retryAfter;
+				this.recoverTime = newRecoverTime > this.recoverTime ? newRecoverTime : this.recoverTime;
+				e['retryAfter'] = retryAfter;
+			}
+			throw e;
 		}
 		return res;
 	}
@@ -388,8 +391,6 @@ export interface OauthCallbackParams {
 	expires_in: number;	// The remaining lifetime of the authorization code
 	state?: string;	// This parameter will be included in response if it was specified in the client authorization request. The value will be copied from the one received from the client
 }
-
-const ErrorRateExceeded = 'CMN-301';
 
 export interface ClientOptions {
 	server?: string;

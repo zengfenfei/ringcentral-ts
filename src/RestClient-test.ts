@@ -496,13 +496,13 @@ describe('RestClient API call methods', () => {
 		try {
 			await client.get('/some/api/429');
 		} catch (e) {
-			expect(e.code).to.eq('CMN-301');
+			expect(e.code).to.eq(429);
 			expect(e.retryAfter).to.gt(0);
 		}
 		try {
 			await client.get('/some/api/429');
 		} catch (e) {
-			expect(e.code).to.eq('CMN-301');
+			expect(e.code).to.eq(429);
 			expect(e.retryAfter).to.gt(0);
 		}
 		client.handleRateLimit = true;
