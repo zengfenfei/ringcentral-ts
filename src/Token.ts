@@ -28,10 +28,10 @@ export default class Token {
 		return this;
 	}
 
-    /**
-     *  Populate token from server response. You should set owner after calling this method.
-     *  timeSpent: Time in ms spent fetching token.
-     */
+	/**
+	 *  Populate token from server response. You should set owner after calling this method.
+	 *  timeSpent: Time in ms spent fetching token.
+	 */
 	fromServer(newToken, timeSpent: number) {
 		this.accessToken = newToken['access_token'];
 		this.type = newToken['token_type'];
@@ -49,15 +49,15 @@ export default class Token {
 	expiresIn: number;  // Date time
 	refreshToken: string;
 	refreshTokenExpiresIn: number;  // Date time
-	scope: string[];    // Permissions
-	ownerId: string;    // Extension identifier
+	scope: string[];	// Permissions
+	ownerId: string;	// Extension identifier
 	endpointId: string;
 
 	// Ower info, these info will be checked after restored
 	appKey: string;
-    /**
-     *  format: {phone-number}*{extension-number}
-     */
+	/**
+	 *  format: {phone-number}*{extension-number}
+	 */
 	owner: string;
 
 	expired(): boolean {
@@ -80,19 +80,19 @@ function tokenOwner(ownerInfo: { username: string, extension?: string }) {
 
 export interface TokenStore {
 
-    /**
-     * Should handle error inside the method
-     */
+	/**
+	 * Should handle error inside the method
+	 */
 	save(data: Token): Promise<void>;
 
-    /**
-     * Will be called every time making an API call.
-     */
+	/**
+	 * Will be called every time making an API call.
+	 */
 	get(): Promise<Token>;
 
-    /**
-     * Should handle error inside the method
-     */
+	/**
+	 * Should handle error inside the method
+	 */
 	clear(): Promise<void>;
 }
 

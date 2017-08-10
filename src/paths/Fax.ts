@@ -9,9 +9,9 @@ export default class Fax extends FaxBase {
 		super(prv, id, service);
 	}
 
-    /**
-     *  Create and Send Fax Message
-     */
+	/**
+	 *  Create and Send Fax Message
+	 */
 	post(body: PostBody, attachments: Binary[]): Promise<MessageInfo> {
 		let meta = JSON.stringify(body);
 		let form = new FormData();

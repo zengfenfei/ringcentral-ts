@@ -94,9 +94,9 @@ export default class RestClient extends EventEmitter {
 		}
 	}
 
-    /**
-     * Send http GET method
-     */
+	/**
+	 * Send http GET method
+	 */
 	get(url: string, query?: {}): Promise<Response> {
 		return this.call(url, query);
 	}
@@ -128,9 +128,9 @@ export default class RestClient extends EventEmitter {
 		}
 	}
 
-    /**
-     * Perform an authenticated API call.
-     */
+	/**
+	 * Perform an authenticated API call.
+	 */
 	private async sendApiCall(endpoint: string, query?: {}, opts?: RequestInit): Promise<Response> {
 		opts = opts || {};
 		opts.method = opts.method || 'GET';
@@ -351,7 +351,7 @@ export default class RestClient extends EventEmitter {
 					resJson.error || resJson.errorCode,
 					resJson,
 					res);
-				if (e.code === 'invalid_grant') {    // Wrong token, clear them.
+				if (e.code === 'invalid_grant') {	// Wrong token, clear them.
 					await this.tokenStore.clear();
 				}
 				this.emit(EventRefreshError, e);
@@ -375,8 +375,8 @@ function isJsonRes(res: Response) {
 
 class RestError extends Error {
 	code: string;
-	detail: any;    // http response json or text
-	rawRes: any;    // The raw http response
+	detail: any;	// http response json or text
+	rawRes: any;	// The raw http response
 
 	constructor(message: string, code: string, detail?, raw?: Response) {
 		super(message);

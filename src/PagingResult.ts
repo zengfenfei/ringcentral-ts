@@ -11,9 +11,9 @@ export default class PagingResult<T> {
 		this.paging = data['paging'];
 	}
 
-    /**
-     * List of real results
-     */
+	/**
+	 * List of real results
+	 */
 	records: T[];
 
 	navigation: NavigationInfo;
