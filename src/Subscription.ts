@@ -24,6 +24,8 @@ export default class Subscription extends EventEmitter {
 
 	debug: boolean;
 
+	private reqId = 0;
+
 	constructor(restClient: RestClient, opts?: { debug?: boolean }) {
 		super();
 		this.rest = restClient;
@@ -52,6 +54,8 @@ export default class Subscription extends EventEmitter {
 			await this.refresh();
 			return;
 		}
+		this.reqId++;
+		let reqId = this.reqId;
 		let res: Response;
 		if (eventFilters) {
 			res = await this.rest.post('/subscription', { eventFilters: prefixFilters(eventFilters), deliveryMode });
@@ -59,13 +63,18 @@ export default class Subscription extends EventEmitter {
 			res = await this.rest.get('/subscription/' + id);
 		}
 		let subscription = await res.json();
-		this.setData(subscription);
+		this.setData(subscription, reqId);
 	}
 
 	/**
 	 * Set subscription data from referesh, newly created or get by id.
 	 */
-	setData(subscription) { // This functions is the only place to parse subscription data.
+	setData(subscription, reqId?: number) { // This functions is the only place to parse subscription data.
+		if (reqId && reqId < this.reqId) {
+			// Subscription is canceled
+			// The request is too slow that former request arrived early than this one, so should ignore this response
+			return;
+		}
 		if (subscription.id !== this.id || !this.subscribeKey) {
 			this.id = subscription.id;
 			this.subscribeKey = subscription.deliveryMode.subscriberKey;
@@ -90,8 +99,10 @@ export default class Subscription extends EventEmitter {
 	async cancel() {
 		this.clearRefreshTimer();
 		this.disconnectPushServer();
-		await this.rest.delete('/subscription/' + this.id);
+		const id = this.id;
 		this.subscriptionDeleted();
+		this.reqId++;
+		await this.rest.delete('/subscription/' + id);
 	}
 
 	onMessage(listener: (...args: any[]) => void) {
@@ -173,6 +184,7 @@ export default class Subscription extends EventEmitter {
 		this.clearRefreshTimer();
 		this.refreshTimer = setTimeout(async () => {
 			this.refreshTimer = null;
+			if (!this.id) return;
 			this.refresh().catch(async e => {
 				e.message = `Subscription refresh failed, will retry in ${this.retryInterval}ms. Cause: ${e.message}`;
 				this.emit(EventRefreshError, e);
@@ -188,19 +200,19 @@ export default class Subscription extends EventEmitter {
 	 *				2.	               |--del--|
 	 */
 	private async refresh() {
-		if (!this.id) {
-			return;
-		}
 		if (Date.now() >= this.expirationTime) {
 			this.id = null;
 			await this.subscribe(this.eventFilters);
 			return;
 		}
 		let subscription;
+		this.reqId++;
+		let reqId = this.reqId;
 		try {
 			let res = await this.rest.put('/subscription/' + this.id, { eventFilters: prefixFilters(this.eventFilters), deliveryMode });
 			subscription = await res.json();
 		} catch (e) {
+			if (reqId < this.reqId) return;
 			if (e.code === ErrorNotFound) { // The subscription is invalidated, resubscribe
 				this.id = null;
 				await this.subscribe(this.eventFilters);
@@ -208,7 +220,7 @@ export default class Subscription extends EventEmitter {
 			}
 			throw e;
 		}
-		this.setData(subscription);
+		this.setData(subscription, reqId);
 		this.emit(EventRefreshSuccess);
 	}
 
