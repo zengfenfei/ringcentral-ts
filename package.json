@@ -12,9 +12,7 @@
 		"lint": "tslint test/*.ts src/*.ts src/**/*.ts"
 	},
 	"dependencies": {
-		"@types/chai": "^3.4.35",
-		"@types/mocha": "^2.2.39",
-		"@types/node": "^7.0.12",
+		"@types/node": "^8.0.20",
 		"delay.ts": "^1.1.0",
 		"form-data": "^2.1.2",
 		"http-status": "^1.0.1",
@@ -24,16 +22,18 @@
 		"tslib": "^1.6.0"
 	},
 	"devDependencies": {
-		"chai": "^3.0.0",
+		"@types/chai": "^4.0.2",
+		"@types/mocha": "^2.2.41",
+		"chai": "^4.1.1",
 		"coveralls": "^2.13.1",
 		"fetch-mock": "^5.10.0",
 		"mocha": "^3.2.0",
-		"nyc": "^10.3.2",
-		"sinon": "^2.1.0",
+		"nyc": "^11.1.0",
+		"sinon": "^3.1.0",
 		"tslint": "^5.0.0",
-		"typedoc": "^0.6.0",
+		"typedoc": "^0.8.0",
 		"typescript": "^2.3.2",
-		"webpack": "^2.3.2"
+		"webpack": "^3.5.2"
 	},
 	"preferGlobal": false,
 	"private": false,
