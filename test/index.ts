@@ -446,8 +446,8 @@ describe('Extension', function () {
 
 	it('Union type parameters, update extension info', function () {
 		fetchMock.putOnce('end:/account/~/extension/~', { fake: 'data' });
-		let reqBody = { status: 'Enabled' };
-		return rc.account().extension().put(reqBody).then(ext => {
+		const reqBody = { status: 'Enabled' };
+		return rc.account().extension().put(<any>reqBody).then(ext => {
 			expect(fetchMock.lastOptions().body).to.deep.eq(JSON.stringify(reqBody));
 			// expect(ext).to.contain.keys(extensionProps);
 		});

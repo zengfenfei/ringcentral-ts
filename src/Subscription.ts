@@ -94,7 +94,7 @@ export default class Subscription extends EventEmitter {
 		this.subscriptionDeleted();
 	}
 
-	onMessage(listener: Function) {
+	onMessage(listener: (...args: any[]) => void) {
 		this.on(EventMessage, listener);
 	}
 
