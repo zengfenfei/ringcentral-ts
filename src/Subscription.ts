@@ -85,14 +85,7 @@ export default class Subscription extends EventEmitter {
 		this.expirationTime = Date.parse(subscription.expirationTime);
 		this.eventFilters = unprefixFilters(subscription.eventFilters);
 
-		let timeout = this.expirationTime - Date.now() - refreshHandicap;
-		if (timeout <= 0) {
-			timeout += refreshHandicap;
-			timeout *= 0.8;
-		}
-		if (timeout <= 0) {
-			timeout = 1000;
-		}
+		let timeout = Math.max(this.expirationTime - Date.now() - refreshHandicap, 1000);
 		this.scheduleRefresh(timeout);
 	}
 
@@ -193,16 +186,10 @@ export default class Subscription extends EventEmitter {
 		}, timeout);
 	}
 
-	/**
-	 * Cases for cancel not working:
-	 *		refresh:	|----put----|----delay(error)----|----put(retry)----|
-	 *				1.	 |--del--|
-	 *				2.	               |--del--|
-	 */
 	private async refresh() {
 		if (Date.now() >= this.expirationTime) {
 			this.id = null;
-			await this.subscribe(this.eventFilters);
+			await this.subscribe();
 			return;
 		}
 		let subscription;
@@ -237,7 +224,7 @@ function unprefixFilters(filters: string[]) {
 
 const deliveryMode = { transportType: 'PubNub', encryption: true };
 // In ms
-const refreshHandicap = 30 * 1000;
+const refreshHandicap = 10 * 1000;
 // In seconds
 // export const MAX_LIFETIME = 604800;
 const ErrorNotFound = 'CMN-102';
