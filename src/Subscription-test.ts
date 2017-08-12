@@ -224,7 +224,7 @@ describe('Subscription', () => {
 	it('retry after refresh error', async () => {
 		// let it retry 2 times
 		let sub = rc.createSubscription();
-		sub.retryInterval = 900;
+		sub.retryInterval = 100;
 		let subData = createSubscriptionData(8);
 		sub.setData(subData);
 		// refresh
@@ -232,14 +232,16 @@ describe('Subscription', () => {
 			throws: { code: 'MockedRefreshError' }
 		});
 		// first retry
-		fetchMock.once('*', {
+		fetchMock.putOnce('end:/subscription/' + subData.id, {
 			throws: { code: 'MockedRefreshErrorForRetry1' }
 		});
+		let data = createSubscriptionData(5);
 		// second retry
-		fetchMock.once('*', {
-			body: createSubscriptionData(1)
+		fetchMock.putOnce('end:/subscription/' + subData.id, {
+			body: data
 		});
-		await delay(sub.retryInterval * 2 + 500);
+		await delay(1000 + sub.retryInterval * 2 + 20);
+		expect(sub.expirationTime).to.eq(Date.parse(data.expirationTime));
 
 		fetchMock.deleteOnce('*', ' ');
 		await sub.cancel();
