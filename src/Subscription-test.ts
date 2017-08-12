@@ -12,7 +12,6 @@ before(async () => {
 	fetchMock.catch('*', { throws: 'Unmatched request' });
 	rc = await auth();
 });
-//afterEach(fetchMock.reset);
 
 describe('Subscription', () => {
 
@@ -155,7 +154,6 @@ describe('Subscription', () => {
 		expect(sub.id).to.be.null;
 		expect(sub.address).to.be.null;
 		expect(sub.encryptionKey).to.be.null;
-		//		expect(sub.eventFilters).to.deep.eq;
 	});
 
 	it('Cancel should work when update subscription request which throws error is in progress', async () => {
