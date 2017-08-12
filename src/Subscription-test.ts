@@ -196,8 +196,11 @@ describe('Subscription', () => {
 		let sub = rc.createSubscription();
 		let subData = createSubscriptionData(-0.5);
 		sub.setData(subData);
-		fetchMock.postOnce('end:/subscription', { body: subData });	// For the resubscribe of the refresh
+		let subData2 = createSubscriptionData(9);
+		fetchMock.postOnce('end:/subscription', { body: subData2 });	// For the resubscribe of the refresh
 		await delay(1100);
+		expect(sub.id).to.not.eq(subData.id);
+		expect(sub.id).to.eq(subData2.id);
 
 		fetchMock.deleteOnce('*', ' ');
 		await sub.cancel();
