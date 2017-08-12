@@ -9,8 +9,10 @@ import RingCentral from './Client';
 let rc: RingCentral;
 
 before(async () => {
+	fetchMock.catch('*', { throws: 'Unmatched request' });
 	rc = await auth();
 });
+//afterEach(fetchMock.reset);
 
 describe('Subscription', () => {
 
@@ -75,15 +77,14 @@ describe('Subscription', () => {
 	let expiresIn = 899;	// seconds
 
 	it('subscribe by id', async () => {
-		let subId = genSubId();
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(expiresIn, subId);
-		fetchMock.getOnce('end:/subscription/' + subId, {
+		let subData = createSubscriptionData(expiresIn);
+		fetchMock.getOnce('end:/subscription/' + subData.id, {
 			body: subData
 		});
-		sub.id = subId;
+		sub.id = subData.id;
 		await sub.subscribe();
-		expect(sub.id).to.eq(subId);
+		expect(sub.id).to.eq(subData.id);
 		expect(sub.expirationTime).to.eq(Date.parse(subData.expirationTime));
 		expect(subData.eventFilters[0].endsWith(sub.eventFilters[0])).to.be.true;
 		expect(sub.subscribeKey).to.eq(subData.deliveryMode.subscriberKey);
@@ -102,7 +103,7 @@ describe('Subscription', () => {
 	it('subscribe by id and event filters', async () => {
 		let sub = rc.createSubscription();
 		sub.id = genSubId();
-		fetchMock.putOnce('end:/subscription/' + sub.id, { body: createSubscriptionData(1, sub.id) });
+		fetchMock.putOnce('end:/subscription/' + sub.id, { body: createSubscriptionData(1) });
 		await sub.subscribe(['/presence']);
 
 		fetchMock.deleteOnce('*', ' ');
@@ -110,64 +111,90 @@ describe('Subscription', () => {
 	});
 
 	it('cancel subscription', async () => {
-		let subId = genSubId();
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(expiresIn, subId);
+		let subData = createSubscriptionData(expiresIn);
 		fetchMock.postOnce('end:/subscription', { body: subData });
 		await sub.subscribe(['/test/subscription']);
-		fetchMock.deleteOnce('end:/subscription/' + subId, ' ');
+		fetchMock.deleteOnce('end:/subscription/' + subData.id, ' ');
 		await sub.cancel();
 		expect(sub.id).to.be.null;
 		expect(sub.pubnub).to.be.null;
+		expect(sub.address).to.be.null;
+		expect(sub.subscribeKey).to.be.null;
 	});
 
 	it('refresh subscription', async () => {
-		let subId = genSubId();
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(0.5, subId);
+		let subData = createSubscriptionData(2);
 		fetchMock.postOnce('end:/subscription', { body: subData });
 		await sub.subscribe(['/test/subscription']);
-		let { expirationTime } = sub;
-		fetchMock.putOnce('end:/subscription/' + subId, { body: createSubscriptionData(60, subId) });
-		await delay(0.6 * 1000);
+		let { expirationTime, id } = sub;
+		let newData = createSubscriptionData(60);
+		newData.id = subData.id;
+		fetchMock.putOnce('end:/subscription/' + sub.id, { body: newData });
+		await delay(1100);
 		expect(sub.expirationTime).to.not.eq(expirationTime);
-
+		expect(id).to.eq(sub.id);
 		fetchMock.once('*', ' ');
 		await sub.cancel();
 	});
 
-	/*it('should cancel existing subscription when subscribe', async () => {
+	it('cancel should work even when creating subscription request is in progress', async () => {
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(0.5, subId);
-		fetchMock.postOnce('end:/subscription', { body: subData });
-		await sub.subscribe(['/test/subscription']);
-		fetchMock.once('*', ' ');	// delete subscription
-		fetchMock.postOnce('end:/subscription', { body: subData });
-		await sub.subscribe(['/test/subscription']);
+		let subData = createSubscriptionData(60);
+		fetchMock.postOnce('end:/subscription', async () => {
+			await delay(200);
+			return { body: subData };
+		});
+		let p1 = sub.subscribe(['/test/subscription']);
 
-		fetchMock.once('*', ' ');
+		fetchMock.deleteOnce('*', ' ');
+		let p2 = sub.cancel();
+
+		await Promise.all([p1, p2]);
+		expect(sub.id).to.be.null;
+		expect(sub.address).to.be.null;
+		expect(sub.encryptionKey).to.be.null;
+		//		expect(sub.eventFilters).to.deep.eq;
+	});
+
+	it('Cancel should work when update subscription request which throws error is in progress', async () => {
+		let data = createSubscriptionData(8);
+		let sub = rc.createSubscription();
+		sub.retryInterval = 500;
+		fetchMock.postOnce('end:/subscription', { body: data });
+		await sub.subscribe(['/some/test']);
+		fetchMock.putOnce('end:/subscription/' + sub.id, async () => {
+			await delay(20);
+			return { throws: { error: 'MockedError', desc: 'PUT subscription error.' } };
+		});
+
+		await delay(1010);
+		fetchMock.deleteOnce('end:/subscription/' + sub.id, ' ');
 		await sub.cancel();
-	});*/
+		await delay(sub.retryInterval + 10);
+		expect(sub.refreshTimer).to.be.null;
+	});
 
 	it('cancel should stop retry timer', async () => {
 		// refresh: |--post(subscribe)--|----delay 0.4s-----|--put(refresh)--|--delay(error, retry)--|
 		// cancel:                        |--del(cancel)--|
-		let subId = genSubId();
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(0.8, subId);
+		let subData = createSubscriptionData(1500);
 		fetchMock.postOnce('end:/subscription', { body: subData });
-		fetchMock.putOnce('end:/subscription/' + subId, { throws: { error: 'MockedError', desc: 'stop retry timer' } });
+		fetchMock.putOnce('end:/subscription/' + subData.id, { throws: { error: 'MockedError', desc: 'stop retry timer' } });
 		await sub.subscribe(['/test/subscription']);
 
-		await delay(400);
+		await delay(1100);
 		fetchMock.deleteOnce('*', ' ');
-		sub.cancel();
+		let p = sub.cancel();
+		expect(sub.refreshTimer).to.be.null;
+		await p;
 	});
 
 	it('resubscribe for expired subscription', async () => {
-		let subId = genSubId();
 		let sub = rc.createSubscription();
-		let subData = createSubscriptionData(-0.5, subId);
+		let subData = createSubscriptionData(-0.5);
 		sub.setData(subData);
 		fetchMock.postOnce('end:/subscription', { body: subData });	// For the resubscribe of the refresh
 		await delay(1100);
@@ -178,21 +205,24 @@ describe('Subscription', () => {
 
 	it('resubscribe for not found error', async () => {
 		let sub = rc.createSubscription();
-		sub.setData(createSubscriptionData(0.4, genSubId()));
+		let data1 = createSubscriptionData(2);
+		sub.setData(data1);
 		fetchMock.putOnce('end:/subscription/' + sub.id, { throws: { code: 'CMN-102', desc: 'Subscription not found' } });
-		fetchMock.postOnce('end:/subscription', { body: createSubscriptionData(1, genSubId()) });
-		await delay(450);
+		let data2 = createSubscriptionData(2);
+		fetchMock.postOnce('end:/subscription', { body: data2 });
+		await delay(1100);
+		expect(sub.id).to.eq(data2.id);
+		expect(sub.subscribeKey).to.eq(data2.deliveryMode.subscriberKey);
 
 		fetchMock.deleteOnce('*', ' ');
 		await sub.cancel();
 	});
 
 	it('retry after refresh error', async () => {
-		let subId = genSubId();
 		// let it retry 2 times
 		let sub = rc.createSubscription();
 		sub.retryInterval = 900;
-		let subData = createSubscriptionData(0.2, subId);
+		let subData = createSubscriptionData(8);
 		sub.setData(subData);
 		// refresh
 		fetchMock.putOnce('end:/subscription/' + subData.id, {
@@ -204,7 +234,7 @@ describe('Subscription', () => {
 		});
 		// second retry
 		fetchMock.once('*', {
-			body: createSubscriptionData(1, subId)
+			body: createSubscriptionData(1)
 		});
 		await delay(sub.retryInterval * 2 + 500);
 
@@ -213,7 +243,8 @@ describe('Subscription', () => {
 	});
 });
 
-function createSubscriptionData(expiresIn: number, subId: string) {
+function createSubscriptionData(expiresIn: number) {
+	let subId = genSubId();
 	return {
 		'uri': 'https://platform.ringcentral.com/restapi/v1.0/subscription/' + subId,
 		'id': subId,
@@ -225,8 +256,8 @@ function createSubscriptionData(expiresIn: number, subId: string) {
 		'deliveryMode': {
 			'transportType': 'PubNub',
 			'encryption': true,
-			'address': '601167281631840_012c504c',
-			'subscriberKey': 'sub-c-b8b9cd8c-e906-11e2-b383-02ee2ddab7fe',
+			'address': '601167281631840_012c5' + subId,
+			'subscriberKey': 'sub-c-b8b9cd8c-e906-11e2-b383' + subId,
 			'encryptionAlgorithm': 'AES',
 			'encryptionKey': 'zcyzmb4ZcGKCCdr5IidJhA=='
 		}

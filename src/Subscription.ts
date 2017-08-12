@@ -177,7 +177,6 @@ export default class Subscription extends EventEmitter {
 		this.clearRefreshTimer();
 		this.refreshTimer = setTimeout(async () => {
 			this.refreshTimer = null;
-			if (!this.id) return;
 			this.refresh().catch(async e => {
 				e.message = `Subscription refresh failed, will retry in ${this.retryInterval}ms. Cause: ${e.message}`;
 				this.emit(EventRefreshError, e);
