@@ -18,9 +18,9 @@ export default class MessageSync extends Base {
 }
 
 export interface MessageSyncRes {
-	records?: MessageInfo[];
+	records: MessageInfo[];
 
-	syncInfo?: SyncInfo;
+	syncInfo: SyncInfo;
 }
 
 export interface SyncInfo {
@@ -44,3 +44,5 @@ export interface SyncInfo {
 	 */
 	olderRecordsExist: boolean;
 }
+
+export * from './MessageSyncBase';
