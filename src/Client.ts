@@ -2,6 +2,7 @@ import RestClient, { ClientOptions } from './RestClient';
 import Account from './paths/Account';
 import ClientInfo from './paths/ClientInfo';
 import Dictionary from './paths/Dictionary';
+import Glip from './paths/Glip';
 import NumberParser from './paths/NumberParser';
 import NumberPool from './paths/NumberPool';
 import Subscription from './paths/Subscription';
@@ -28,6 +29,10 @@ export default class RingCentral extends RestClient {
 
 	dictionary(id?: string): Dictionary {
 		return new Dictionary(null, id, this);
+	}
+
+	glip(id?: string) {
+		return new Glip(null, id, this);
 	}
 
 	numberParser(id?: string): NumberParser {

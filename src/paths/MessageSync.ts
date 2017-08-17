@@ -23,7 +23,7 @@ export interface MessageSyncRes {
 	syncInfo?: SyncInfo;
 }
 
-export git interface SyncInfo {
+export interface SyncInfo {
 	/**
 	 * Type of synchronization
 	 */
