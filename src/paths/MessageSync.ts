@@ -1,71 +1,46 @@
-/* Generated code */
 import MessageInfo from '../definitions/MessageInfo';
-import PagingResult from '../PagingResult';
-import PathSegment from '../PathSegment';
+import Base, { ListQuery } from './MessageSyncBase';
 
-export default class MessageSync extends PathSegment {
-	constructor(prv: PathSegment, id?: string, service?) {
-		super('message-sync', id, prv, service);
-	}
+export default class MessageSync extends Base {
 
 	/**
 	 *  Message Synchronization
 	 */
-	list(query?: ListQuery): Promise<PagingResult<MessageInfo>> {
+	list(query?: ListQuery): Promise<MessageSyncRes> {
 		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
 		}).then<any>((res) => {
-				return res.json();
+			return res.json();
 		});
 	}
 
 }
 
-export interface ListQuery {
+export interface MessageSyncRes {
+	records?: MessageInfo[];
 
-	/**
-	 * Conversation identifier for the resulting messages. Meaningful for SMS and Pager messages only.
-	 */
-	conversationId?: number;
+	syncInfo?: SyncInfo;
+}
 
+export git interface SyncInfo {
 	/**
-	 * The start datetime for resulting messages in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is dateTo minus 24 hours
-	 */
-	dateFrom?: string;
-
-	/**
-	 * The end datetime for resulting messages in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is current time
-	 */
-	dateTo?: string;
-
-	/**
-	 * Direction for the resulting messages. If not specified, both inbound and outbound messages are returned. Multiple values are accepted
-	 */
-	direction?: 'Inbound' | 'Outbound';
-
-	/**
-	 * If 'True', then the latest messages per every conversation ID are returned
-	 */
-	distinctConversations?: boolean;
-
-	/**
-	 * Type for the resulting messages. If not specified, all types of messages are returned. Multiple values are accepted
-	 */
-	messageType?: 'Fax' | 'SMS' | 'VoiceMail' | 'Pager' | 'Text';
-
-	/**
-	 * Limits the number of records to be returned (works in combination with dateFrom and dateTo if specified)
-	 */
-	recordCount?: number;
-
-	/**
-	 * Value of syncToken property of last sync request response
-	 */
-	syncToken?: string;
-
-	/**
-	 * Type of message synchronization
+	 * Type of synchronization
 	 */
 	syncType?: 'FSync' | 'ISync';
+
+	/**
+	 * Synchronization token
+	 */
+	syncToken: string;
+
+	/**
+	 * Last synchronization datetime in ISO 8601 format including timezone, for example 2016- 03 - 10T18:07:52.534Z
+	 */
+	syncTime: string;
+
+	/**
+	 * Returned if 'recordCount' is specified. 'True' means that there are some earlier messages not yet retrieved.To retrieve all the messages please repeat either 'ISync' request, or 'FSync' request without 'recordCount' value. 'False' means that all records are returned
+	 */
+	olderRecordsExist: boolean;
 }

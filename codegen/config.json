@@ -10,6 +10,9 @@
     ],
     "Fax": [
       "post"
+    ],
+    "MessageSync": [
+      "list"
     ]
   }
 }
