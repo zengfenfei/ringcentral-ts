@@ -62,8 +62,8 @@ async function test() {
 			receivedSms = evt.body;
 			subscription.removeListener('message', messageListener);
 			notify('The subscription is alive. Notification delay:' + (Date.now() - sentTime));
-			rc.account().extension().messageStore(receivedSms.id).delete({ purge: true });
-			rc.account().extension().messageStore(sentSms.id).delete({ purge: true });
+			rc.account().extension().messageStore(receivedSms.id).delete({});
+			rc.account().extension().messageStore(sentSms.id).delete({});
 		};
 		subscription.onMessage(messageListener);
 		let sentSms = await rc.account().extension().sms().post({

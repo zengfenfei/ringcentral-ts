@@ -309,14 +309,14 @@ describe('PathSegments', function () {
 
 	});
 
-	describe('Clientinfo', function () {
+	/*describe('Clientinfo', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
 			return rc.clientInfo().customData('testKey').put({ id: 'testId', value: 'testValue' });
 		});
 
-	});
+	});*/
 
 	describe('ActiveCalls', function () {
 
@@ -347,14 +347,14 @@ describe('PathSegments', function () {
 
 	});
 
-	describe('NumberPool', function () {
+	/*describe('NumberPool', function () {
 
 		it('covers all', () => {
 			fetchMock.once('*', {});
 			return rc.numberPool().lookup().post({ countryCode: 'cn' });
 		});
 
-	});
+	});*/
 
 	describe('Department', function () {
 
@@ -377,14 +377,14 @@ describe('PathSegments', function () {
 
 	});
 
-	describe('DialingPlan', function () {
+	/*describe('DialingPlan', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
 			return rc.account().dialingPlan().list();
 		});
 
-	});
+	});*/
 
 	describe('Presence', function () {
 
@@ -399,7 +399,7 @@ describe('PathSegments', function () {
 
 		it('gets call log sync', function () {
 			fetchMock.once('*', {});
-			return rc.account().extension().callLogSync().list({ recordCount: 5 });
+			return rc.account().extension().callLogSync().list({ recordCount: 5 }); // https://github.com/ringcentral/ringcentral-api-specs/issues/7
 		});
 
 		it('get call log by id', () => {
@@ -413,7 +413,7 @@ describe('PathSegments', function () {
 
 		it('gets address book sync', function () {
 			fetchMock.once('*', {});
-			return rc.account().extension().addressBookSync().list();
+			return rc.account().extension().addressBookSync().get().list(); // https://github.com/ringcentral/ringcentral-api-specs/issues/7
 		});
 	});
 
@@ -421,18 +421,18 @@ describe('PathSegments', function () {
 
 		it('parses number', function () {
 			fetchMock.once('*', {});
-			return rc.numberParser().parse().post({ originalStrings: ['+8618657118272'] });
+			return rc.numberParser().parse().post({});
 		});
 
 	});
 
-	it('Order', async () => {
+	/*it('Order', async () => {
 		fetchMock.once('*', {});
 		await rc.account().order().post({});
 
 		fetchMock.once('*', {});
 		await rc.account().order('orderId').get();
-	});
+	});*/
 
 	it('Greetings', async () => {
 		fetchMock.once('*', {});
@@ -450,10 +450,10 @@ describe('PathSegments', function () {
 		await rc.account().extension().conferencing().put({});
 	});
 
-	it('Reserve', () => {
+	/*it('Reserve', () => {
 		fetchMock.once('*', {});
 		return rc.numberPool().reserve().post({});
-	});
+	});*/
 
 	it('Recording', () => {
 		fetchMock.once('*', {});
