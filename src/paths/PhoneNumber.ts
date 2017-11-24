@@ -1,6 +1,5 @@
 /* Generated code */
 import PhoneNumberInfo from '../definitions/PhoneNumberInfo';
-import PagingResult from '../PagingResult';
 import PathSegment from '../PathSegment';
 
 export default class PhoneNumber extends PathSegment {
@@ -9,9 +8,9 @@ export default class PhoneNumber extends PathSegment {
 	}
 
 	/**
-	 *  Get Extension Phone Numbers
+	 *  <p style='font-style:italic;'>Since 1.0.2</p><p>Returns the list of phone numbers that are used by a particular extension, and can be filtered by the phone number type. The returned list contains all numbers which are directly mapped to a given extension plus the features and also company-level numbers which may be used when performing different operations on behalf of this extension.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	list(query?: ListQuery): Promise<PagingResult<PhoneNumberInfo>> {
+	list(query?: ListQuery): Promise<GetExtensionPhoneNumbersResponse> {
 		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
@@ -22,7 +21,7 @@ export default class PhoneNumber extends PathSegment {
 
 
 	/**
-	 *  Get Phone Number by ID
+	 *  <p style='font-style:italic;'></p><p></p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 	 */
 	get(): Promise<PhoneNumberInfo> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
@@ -40,7 +39,7 @@ export interface ListQuery {
 	/**
 	 * Usage type of the phone number
 	 */
-	usageType?: 'MainCompanyNumber' | 'AdditionalCompanyNumber' | 'CompanyNumber' | 'DirectNumber' | 'CompanyFaxNumber' | 'ForwardedNumber';
+	usageType?: ('MainCompanyNumber' | 'AdditionalCompanyNumber' | 'CompanyNumber' | 'DirectNumber' | 'CompanyFaxNumber' | 'ForwardedNumber')[];
 
 	/**
 	 * Indicates the page number to retrieve. Only positive number values are allowed. Default value is '1'

@@ -1,6 +1,6 @@
 /* Generated code */
-import CallerInfo from '../definitions/CallerInfo';
-import MessageInfo from '../definitions/MessageInfo';
+import CreatePagerMessageRequest from '../definitions/CreatePagerMessageRequest';
+import GetMessageInfoResponse from '../definitions/GetMessageInfoResponse';
 import PathSegment from '../PathSegment';
 
 export default class CompanyPager extends PathSegment {
@@ -9,9 +9,9 @@ export default class CompanyPager extends PathSegment {
 	}
 
 	/**
-	 *  Create and Send Pager Message
+	 *  <p style='font-style:italic;'>Since 1.0.2</p><p>Creates and sends a pager message.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>InternalMessages</td><td>Sending and receiving intra-company text messages</td></tr><tr><td class='code'>ReadMessages</td><td>Viewing user messages</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Medium</p>
 	 */
-	post(body: PostBody): Promise<MessageInfo> {
+	post(body: CreatePagerMessageRequest): Promise<GetMessageInfoResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'post'
@@ -20,27 +20,4 @@ export default class CompanyPager extends PathSegment {
 		});
 	}
 
-}
-
-export interface PostBody {
-
-	/**
-	 * Sender of a pager message. The extensionNumber property must be filled
-	 */
-	from?: CallerInfo;
-
-	/**
-	 * Internal identifier of a message this message replies to
-	 */
-	replyOn?: number;
-
-	/**
-	 * Text of a pager message. Max length is 1024 symbols (2-byte UTF-16 encoded). If a character is encoded in 4 bytes in UTF-16 it is treated as 2 characters, thus restricting the maximum message length to 512 symbols
-	 */
-	text?: string;
-
-	/**
-	 * Optional if replyOn parameter is specified. Receiver of a pager message. The extensionNumber property must be filled
-	 */
-	to?: CallerInfo[];
 }

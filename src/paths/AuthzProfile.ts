@@ -1,5 +1,5 @@
 /* Generated code */
-import UserPermission from '../definitions/UserPermission';
+import AuthProfileResource from '../definitions/AuthProfileResource';
 import PathSegment from '../PathSegment';
 import Check from './Check';
 
@@ -12,10 +12,7 @@ export default class AuthzProfile extends PathSegment {
 		return new Check(this, id);
 	}
 
-	/**
-	 *  Get User Permissions
-	 */
-	get(): Promise<GetResponse> {
+	get(): Promise<AuthProfileResource> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'
@@ -24,17 +21,4 @@ export default class AuthzProfile extends PathSegment {
 		});
 	}
 
-}
-
-export interface GetResponse {
-
-	/**
-	 * Canonical URI of an authorization profile resource
-	 */
-	uri?: string;
-
-	/**
-	 * List of user permissions granted
-	 */
-	permissions?: UserPermission[];
 }

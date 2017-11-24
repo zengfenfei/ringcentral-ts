@@ -1,5 +1,6 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
+import BulkAssign from './BulkAssign';
 import Members from './Members';
 
 export default class Department extends PathSegment {
@@ -9,5 +10,9 @@ export default class Department extends PathSegment {
 
 	members(id?: string) {
 		return new Members(this, id);
+	}
+
+	bulkAssign(id?: string) {
+		return new BulkAssign(this, id);
 	}
 }

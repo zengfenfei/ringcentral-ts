@@ -18,10 +18,10 @@ export default class {{name}} extends PathSegment {
 	{% endfor %}
 	{% for op in operations %}
 
-	/**
+{% if op.description %}	/**
 	 *  {{op.description}}
 	 */
-	{{op.method}}({{op.paramsDeclar}}): Promise<{{op.responseType}}> {
+{% endif %}	{{op.method}}({{op.paramsDeclar}}): Promise<{{op.responseType}}> {
 		return this.getRest().call(this.getEndpoint({% if op.method == 'list' %}false{% else %}true{% endif %}), {{op.queryParamName}}, {
 			body: {{op.bodyParamName}},
 			method: '{{op.httpMethod}}'
@@ -37,10 +37,10 @@ export default class {{name}} extends PathSegment {
 export interface {{def.name}} {
 {% for fld in def.fields %}
 
-	/**
+{% if fld.comment %}	/**
 	 * {{fld.comment}}
 	 */
-	{{ fld.name }}?: {{fld.type}};
+{% endif %}	{{ fld.name }}?: {{fld.type}};
 {% endfor %}
 }
 {% endfor %}

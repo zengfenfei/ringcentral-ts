@@ -1,5 +1,5 @@
 /* Generated code */
-import MeetingServiceInfo from '../definitions/MeetingServiceInfo';
+import MeetingServiceInfoResource from '../definitions/MeetingServiceInfoResource';
 import PathSegment from '../PathSegment';
 
 export default class ServiceInfo extends PathSegment {
@@ -7,10 +7,7 @@ export default class ServiceInfo extends PathSegment {
 		super('service-info', id, prv, service);
 	}
 
-	/**
-	 *  Get Meeting Service Info
-	 */
-	get(): Promise<MeetingServiceInfo> {
+	get(): Promise<MeetingServiceInfoResource> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'

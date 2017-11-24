@@ -1,6 +1,6 @@
 /* Generated code */
-import MessageInfo from '../definitions/MessageInfo';
-import PagingResult from '../PagingResult';
+import GetMessageInfoResponse from '../definitions/GetMessageInfoResponse';
+import UpdateMessageRequest from '../definitions/UpdateMessageRequest';
 import PathSegment from '../PathSegment';
 import Content from './Content';
 
@@ -16,9 +16,9 @@ export default class MessageStore extends PathSegment {
 	}
 
 	/**
-	 *  Get Message List
+	 *  <p style='font-style:italic;'>Since 1.0.2</p><p>Returns the list of messages from an extension mailbox.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadMessages</td><td>Viewing user messages</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	list(query?: ListQuery): Promise<PagingResult<MessageInfo>> {
+	list(query?: ListQuery): Promise<GetMessageList> {
 		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
@@ -28,9 +28,6 @@ export default class MessageStore extends PathSegment {
 	}
 
 
-	/**
-	 *  Delete Message by ID
-	 */
 	delete(query?: DeleteQuery): Promise<void> {
 		return this.getRest().call(this.getEndpoint(true), query, {
 			body: undefined,
@@ -40,9 +37,9 @@ export default class MessageStore extends PathSegment {
 
 
 	/**
-	 *  Get Message by ID
+	 *  <p style='font-style:italic;'>Since 1.0.2</p><p>Returns individual message record(s) by the given message ID(s). The length of inbound messages is unlimited. Batch request is supported, see Batch Requests for details.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadMessages</td><td>Viewing user messages</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	get(): Promise<MessageInfo> {
+	get(): Promise<GetMessageInfoResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'
@@ -53,9 +50,9 @@ export default class MessageStore extends PathSegment {
 
 
 	/**
-	 *  Update Message by ID
+	 *  <p style='font-style:italic;'>Since 1.0.2</p><p>Updates message(s) by ID(s). Batch request is supported, see Batch Requests for details. Currently, only the message read status updating is supported.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>EditMessages</td><td>Viewing and updating user messages</td></tr><tr><td class='code'>ReadMessages</td><td>Viewing user messages</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Medium</p>
 	 */
-	put(body: PutBody): Promise<MessageInfo> {
+	put(body: UpdateMessageRequest): Promise<GetMessageInfoResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'put'
@@ -71,7 +68,7 @@ export interface ListQuery {
 	/**
 	 * Specifies the availability status for the resulting messages. Default value is 'Alive'. Multiple values are accepted
 	 */
-	availability?: 'Alive' | 'Deleted' | 'Purged';
+	availability?: ('Alive' | 'Deleted' | 'Purged')[];
 
 	/**
 	 * Specifies the conversation identifier for the resulting messages
@@ -91,7 +88,7 @@ export interface ListQuery {
 	/**
 	 * The direction for the resulting messages. If not specified, both inbound and outbound messages are returned. Multiple values are accepted
 	 */
-	direction?: 'Inbound' | 'Outbound';
+	direction?: ('Inbound' | 'Outbound')[];
 
 	/**
 	 * If 'True', then the latest messages per every conversation ID are returned
@@ -101,12 +98,12 @@ export interface ListQuery {
 	/**
 	 * The type of the resulting messages. If not specified, all messages without message type filtering are returned. Multiple values are accepted
 	 */
-	messageType?: 'Fax' | 'SMS' | 'VoiceMail' | 'Pager' | 'Text';
+	messageType?: ('Fax' | 'SMS' | 'VoiceMail' | 'Pager' | 'Text')[];
 
 	/**
 	 * The read status for the resulting messages. Multiple values are accepted
 	 */
-	readStatus?: 'Read' | 'Unread';
+	readStatus?: ('Read' | 'Unread')[];
 
 	/**
 	 * Indicates the page number to retrieve. Only positive number values are allowed. Default value is '1'
@@ -126,21 +123,5 @@ export interface ListQuery {
 
 export interface DeleteQuery {
 
-	/**
-	 * If the value is 'True', then the message is purged immediately with all the attachments. The default value is 'False'
-	 */
-	purge?: boolean;
-
-	/**
-	 * Internal identifier of a message thread
-	 */
-	conversationId?: number;
-}
-
-export interface PutBody {
-
-	/**
-	 * Read status of a message to be changed. Multiple values are accepted
-	 */
-	readStatus?: 'Read' | 'Unread';
+	conversationId?: string[];
 }

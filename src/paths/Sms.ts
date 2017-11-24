@@ -1,6 +1,6 @@
 /* Generated code */
-import CallerInfo from '../definitions/CallerInfo';
-import MessageInfo from '../definitions/MessageInfo';
+import CreateSMSMessage from '../definitions/CreateSMSMessage';
+import GetMessageInfoResponse from '../definitions/GetMessageInfoResponse';
 import PathSegment from '../PathSegment';
 
 export default class Sms extends PathSegment {
@@ -9,9 +9,9 @@ export default class Sms extends PathSegment {
 	}
 
 	/**
-	 *  Create and Send SMS Message
+	 *  <p style='font-style:italic;'>Since 1.0.2</p><p>Creates and sends new SMS message. Sending SMS messages simultaneously to different recipients is limited up to 50 requests per minute; relevant for all client applications.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>SMS</td><td>Sending and receiving SMS (text) messages</td></tr><tr><td class='code'>ReadMessages</td><td>Viewing user messages</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Medium</p>
 	 */
-	post(body: PostBody): Promise<MessageInfo> {
+	post(body: CreateSMSMessage): Promise<GetMessageInfoResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'post'
@@ -20,22 +20,4 @@ export default class Sms extends PathSegment {
 		});
 	}
 
-}
-
-export interface PostBody {
-
-	/**
-	 * Sender of an SMS message. The phoneNumber property must be filled to correspond to one of the account phone numbers which is allowed to send SMS
-	 */
-	from?: CallerInfo;
-
-	/**
-	 * Receiver of an SMS message. The phoneNumber property must be filled
-	 */
-	to?: CallerInfo[];
-
-	/**
-	 * Text of a message. Max length is 1000 symbols (2-byte UTF-16 encoded). If a character is encoded in 4 bytes in UTF-16 it is treated as 2 characters, thus restricting the maximum message length to 500 symbols
-	 */
-	text?: string;
 }

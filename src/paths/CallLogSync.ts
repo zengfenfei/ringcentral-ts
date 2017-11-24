@@ -1,6 +1,4 @@
 /* Generated code */
-import CallLogRecord from '../definitions/CallLogRecord';
-import PagingResult from '../PagingResult';
 import PathSegment from '../PathSegment';
 
 export default class CallLogSync extends PathSegment {
@@ -9,25 +7,23 @@ export default class CallLogSync extends PathSegment {
 	}
 
 	/**
-	 *  Call Log Synchronization
+	 *  <p style='font-style:italic;'></p><p></p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadCallLog</td><td>Viewing user call logs</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Heavy</p>
 	 */
-	list(query?: ListQuery): Promise<PagingResult<CallLogRecord>> {
-		return this.getRest().call(this.getEndpoint(false), query, {
+	get(query?: GetQuery): Promise<void> {
+		return this.getRest().call(this.getEndpoint(true), query, {
 			body: undefined,
 			method: 'get'
-		}).then<any>((res) => {
-				return res.json();
-		});
+		}).then(res => {});
 	}
 
 }
 
-export interface ListQuery {
+export interface GetQuery {
 
 	/**
 	 * Type of synchronization. 'FSync' is a default value
 	 */
-	syncType?: 'FSync' | 'ISync';
+	syncType?: ('FSync' | 'ISync')[];
 
 	/**
 	 * Value of syncToken property of last sync request response
@@ -40,12 +36,12 @@ export interface ListQuery {
 	dateFrom?: string;
 
 	/**
-	 * For FSync the parameter is mandatory, it limits the number of records to be returned in response. For ISync it specifies with how many records to extend sync Frame to the past, the maximum number of records is 250
+	 * ForT?FSync the parameter is mandatory, it limits the number of records to be returned in response. For ISync it specifies with how many records to extend sync Frame to the past, the maximum number of records is 250
 	 */
 	recordCount?: number;
 
 	/**
 	 * Type of calls to be returned. The default value is 'All'
 	 */
-	statusGroup?: 'Missed' | 'All';
+	statusGroup?: ('Missed' | 'All')[];
 }

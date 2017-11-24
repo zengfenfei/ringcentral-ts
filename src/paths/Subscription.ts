@@ -1,31 +1,20 @@
 /* Generated code */
+import CreateSubscriptionRequest from '../definitions/CreateSubscriptionRequest';
+import ModifySubscriptionRequest from '../definitions/ModifySubscriptionRequest';
 import SubscriptionInfo from '../definitions/SubscriptionInfo';
-import SubscriptionRequestDeliveryMode from '../definitions/SubscriptionRequestDeliveryMode';
-import PagingResult from '../PagingResult';
 import PathSegment from '../PathSegment';
+import Renew from './Renew';
 
 export default class Subscription extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
 		super('subscription', id, prv, service);
 	}
 
-	/**
-	 *  Create New Subscription
-	 */
-	post(body: PostBody): Promise<SubscriptionInfo> {
-		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: body,
-			method: 'post'
-		}).then<any>((res) => {
-				return res.json();
-		});
+	renew(id?: string) {
+		return new Renew(this, id);
 	}
 
-
-	/**
-	 *  Get Subscription List
-	 */
-	list(): Promise<PagingResult<SubscriptionInfo>> {
+	list(): Promise<RecordsCollectionResourceSubscriptionResponse> {
 		return this.getRest().call(this.getEndpoint(false), undefined, {
 			body: undefined,
 			method: 'get'
@@ -36,18 +25,20 @@ export default class Subscription extends PathSegment {
 
 
 	/**
-	 *  Cancel Subscription by ID
+	 *  <p style='font-style:italic;'>Since 1.0.6 (Release 5.15)</p><p>Creates a new subscription.</p><h4>Usage Plan Group</h4><p>Medium</p>
 	 */
-	delete(): Promise<void> {
+	post(body: CreateSubscriptionRequest): Promise<SubscriptionInfo> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: undefined,
-			method: 'delete'
-		}).then(res => {});
+			body: body,
+			method: 'post'
+		}).then<any>((res) => {
+				return res.json();
+		});
 	}
 
 
 	/**
-	 *  Get Subscription by ID
+	 *  <p style='font-style:italic;'>Since 1.0.6 (Release 5.15)</p><p>Returns the requested subscription.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
 	get(): Promise<SubscriptionInfo> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
@@ -60,10 +51,10 @@ export default class Subscription extends PathSegment {
 
 
 	/**
-	 *  Update/Renew Subscription by ID
+	 *  <p style='font-style:italic;'>Since 1.0.6 (Release 5.15)</p><p>Renews the existent subscription if the request body is empty. If event filters are specified, calling this method modifies the event filters for the existing subscription. The client application can extend or narrow the events for which it receives notifications in the frame of one subscription.</p><h4>Usage Plan Group</h4><p>Medium</p>
 	 */
-	put(body: PutBody): Promise<SubscriptionInfo> {
-		return this.getRest().call(this.getEndpoint(true), undefined, {
+	put(body: ModifySubscriptionRequest, query?: PutQuery): Promise<SubscriptionInfo> {
+		return this.getRest().call(this.getEndpoint(true), query, {
 			body: body,
 			method: 'put'
 		}).then<any>((res) => {
@@ -71,25 +62,23 @@ export default class Subscription extends PathSegment {
 		});
 	}
 
+
+	/**
+	 *  <p style='font-style:italic;'></p><p>Cancels the existent subscription.</p><h4>Usage Plan Group</h4><p>Medium</p>
+	 */
+	delete(): Promise<void> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: undefined,
+			method: 'delete'
+		}).then(res => {});
+	}
+
 }
 
-export interface PostBody {
+export interface PutQuery {
 
 	/**
-	 * Mandatory. Collection of URIs to API resources (see Event Types for details). For APNS transport type only message event filter is available
+	 * If 'True' then aggregated presence status is returned in a notification payload
 	 */
-	eventFilters?: string[];
-
-	/**
-	 * Notification delivery settings
-	 */
-	deliveryMode?: SubscriptionRequestDeliveryMode;
-}
-
-export interface PutBody {
-
-	/**
-	 * Collection of URIs to API resources (see Event Types). Mandatory field
-	 */
-	eventFilters?: string[];
+	aggregated?: boolean;
 }

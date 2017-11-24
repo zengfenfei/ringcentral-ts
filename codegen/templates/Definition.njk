@@ -6,10 +6,10 @@ import {{imp}} from './{{imp}}';
 interface {{name}} {
 {% for fld in fields %}
 
-	/**
+{% if fld.comment %}	/**
 	 * {{fld.comment}}
 	 */
-	{{ fld.name }}?: {{fld.type}};
+{% endif %}	{{ fld.name }}?: {{fld.type}};
 {% endfor %}
 }
 

@@ -1,6 +1,4 @@
 /* Generated code */
-import LocationInfo from '../definitions/LocationInfo';
-import PagingResult from '../PagingResult';
 import PathSegment from '../PathSegment';
 
 export default class Location extends PathSegment {
@@ -9,9 +7,9 @@ export default class Location extends PathSegment {
 	}
 
 	/**
-	 *  Get Location List
+	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns all the available locations for the certain state.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	list(query?: ListQuery): Promise<PagingResult<LocationInfo>> {
+	list(query?: ListQuery): Promise<GetLocationListResponse> {
 		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
@@ -27,7 +25,7 @@ export interface ListQuery {
 	/**
 	 * Sorts results by the specified property. The default value is 'City'
 	 */
-	orderBy?: 'Npa' | 'City';
+	orderBy?: ('Npa' | 'City')[];
 
 	/**
 	 * Indicates the page number to retrieve. Only positive number values are allowed. Default value is '1'.

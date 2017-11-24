@@ -1,8 +1,7 @@
 /* Generated code */
-import AnsweringRuleInfoCalleeInfo from './AnsweringRuleInfoCalleeInfo';
-import AnsweringRuleInfoCallerInfo from './AnsweringRuleInfoCallerInfo';
+import CalledNumberInfo from './CalledNumberInfo';
+import CallersInfo from './CallersInfo';
 import ForwardingInfo from './ForwardingInfo';
-import GreetingInfo from './GreetingInfo';
 import ScheduleInfo from './ScheduleInfo';
 import UnconditionalForwardingInfo from './UnconditionalForwardingInfo';
 import VoicemailInfo from './VoicemailInfo';
@@ -42,12 +41,12 @@ interface AnsweringRuleInfo {
 	/**
 	 * Answering rules are applied when calling to selected number(s)
 	 */
-	calledNumbers?: AnsweringRuleInfoCalleeInfo[];
+	calledNumbers?: CalledNumberInfo[];
 
 	/**
 	 * Answering rules are applied when calls are received from specified caller(s)
 	 */
-	callers?: AnsweringRuleInfoCallerInfo[];
+	callers?: CallersInfo[];
 
 	/**
 	 * Specifies how incoming calls are forwarded
@@ -68,11 +67,6 @@ interface AnsweringRuleInfo {
 	 * Specifies whether to take a voicemail and who should do it
 	 */
 	voicemail?: VoicemailInfo;
-
-	/**
-	 * Predefined greetings applied for an answering rule
-	 */
-	greetings?: GreetingInfo[];
 }
 
 export default AnsweringRuleInfo;

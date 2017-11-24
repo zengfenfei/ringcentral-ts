@@ -1,19 +1,17 @@
 /* Generated code */
-import RingOutInfo from '../definitions/RingOutInfo';
-import RingOutRequestCountryInfo from '../definitions/RingOutRequestCountryInfo';
-import RingOutRequestFrom from '../definitions/RingOutRequestFrom';
-import RingOutRequestTo from '../definitions/RingOutRequestTo';
+import GetRingOutStatusResponse from '../definitions/GetRingOutStatusResponse';
+import MakeRingOutRequest from '../definitions/MakeRingOutRequest';
 import PathSegment from '../PathSegment';
 
-export default class Ringout extends PathSegment {
+export default class RingOut extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
-		super('ringout', id, prv, service);
+		super('ring-out', id, prv, service);
 	}
 
 	/**
-	 *  Initiate RingOut Call
+	 *  <p style='font-style:italic;'>Since 1.0.7 (Release 5.16)</p><p>Makes a 2-leg RingOut call.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>RingOut</td><td>Performing two-legged ring-out phone calls</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Heavy</p>
 	 */
-	post(body: PostBody): Promise<RingOutInfo> {
+	post(body: MakeRingOutRequest): Promise<GetRingOutStatusResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'post'
@@ -24,20 +22,9 @@ export default class Ringout extends PathSegment {
 
 
 	/**
-	 *  Cancel RingOut Call
+	 *  <p style='font-style:italic;'>Since 1.0.7 (Release 5.16)</p><p>Returns the status of a 2-leg RingOut call.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>RingOut</td><td>Performing two-legged ring-out phone calls</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	delete(): Promise<void> {
-		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: undefined,
-			method: 'delete'
-		}).then(res => {});
-	}
-
-
-	/**
-	 *  Get RingOut Call Status
-	 */
-	get(): Promise<RingOutInfo> {
+	get(): Promise<GetRingOutStatusResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'
@@ -46,32 +33,15 @@ export default class Ringout extends PathSegment {
 		});
 	}
 
-}
-
-export interface PostBody {
 
 	/**
-	 * Phone number of the caller. This number corresponds to the 1st leg of the RingOut call. This number can be one of user's configured forwarding numbers or arbitrary number
+	 *  <p style='font-style:italic;'></p><p>Cancels the 2-leg RingOut call.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>RingOut</td><td>Performing two-legged ring-out phone calls</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Heavy</p>
 	 */
-	from?: RingOutRequestFrom;
+	delete(): Promise<void> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: undefined,
+			method: 'delete'
+		}).then(res => {});
+	}
 
-	/**
-	 * Phone number of the called party. This number corresponds to the 2nd leg of the RingOut call
-	 */
-	to?: RingOutRequestTo;
-
-	/**
-	 * The number which will be displayed to the called party
-	 */
-	callerId?: RingOutRequestTo;
-
-	/**
-	 * The audio prompt that the calling party hears when the call is connected
-	 */
-	playPrompt?: boolean;
-
-	/**
-	 * Optional. Dialing plan country data. If not specified, then extension home country is applied by default
-	 */
-	country?: RingOutRequestCountryInfo;
 }

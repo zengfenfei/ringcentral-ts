@@ -1,6 +1,5 @@
 /* Generated code */
-import StateInfo from '../definitions/StateInfo';
-import PagingResult from '../PagingResult';
+import GetStateInfoResponse from '../definitions/GetStateInfoResponse';
 import PathSegment from '../PathSegment';
 
 export default class State extends PathSegment {
@@ -9,9 +8,9 @@ export default class State extends PathSegment {
 	}
 
 	/**
-	 *  Get State/Province List
+	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns all the states for a certain country.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	list(query?: ListQuery): Promise<PagingResult<StateInfo>> {
+	list(query?: ListQuery): Promise<GetStateListResponse> {
 		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
@@ -22,9 +21,9 @@ export default class State extends PathSegment {
 
 
 	/**
-	 *  Get State/Province by ID
+	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns the information on the required state.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	get(): Promise<StateInfo> {
+	get(): Promise<GetStateInfoResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'

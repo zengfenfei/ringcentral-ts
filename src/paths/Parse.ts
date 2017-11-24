@@ -1,6 +1,6 @@
 /* Generated code */
-import ParsePhoneNumberCountryInfo from '../definitions/ParsePhoneNumberCountryInfo';
-import ParsePhoneNumberPhoneNumberInfo from '../definitions/ParsePhoneNumberPhoneNumberInfo';
+import ParsePhoneNumberRequest from '../definitions/ParsePhoneNumberRequest';
+import ParsePhoneNumberResponse from '../definitions/ParsePhoneNumberResponse';
 import PathSegment from '../PathSegment';
 
 export default class Parse extends PathSegment {
@@ -9,9 +9,9 @@ export default class Parse extends PathSegment {
 	}
 
 	/**
-	 *  Parse Phone Number
+	 *  <p style='font-style:italic;'>Since 1.0.13 (Release 6.5)</p><p>Returns one or more parsed and/or formatted phone numbers that are passed as a string.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	post(body: PostBody, query?: PostQuery): Promise<PostResponse> {
+	post(body: ParsePhoneNumberRequest, query?: PostQuery): Promise<ParsePhoneNumberResponse> {
 		return this.getRest().call(this.getEndpoint(true), query, {
 			body: body,
 			method: 'post'
@@ -22,14 +22,6 @@ export default class Parse extends PathSegment {
 
 }
 
-export interface PostBody {
-
-	/**
-	 * Phone numbers passed in a string. The maximum value of phone numbers is limited to 64. The maximum number of symbols in each phone number in a string is 64
-	 */
-	originalStrings?: string[];
-}
-
 export interface PostQuery {
 
 	/**
@@ -38,70 +30,7 @@ export interface PostQuery {
 	homeCountry?: string;
 
 	/**
-	 * The default value is "False". If "True", the numbers that are closer to the home country are given higher priority
+	 * The default value is 'False'. If 'True', the numbers that are closer to the home country are given higher priority
 	 */
 	nationalAsPriority?: boolean;
-}
-
-export interface PostResponse {
-
-	/**
-	 * Canonical URI of a resource
-	 */
-	uri?: string;
-
-	/**
-	 * Information on a user home country
-	 */
-	homeCountry?: ParsePhoneNumberCountryInfo[];
-
-	/**
-	 * Parsed phone numbers data
-	 */
-	phoneNumbers?: ParsePhoneNumberPhoneNumberInfo[];
-
-	/**
-	 * One of the numbers to be parsed, passed as a string in response
-	 */
-	originalString?: string;
-
-	/**
-	 * Area code of the location (3-digit usually), according to the NANP number format, that can be summarized as NPA-NXX-xxxx and covers Canada, the United States, parts of the Caribbean Sea, and some Atlantic and Pacific islands. See North American Numbering Plan for details
-	 */
-	areaCode?: string;
-
-	/**
-	 * Domestic format of a phone number
-	 */
-	formattedNational?: string;
-
-	/**
-	 * International format of a phone number
-	 */
-	formattedInternational?: string;
-
-	/**
-	 * Dialing format of a phone number
-	 */
-	dialable?: string;
-
-	/**
-	 * E.164 (11-digits) format of a phone number
-	 */
-	e164?: string;
-
-	/**
-	 * "True" if the number is in a special format (for example N11 code)
-	 */
-	special?: boolean;
-
-	/**
-	 * E.164 (11-digits) format of a phone number without the plus sign ('+')
-	 */
-	normalized?: string;
-
-	/**
-	 * Information on a country the phone number belongs to
-	 */
-	country?: ParsePhoneNumberCountryInfo[];
 }

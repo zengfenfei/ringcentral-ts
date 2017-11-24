@@ -1,13 +1,7 @@
 /* Generated code */
 import AnsweringRuleInfo from '../definitions/AnsweringRuleInfo';
-import AnsweringRuleScheduleInfo from '../definitions/AnsweringRuleScheduleInfo';
-import CalledNumberInfo from '../definitions/CalledNumberInfo';
-import CallersInfo from '../definitions/CallersInfo';
-import ForwardingInfo from '../definitions/ForwardingInfo';
-import GreetingInfo from '../definitions/GreetingInfo';
-import UnconditionalForwardingInfo from '../definitions/UnconditionalForwardingInfo';
-import VoicemailInfo from '../definitions/VoicemailInfo';
-import PagingResult from '../PagingResult';
+import CreateAnsweringRuleRequest from '../definitions/CreateAnsweringRuleRequest';
+import UpdateAnsweringRuleRequest from '../definitions/UpdateAnsweringRuleRequest';
 import PathSegment from '../PathSegment';
 
 export default class AnsweringRule extends PathSegment {
@@ -16,9 +10,20 @@ export default class AnsweringRule extends PathSegment {
 	}
 
 	/**
-	 *  Create Custom Answering Rule
+	 *  <p style='font-style:italic;'>Since 1.0.15 (Release 7.0)</p><p>Returns the extension answering rules.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	post(body: PostBody): Promise<AnsweringRuleInfo> {
+	get(query?: GetQuery): Promise<void> {
+		return this.getRest().call(this.getEndpoint(true), query, {
+			body: undefined,
+			method: 'get'
+		}).then(res => {});
+	}
+
+
+	/**
+	 *  <p style='font-style:italic;'>Since 1.0.24 (Release 8.0)</p><p>Creates a custom answering rule for a particular caller ID.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>EditExtensions</td><td>Viewing and updating my extension info (includes extension name, number, email and phone number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Medium</p>
+	 */
+	post(body: CreateAnsweringRuleRequest): Promise<AnsweringRuleInfo> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'post'
@@ -29,46 +34,9 @@ export default class AnsweringRule extends PathSegment {
 
 
 	/**
-	 *  Get Answering Rules List
+	 *  <p style='font-style:italic;'>Since 1.0.24 (Release 8.0)</p><p>Updates a custom answering rule for a particular caller ID.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>EditExtensions</td><td>Viewing and updating my extension info (includes extension name, number, email and phone number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Medium</p>
 	 */
-	list(): Promise<PagingResult<AnsweringRuleInfo>> {
-		return this.getRest().call(this.getEndpoint(false), undefined, {
-			body: undefined,
-			method: 'get'
-		}).then<any>((res) => {
-				return res.json();
-		});
-	}
-
-
-	/**
-	 *  Delete Answering Rule by ID
-	 */
-	delete(): Promise<void> {
-		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: undefined,
-			method: 'delete'
-		}).then(res => {});
-	}
-
-
-	/**
-	 *  Get Custom Answering Rule by ID
-	 */
-	get(): Promise<AnsweringRuleInfo> {
-		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: undefined,
-			method: 'get'
-		}).then<any>((res) => {
-				return res.json();
-		});
-	}
-
-
-	/**
-	 *  Update Answering Rule by ID
-	 */
-	put(body: PutBody): Promise<AnsweringRuleInfo> {
+	put(body: UpdateAnsweringRuleRequest): Promise<AnsweringRuleInfo> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'put'
@@ -77,80 +45,32 @@ export default class AnsweringRule extends PathSegment {
 		});
 	}
 
+
+	delete(body: UpdateAnsweringRuleRequest): Promise<void> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: body,
+			method: 'delete'
+		}).then(res => {});
+	}
+
+
+	/**
+	 *  <p style='font-style:italic;'>Since 1.0.31 (Release 9.2)</p><p>Returns a list of company answering rules.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>API Group</h4><p>Medium</p>
+	 */
+	list(): Promise<CompanyAnsweringRuleList> {
+		return this.getRest().call(this.getEndpoint(false), undefined, {
+			body: undefined,
+			method: 'get'
+		}).then<any>((res) => {
+				return res.json();
+		});
+	}
+
 }
 
-export interface PostBody {
+export interface GetQuery {
 
-	/**
-	 * Specifies if the rule is active or inactive. The default value is 'True'
-	 */
-	enabled?: boolean;
+	page?: string;
 
-	/**
-	 * Type of an answering rule, the supported value is 'Custom'
-	 */
-	type?: string;
-
-	/**
-	 * Name of an answering rule specified by user. Max number of symbols is 30
-	 */
-	name?: string;
-
-	/**
-	 * Answering rule will be applied when calls are received from the specified caller(s)
-	 */
-	callers?: CallersInfo[];
-
-	/**
-	 * Answering rule will be applied when calling the specified number(s)
-	 */
-	calledNumbers?: CalledNumberInfo[];
-
-	/**
-	 * Schedule when an answering rule should be applied
-	 */
-	schedule?: AnsweringRuleScheduleInfo;
-
-	/**
-	 * Specifies how incoming calls should be forwarded. The default value is 'ForwardCalls'
-	 */
-	callHandlingAction?: 'ForwardCalls' | 'UnconditionalForwarding';
-
-	/**
-	 * Forwarding parameters. If the 'callHandlingAction' parameter value is set to 'ForwardCalls' - should be specified . The settings determine the forwarding numbers to which the call should be forwarded. If not specified in request, then the business-hours forwarding rules are set by default
-	 */
-	forwarding?: ForwardingInfo;
-
-	/**
-	 * Unconditional forwarding parameters. If the 'callHandlingAction' parameter value is set to 'UnconditionalForwarding' - should be specified
-	 */
-	unconditionalForwarding?: UnconditionalForwardingInfo;
-
-	/**
-	 * Specifies whether to take a voicemail and who should do it
-	 */
-	voiceMail?: VoicemailInfo;
-}
-
-export interface PutBody {
-
-	/**
-	 * Specifies if the answering rule is active or not
-	 */
-	enabled?: boolean;
-
-	/**
-	 * Custom name of an answering rule. The maximum number of characters is 64
-	 */
-	name?: string;
-
-	/**
-	 * Forwarding parameters. Returned if 'ForwardCalls' is specified in 'callHandlingAction'. These settings determine the forwarding numbers to which the call will be forwarded
-	 */
-	forwarding?: ForwardingInfo;
-
-	/**
-	 * Predefined greetings applied for an answering rule
-	 */
-	greetings?: GreetingInfo[];
+	perPage?: string;
 }

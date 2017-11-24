@@ -1,15 +1,28 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
+import Banners from './Banners';
 import CustomData from './CustomData';
+import SipProvision from './SipProvision';
+import SpecialNumberRule from './SpecialNumberRule';
 
 export default class ClientInfo extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
 		super('client-info', id, prv, service);
 	}
 
-/**
-	 * Custom data access key. The number of unique custom data keys is limited to 100 keys per extension, summarized for all the applications. For example, if you have created 50 custom data keys under the Android mobile client application for the particular extension, then logged in the iOS application and created another 50 keys, the web client application won't be allowed to create any custom data key for that extension
-	 */	customData(id?: string) {
+	sipProvision(id?: string) {
+		return new SipProvision(this, id);
+	}
+
+	banners(id?: string) {
+		return new Banners(this, id);
+	}
+
+	customData(id?: string) {
 		return new CustomData(this, id);
+	}
+
+	specialNumberRule(id?: string) {
+		return new SpecialNumberRule(this, id);
 	}
 }

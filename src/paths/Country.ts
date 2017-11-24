@@ -1,6 +1,5 @@
 /* Generated code */
-import FullCountryInfo from '../definitions/FullCountryInfo';
-import PagingResult from '../PagingResult';
+import GetCountryInfoDictionaryResponse from '../definitions/GetCountryInfoDictionaryResponse';
 import PathSegment from '../PathSegment';
 
 export default class Country extends PathSegment {
@@ -9,9 +8,9 @@ export default class Country extends PathSegment {
 	}
 
 	/**
-	 *  Get Country List
+	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns all the countries available for calling.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	list(query?: ListQuery): Promise<PagingResult<FullCountryInfo>> {
+	list(query?: ListQuery): Promise<GetCountryListResponse> {
 		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
@@ -22,9 +21,9 @@ export default class Country extends PathSegment {
 
 
 	/**
-	 *  Get Country by ID
+	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns the information on the required country.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	get(): Promise<FullCountryInfo> {
+	get(): Promise<GetCountryInfoDictionaryResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'
@@ -43,6 +42,11 @@ export interface ListQuery {
 	loginAllowed?: boolean;
 
 	/**
+	 * Indicates whether signup/billing is allowed for a country. If not specified all countries are returned (according to other filters specified if any)
+	 */
+	signupAllowed?: boolean;
+
+	/**
 	 * Specifies if RingCentral sells phone numbers of this country
 	 */
 	numberSelling?: boolean;
@@ -56,4 +60,9 @@ export interface ListQuery {
 	 * Indicates the page size (number of items). If not specified, the value is '100' by default
 	 */
 	perPage?: number;
+
+	/**
+	 * Specifies if free phone line for softphone is available for a country or not
+	 */
+	freeSoftphoneLine?: boolean;
 }

@@ -1,0 +1,10 @@
+/* Generated code */
+
+interface ErrorEntity {
+
+	errorCode?: string;
+
+	message?: string;
+}
+
+export default ErrorEntity;

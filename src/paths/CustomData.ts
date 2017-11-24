@@ -1,63 +1,15 @@
 /* Generated code */
-import AttachmentInfo from '../definitions/AttachmentInfo';
 import PathSegment from '../PathSegment';
+import Content from './Content';
 
 export default class CustomData extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
 		super('custom-data', id, prv, service);
 	}
 
-	/**
-	 *  Update Custom Data by Key
-	 */
-	put(body: PutBody): Promise<PutResponse> {
-		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: body,
-			method: 'put'
-		}).then<any>((res) => {
-				return res.json();
-		});
+/**
+	 * Internal identifier of a message attachment
+	 */	content(id?: string) {
+		return new Content(this, id);
 	}
-
-}
-
-export interface PutBody {
-
-	/**
-	 * Custom data access key. Optional. If specified, must match the custom key in the URL
-	 */
-	id?: string;
-
-	/**
-	 * Description of custom data. Mandatory for create, if there is no attachment specified. Maximum length is limited to 256 symbols
-	 */
-	value?: string;
-}
-
-export interface PutResponse {
-
-	/**
-	 * Custom data access key
-	 */
-	id?: string;
-
-	/**
-	 * Link to the custom data
-	 */
-	uri?: string;
-
-	/**
-	 * Description of custom data
-	 */
-	value?: string;
-
-	/**
-	 * Time of the last change in custom data
-	 */
-	lastModifiedTime?: string;
-
-	/**
-	 * Attachment data: link and type
-	 */
-	attachment?: AttachmentInfo;
 }

@@ -1,5 +1,7 @@
 /* Generated code */
-import BusinessHourScheduleInfo from '../definitions/BusinessHourScheduleInfo';
+import GetUserBusinessHoursResponse from '../definitions/GetUserBusinessHoursResponse';
+import UserBusinessHoursUpdate from '../definitions/UserBusinessHoursUpdate';
+import UserBusinessHoursUpdateRequest from '../definitions/UserBusinessHoursUpdateRequest';
 import PathSegment from '../PathSegment';
 
 export default class BusinessHours extends PathSegment {
@@ -8,9 +10,9 @@ export default class BusinessHours extends PathSegment {
 	}
 
 	/**
-	 *  Get User Hours Setting
+	 *  <p style='font-style:italic;'>Since 1.0.15 (Release 7.0)</p><p>Returns the extension user hours when answering rules are to be applied.</p><h4>Usage Plan Group</h4><p>Light</p>
 	 */
-	get(): Promise<GetResponse> {
+	get(): Promise<GetUserBusinessHoursResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
 			method: 'get'
@@ -19,17 +21,17 @@ export default class BusinessHours extends PathSegment {
 		});
 	}
 
-}
-
-export interface GetResponse {
 
 	/**
-	 * Canonical URI of a business-hours resource
+	 *  <p style='font-style:italic;'>Since 1.0.28 (Release 8.4)</p><p>Updates  the extension user hours when answering rules are to be applied.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>EditExtensions</td><td>Viewing and updating user extension info (includes extension name, number, email and phone number, assigned phone numbers, devices and other extension settings)</td></tr></tbody></table><h4>API Group</h4><p>Medium</p>
 	 */
-	uri?: string;
+	put(body: UserBusinessHoursUpdateRequest): Promise<UserBusinessHoursUpdate> {
+		return this.getRest().call(this.getEndpoint(true), undefined, {
+			body: body,
+			method: 'put'
+		}).then<any>((res) => {
+				return res.json();
+		});
+	}
 
-	/**
-	 * Schedule when an answering rule is applied
-	 */
-	schedule?: BusinessHourScheduleInfo;
 }

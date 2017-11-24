@@ -6,9 +6,6 @@ export default class End extends PathSegment {
 		super('end', id, prv, service);
 	}
 
-	/**
-	 *  End Current Meeting
-	 */
 	post(): Promise<void> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: undefined,
