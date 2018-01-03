@@ -1,4 +1,5 @@
 /* Generated code */
+import CompanyDirectoryContacts from '../definitions/CompanyDirectoryContacts';
 import ContactInfo from '../definitions/ContactInfo';
 import PathSegment from '../PathSegment';
 

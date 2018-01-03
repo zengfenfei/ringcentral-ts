@@ -1,4 +1,5 @@
 /* Generated code */
+import PagingOnlyGroupDevices from '../definitions/PagingOnlyGroupDevices';
 import PathSegment from '../PathSegment';
 
 export default class Devices extends PathSegment {

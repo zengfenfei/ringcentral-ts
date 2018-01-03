@@ -1,6 +1,7 @@
 /* Generated code */
 import GlipCreatePost from '../definitions/GlipCreatePost';
 import GlipPostInfo from '../definitions/GlipPostInfo';
+import GlipPosts from '../definitions/GlipPosts';
 import PathSegment from '../PathSegment';
 
 export default class Posts extends PathSegment {

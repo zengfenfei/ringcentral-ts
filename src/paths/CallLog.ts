@@ -1,4 +1,5 @@
 /* Generated code */
+import ExtensionCallLogResponse from '../definitions/ExtensionCallLogResponse';
 import UserCallLogRecord from '../definitions/UserCallLogRecord';
 import PathSegment from '../PathSegment';
 
@@ -118,9 +119,9 @@ export interface DeleteQuery {
 
 	extensionNumber?: string;
 
-	type?: 'Voice' | 'Fax'[];
+	type?: ('Voice' | 'Fax')[];
 
-	direction?: 'Inbound' | 'Outbound'[];
+	direction?: ('Inbound' | 'Outbound')[];
 
 	dateFrom?: string;
 }

@@ -1,4 +1,5 @@
 /* Generated code */
+import IIvrPrompts from '../definitions/IvrPrompts';
 import PromptInfo from '../definitions/PromptInfo';
 import PathSegment from '../PathSegment';
 import Content from './Content';
@@ -17,7 +18,7 @@ export default class IvrPrompts extends PathSegment {
 	/**
 	 *  <p style='font-style:italic;'>Since 1.0.32 (Release 9.3)</p><p>Returns a list of IVR prompts.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>API Group</h4><p>Medium</p>
 	 */
-	list(): Promise<IVRPrompts> {
+	list(): Promise<IIvrPrompts> {
 		return this.getRest().call(this.getEndpoint(false), undefined, {
 			body: undefined,
 			method: 'get'

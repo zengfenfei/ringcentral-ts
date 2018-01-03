@@ -3,39 +3,35 @@ import ExtensionCreationRequest from '../definitions/ExtensionCreationRequest';
 import ExtensionInfo from '../definitions/ExtensionInfo';
 import ExtensionUpdateRequest from '../definitions/ExtensionUpdateRequest';
 import GetExtensionInfoResponse from '../definitions/GetExtensionInfoResponse';
+import GetExtensionListResponse from '../definitions/GetExtensionListResponse';
 import PathSegment from '../PathSegment';
-import ActiveCalls from './ActiveCalls';
-import AddressBook from './AddressBook';
-import AddressBookSync from './AddressBookSync';
-import AnsweringRule from './AnsweringRule';
-import AuthzProfile from './AuthzProfile';
-import BlockedNumber from './BlockedNumber';
-import BusinessHours from './BusinessHours';
-import CallerId from './CallerId';
 import CallLog from './CallLog';
 import CallLogSync from './CallLogSync';
+import ActiveCalls from './ActiveCalls';
+import PhoneNumber from './PhoneNumber';
+import Sms from './Sms';
 import CompanyPager from './CompanyPager';
-import Conferencing from './Conferencing';
-import Credentials from './Credentials';
-import Device from './Device';
-import DirectRingOut from './DirectRingOut';
-import Favorite from './Favorite';
 import Fax from './Fax';
-import ForwardingNumber from './ForwardingNumber';
-import FreeNumbers from './FreeNumbers';
-import Grant from './Grant';
-import Greeting from './Greeting';
-import Meeting from './Meeting';
 import MessageStore from './MessageStore';
 import MessageSync from './MessageSync';
-import NotificationSettings from './NotificationSettings';
-import PhoneNumber from './PhoneNumber';
-import Presence from './Presence';
-import ProfileImage from './ProfileImage';
-import Reporting from './Reporting';
-import Ringout from './Ringout';
 import RingOut from './RingOut';
-import Sms from './Sms';
+import AddressBook from './AddressBook';
+import AddressBookSync from './AddressBookSync';
+import Favorite from './Favorite';
+import Presence from './Presence';
+import Meeting from './Meeting';
+import AuthzProfile from './AuthzProfile';
+import ForwardingNumber from './ForwardingNumber';
+import BlockedNumber from './BlockedNumber';
+import BusinessHours from './BusinessHours';
+import AnsweringRule from './AnsweringRule';
+import Greeting from './Greeting';
+import CallerId from './CallerId';
+import Grant from './Grant';
+import NotificationSettings from './NotificationSettings';
+import ProfileImage from './ProfileImage';
+import Conferencing from './Conferencing';
+import Device from './Device';
 
 export default class Extension extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
@@ -84,18 +80,8 @@ export default class Extension extends PathSegment {
 
 /**
 	 * Internal identifier of a RingOut call
-	 */	ringout(id?: string) {
-		return new Ringout(this, id);
-	}
-
-/**
-	 * Internal identifier of a RingOut call
 	 */	ringOut(id?: string) {
 		return new RingOut(this, id);
-	}
-
-	directRingOut(id?: string) {
-		return new DirectRingOut(this, id);
 	}
 
 	addressBook(id?: string) {
@@ -152,10 +138,6 @@ export default class Extension extends PathSegment {
 		return new CallerId(this, id);
 	}
 
-	credentials(id?: string) {
-		return new Credentials(this, id);
-	}
-
 	grant(id?: string) {
 		return new Grant(this, id);
 	}
@@ -174,16 +156,8 @@ export default class Extension extends PathSegment {
 		return new Conferencing(this, id);
 	}
 
-	freeNumbers(id?: string) {
-		return new FreeNumbers(this, id);
-	}
-
 	device(id?: string) {
 		return new Device(this, id);
-	}
-
-	reporting(id?: string) {
-		return new Reporting(this, id);
 	}
 
 	/**

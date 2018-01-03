@@ -1,4 +1,5 @@
 /* Generated code */
+import ICallLogSync from '../definitions/CallLogSync';
 import PathSegment from '../PathSegment';
 
 export default class CallLogSync extends PathSegment {
@@ -9,16 +10,18 @@ export default class CallLogSync extends PathSegment {
 	/**
 	 *  <p style='font-style:italic;'></p><p></p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadCallLog</td><td>Viewing user call logs</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Heavy</p>
 	 */
-	get(query?: GetQuery): Promise<void> {
-		return this.getRest().call(this.getEndpoint(true), query, {
+	list(query?: ListQuery): Promise<ICallLogSync> {
+		return this.getRest().call(this.getEndpoint(false), query, {
 			body: undefined,
 			method: 'get'
-		}).then(res => {});
+		}).then<any>((res) => {
+				return res.json();
+		});
 	}
 
 }
 
-export interface GetQuery {
+export interface ListQuery {
 
 	/**
 	 * Type of synchronization. 'FSync' is a default value

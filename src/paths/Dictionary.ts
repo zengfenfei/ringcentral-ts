@@ -1,21 +1,14 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
-import Brand from './Brand';
-import Country from './Country';
-import Device from './Device';
 import FaxCoverPage from './FaxCoverPage';
 import Greeting from './Greeting';
 import Language from './Language';
-import LicenseTypes from './LicenseTypes';
+import Country from './Country';
 import Location from './Location';
-import Permission from './Permission';
-import PermissionCategory from './PermissionCategory';
-import SecretQuestion from './SecretQuestion';
-import ServicePlan from './ServicePlan';
-import ShippingOptions from './ShippingOptions';
 import State from './State';
 import Timezone from './Timezone';
-import UserRole from './UserRole';
+import Device from './Device';
+import LicenseTypes from './LicenseTypes';
 
 export default class Dictionary extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
@@ -26,26 +19,8 @@ export default class Dictionary extends PathSegment {
 		return new FaxCoverPage(this, id);
 	}
 
-	userRole(id?: string) {
-		return new UserRole(this, id);
-	}
-
-	permission(id?: string) {
-		return new Permission(this, id);
-	}
-
-	permissionCategory(id?: string) {
-		return new PermissionCategory(this, id);
-	}
-
 	greeting(id?: string) {
 		return new Greeting(this, id);
-	}
-
-/**
-	 * Internal identifier of a question
-	 */	secretQuestion(id?: string) {
-		return new SecretQuestion(this, id);
 	}
 
 /**
@@ -76,20 +51,8 @@ export default class Dictionary extends PathSegment {
 		return new Timezone(this, id);
 	}
 
-	brand(id?: string) {
-		return new Brand(this, id);
-	}
-
-	servicePlan(id?: string) {
-		return new ServicePlan(this, id);
-	}
-
 	device(id?: string) {
 		return new Device(this, id);
-	}
-
-	shippingOptions(id?: string) {
-		return new ShippingOptions(this, id);
 	}
 
 	licenseTypes(id?: string) {

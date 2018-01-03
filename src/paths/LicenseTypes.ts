@@ -1,4 +1,5 @@
 /* Generated code */
+import ILicenseTypes from '../definitions/LicenseTypes';
 import PathSegment from '../PathSegment';
 
 export default class LicenseTypes extends PathSegment {
@@ -9,7 +10,7 @@ export default class LicenseTypes extends PathSegment {
 	/**
 	 *  <p style='font-style:italic;'>Since 1.0.31 (Release 9.2)</p><p>Returns supported license types.</p><h4>API Group</h4><p>Light</p>
 	 */
-	list(): Promise<LicenseTypes> {
+	list(): Promise<ILicenseTypes> {
 		return this.getRest().call(this.getEndpoint(false), undefined, {
 			body: undefined,
 			method: 'get'

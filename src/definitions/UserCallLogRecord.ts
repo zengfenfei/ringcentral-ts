@@ -19,14 +19,8 @@ interface UserCallLogRecord {
 	 */
 	sessionId?: string;
 
-	/**
-	 * Caller information
-	 */
 	from?: CallLogCallerInfo;
 
-	/**
-	 * Callee information
-	 */
 	to?: CallLogCallerInfo;
 
 	/**
@@ -49,9 +43,6 @@ interface UserCallLogRecord {
 	 */
 	duration?: number;
 
-	/**
-	 * Call recording data. Returned if the call is recorded. Each call recording is stored in the system for 90 days. But if the number of recordings exceeds the admissible limit (100,000 recordings per account) then the older recordings are replaced with the new ones. Thus a link to an older recording in a certain call log record becomes unavailable
-	 */
 	recording?: RecordingInfo;
 }
 

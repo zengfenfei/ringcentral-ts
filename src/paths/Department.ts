@@ -1,7 +1,7 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
-import BulkAssign from './BulkAssign';
 import Members from './Members';
+import BulkAssign from './BulkAssign';
 
 export default class Department extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {

@@ -1,4 +1,5 @@
 /* Generated code */
+import ExtensionActiveCallsResponse from '../definitions/ExtensionActiveCallsResponse';
 import PathSegment from '../PathSegment';
 
 export default class ActiveCalls extends PathSegment {

@@ -2,7 +2,10 @@
 import CalledNumberInfo from './CalledNumberInfo';
 import CallersInfo from './CallersInfo';
 import ForwardingInfo from './ForwardingInfo';
+import GreetingInfo from './GreetingInfo';
+import QueueInfo from './QueueInfo';
 import ScheduleInfo from './ScheduleInfo';
+import TransferredExtensionInfo from './TransferredExtensionInfo';
 import UnconditionalForwardingInfo from './UnconditionalForwardingInfo';
 import VoicemailInfo from './VoicemailInfo';
 
@@ -51,7 +54,7 @@ interface AnsweringRuleInfo {
 	/**
 	 * Specifies how incoming calls are forwarded
 	 */
-	callHandlingAction?: 'ForwardCalls' | 'TakeMessagesOnly' | 'PlayAnnouncementOnly' | 'UnconditionalForwarding';
+	callHandlingAction?: 'ForwardCalls' | 'UnconditionalForwarding' | 'AgentQueue' | 'TransferToExtension' | 'TakeMessagesOnly' | 'PlayAnnouncementOnly';
 
 	/**
 	 * Forwarding parameters. Returned if 'ForwardCalls' is specified in 'callHandlingAction'. These settings determine the forwarding numbers to which the call will be forwarded
@@ -64,9 +67,24 @@ interface AnsweringRuleInfo {
 	unconditionalForwarding?: UnconditionalForwardingInfo;
 
 	/**
+	 * Queue settings applied for department (call queue) extension type, with the 'AgentQueue' value specified as a call handling action
+	 */
+	queue?: QueueInfo;
+
+	/**
+	 * Transfer settings applied for department (call queue) extension type, with 'TransferToExtension' call handling action
+	 */
+	transfer?: TransferredExtensionInfo;
+
+	/**
 	 * Specifies whether to take a voicemail and who should do it
 	 */
 	voicemail?: VoicemailInfo;
+
+	/**
+	 * Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List
+	 */
+	greetings?: GreetingInfo[];
 }
 
 export default AnsweringRuleInfo;

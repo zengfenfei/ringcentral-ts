@@ -1,8 +1,8 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
-import BulkAssign from './BulkAssign';
-import Devices from './Devices';
 import Users from './Users';
+import Devices from './Devices';
+import BulkAssign from './BulkAssign';
 
 export default class PagingOnlyGroups extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {

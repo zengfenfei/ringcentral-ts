@@ -1,10 +1,10 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
 import Companies from './Companies';
-import Files from './Files';
 import Groups from './Groups';
 import Persons from './Persons';
 import Posts from './Posts';
+import Files from './Files';
 import Profile from './Profile';
 
 export default class Glip extends PathSegment {

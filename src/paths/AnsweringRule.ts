@@ -1,5 +1,6 @@
 /* Generated code */
 import AnsweringRuleInfo from '../definitions/AnsweringRuleInfo';
+import CompanyAnsweringRuleList from '../definitions/CompanyAnsweringRuleList';
 import CreateAnsweringRuleRequest from '../definitions/CreateAnsweringRuleRequest';
 import UpdateAnsweringRuleRequest from '../definitions/UpdateAnsweringRuleRequest';
 import PathSegment from '../PathSegment';
@@ -46,9 +47,9 @@ export default class AnsweringRule extends PathSegment {
 	}
 
 
-	delete(body: UpdateAnsweringRuleRequest): Promise<void> {
+	delete(): Promise<void> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
-			body: body,
+			body: undefined,
 			method: 'delete'
 		}).then(res => {});
 	}

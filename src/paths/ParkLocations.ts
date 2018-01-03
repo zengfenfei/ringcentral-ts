@@ -1,7 +1,7 @@
 /* Generated code */
 import PathSegment from '../PathSegment';
-import BulkAssign from './BulkAssign';
 import Users from './Users';
+import BulkAssign from './BulkAssign';
 
 export default class ParkLocations extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {

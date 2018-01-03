@@ -1,5 +1,6 @@
 /* Generated code */
 import BlockedNumberInfo from '../definitions/BlockedNumberInfo';
+import BlockedNumbersList from '../definitions/BlockedNumbersList';
 import PathSegment from '../PathSegment';
 
 export default class BlockedNumber extends PathSegment {

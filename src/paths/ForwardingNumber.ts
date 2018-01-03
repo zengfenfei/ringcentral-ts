@@ -2,6 +2,7 @@
 import CreateForwardingNumberRequest from '../definitions/CreateForwardingNumberRequest';
 import ForwardingNumberInfo from '../definitions/ForwardingNumberInfo';
 import ForwardingNumberResource from '../definitions/ForwardingNumberResource';
+import GetExtensionForwardingNumberListResponse from '../definitions/GetExtensionForwardingNumberListResponse';
 import UpdateForwardingNumberRequest from '../definitions/UpdateForwardingNumberRequest';
 import PathSegment from '../PathSegment';
 

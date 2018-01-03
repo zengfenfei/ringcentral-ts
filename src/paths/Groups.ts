@@ -1,6 +1,7 @@
 /* Generated code */
 import GlipCreateGroup from '../definitions/GlipCreateGroup';
 import GlipGroupInfo from '../definitions/GlipGroupInfo';
+import GlipGroupList from '../definitions/GlipGroupList';
 import PathSegment from '../PathSegment';
 import BulkAssign from './BulkAssign';
 

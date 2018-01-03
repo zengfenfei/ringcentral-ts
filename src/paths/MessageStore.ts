@@ -1,5 +1,6 @@
 /* Generated code */
 import GetMessageInfoResponse from '../definitions/GetMessageInfoResponse';
+import GetMessageList from '../definitions/GetMessageList';
 import UpdateMessageRequest from '../definitions/UpdateMessageRequest';
 import PathSegment from '../PathSegment';
 import Content from './Content';

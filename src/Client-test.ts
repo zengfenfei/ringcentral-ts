@@ -11,7 +11,6 @@ describe('client', () => {
 async function runCoverage() {
 	rc = await auth();
 	rc.clientInfo();
-	rc.numberPool();
 	rc.oauthUrl('redirectUrl');
 	await rc.getToken();
 	fetchMock.postOnce('end:/oauth/revoke', ' ');

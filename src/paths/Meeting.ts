@@ -1,6 +1,7 @@
 /* Generated code */
 import MeetingRequestResource from '../definitions/MeetingRequestResource';
 import MeetingResponseResource from '../definitions/MeetingResponseResource';
+import MeetingsResource from '../definitions/MeetingsResource';
 import PathSegment from '../PathSegment';
 import End from './End';
 import ServiceInfo from './ServiceInfo';

@@ -2,6 +2,7 @@
 import CustomCompanyGreetingInfo from '../definitions/CustomCompanyGreetingInfo';
 import CustomGreetingRequest from '../definitions/CustomGreetingRequest';
 import DictionaryGreetingInfo from '../definitions/DictionaryGreetingInfo';
+import DictionaryGreetingList from '../definitions/DictionaryGreetingList';
 import PathSegment from '../PathSegment';
 
 export default class Greeting extends PathSegment {

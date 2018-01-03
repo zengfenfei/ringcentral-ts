@@ -1,4 +1,5 @@
 /* Generated code */
+import ContactList from '../definitions/ContactList';
 import PersonalContactResource from '../definitions/PersonalContactResource';
 import PathSegment from '../PathSegment';
 

@@ -1,5 +1,6 @@
 /* Generated code */
 import LicenseInfo from '../definitions/LicenseInfo';
+import LicenseList from '../definitions/LicenseList';
 import PathSegment from '../PathSegment';
 import BulkPurchase from './BulkPurchase';
 

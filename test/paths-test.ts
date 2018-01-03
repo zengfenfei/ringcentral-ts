@@ -144,15 +144,15 @@ describe('PathSegments', function () {
 		it('covers all', async () => {
 			let id = 'ringoutId';
 			fetchMock.once('*', {});
-			await rc.account().extension().ringout().post({
+			await rc.account().extension().ringOut().post({
 				from: { phoneNumber: '+16507411615' },
 				to: { phoneNumber: '+16507411615' }
 			});
 			fetchMock.once('*', {});
-			await rc.account().extension().ringout(id).get();
+			await rc.account().extension().ringOut(id).get();
 
 			fetchMock.once('*', {});
-			await rc.account().extension().ringout(id).delete();
+			await rc.account().extension().ringOut(id).delete();
 		});
 
 	});
@@ -169,7 +169,7 @@ describe('PathSegments', function () {
 
 	});
 
-	describe('Group', function () {
+	/*describe('Group', function () {
 
 		it('covers all', function () {
 			fetchMock.once('*', {});
@@ -177,7 +177,7 @@ describe('PathSegments', function () {
 			return addressBook.group().list();
 		});
 
-	});
+	});*/
 
 	describe('Greeting', function () {
 
@@ -413,7 +413,7 @@ describe('PathSegments', function () {
 
 		it('gets address book sync', function () {
 			fetchMock.once('*', {});
-			return rc.account().extension().addressBookSync().get().list(); // https://github.com/ringcentral/ringcentral-api-specs/issues/7
+			return rc.account().extension().addressBookSync().list(); // https://github.com/ringcentral/ringcentral-api-specs/issues/7
 		});
 	});
 

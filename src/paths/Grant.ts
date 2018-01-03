@@ -1,4 +1,5 @@
 /* Generated code */
+import GetExtensionGrantListResponse from '../definitions/GetExtensionGrantListResponse';
 import PathSegment from '../PathSegment';
 
 export default class Grant extends PathSegment {

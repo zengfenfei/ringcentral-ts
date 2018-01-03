@@ -1,5 +1,6 @@
 /* Generated code */
 import LanguageInfo from '../definitions/LanguageInfo';
+import LanguageList from '../definitions/LanguageList';
 import PathSegment from '../PathSegment';
 
 export default class Language extends PathSegment {

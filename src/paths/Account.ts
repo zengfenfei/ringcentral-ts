@@ -1,30 +1,27 @@
 /* Generated code */
 import GetAccountInfoResponse from '../definitions/GetAccountInfoResponse';
 import PathSegment from '../PathSegment';
-import ActiveCalls from './ActiveCalls';
-import AnsweringRule from './AnsweringRule';
-import Bot from './Bot';
-import BusinessAddress from './BusinessAddress';
-import BusinessHours from './BusinessHours';
+import Extension from './Extension';
 import CallLog from './CallLog';
 import CallLogSync from './CallLogSync';
-import Department from './Department';
-import Device from './Device';
-import DialingPlan from './DialingPlan';
+import ActiveCalls from './ActiveCalls';
+import Recording from './Recording';
 import Directory from './Directory';
-import Extension from './Extension';
+import Bot from './Bot';
+import Presence from './Presence';
+import BusinessHours from './BusinessHours';
 import Greeting from './Greeting';
+import AnsweringRule from './AnsweringRule';
 import IvrMenus from './IvrMenus';
 import IvrPrompts from './IvrPrompts';
+import BusinessAddress from './BusinessAddress';
+import ServiceInfo from './ServiceInfo';
+import PhoneNumber from './PhoneNumber';
+import Device from './Device';
 import Licenses from './Licenses';
-import Order from './Order';
+import Department from './Department';
 import PagingOnlyGroups from './PagingOnlyGroups';
 import ParkLocations from './ParkLocations';
-import PhoneNumber from './PhoneNumber';
-import Presence from './Presence';
-import Recording from './Recording';
-import ServiceInfo from './ServiceInfo';
-import UserRole from './UserRole';
 
 export default class Account extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
@@ -69,10 +66,6 @@ export default class Account extends PathSegment {
 		return new Presence(this, id);
 	}
 
-	userRole(id?: string) {
-		return new UserRole(this, id);
-	}
-
 	businessHours(id?: string) {
 		return new BusinessHours(this, id);
 	}
@@ -103,22 +96,12 @@ export default class Account extends PathSegment {
 		return new ServiceInfo(this, id);
 	}
 
-	dialingPlan(id?: string) {
-		return new DialingPlan(this, id);
-	}
-
 	phoneNumber(id?: string) {
 		return new PhoneNumber(this, id);
 	}
 
 	device(id?: string) {
 		return new Device(this, id);
-	}
-
-/**
-	 * Internal identifier of an order
-	 */	order(id?: string) {
-		return new Order(this, id);
 	}
 
 /**

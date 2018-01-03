@@ -1,4 +1,5 @@
 /* Generated code */
+import GetExtensionPhoneNumbersResponse from '../definitions/GetExtensionPhoneNumbersResponse';
 import PhoneNumberInfo from '../definitions/PhoneNumberInfo';
 import PathSegment from '../PathSegment';
 

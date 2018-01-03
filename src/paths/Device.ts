@@ -1,6 +1,7 @@
 /* Generated code */
 import AccountDeviceUpdate from '../definitions/AccountDeviceUpdate';
 import DeviceResource from '../definitions/DeviceResource';
+import GetAccountDevicesResponse from '../definitions/GetAccountDevicesResponse';
 import GetDeviceInfoResponse from '../definitions/GetDeviceInfoResponse';
 import PathSegment from '../PathSegment';
 

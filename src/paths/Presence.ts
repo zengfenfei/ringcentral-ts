@@ -1,21 +1,12 @@
 /* Generated code */
+import AccountPresenceInfo from '../definitions/AccountPresenceInfo';
 import GetPresenceInfo from '../definitions/GetPresenceInfo';
 import PresenceInfoResource from '../definitions/PresenceInfoResource';
 import PathSegment from '../PathSegment';
-import Line from './Line';
-import Permission from './Permission';
 
 export default class Presence extends PathSegment {
 	constructor(prv: PathSegment, id?: string, service?) {
 		super('presence', id, prv, service);
-	}
-
-	line(id?: string) {
-		return new Line(this, id);
-	}
-
-	permission(id?: string) {
-		return new Permission(this, id);
 	}
 
 	list(): Promise<AccountPresenceInfo> {

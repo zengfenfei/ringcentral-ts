@@ -1,4 +1,5 @@
 /* Generated code */
+import DepartmentMemberList from '../definitions/DepartmentMemberList';
 import PathSegment from '../PathSegment';
 
 export default class Members extends PathSegment {

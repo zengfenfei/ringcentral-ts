@@ -1,5 +1,6 @@
 /* Generated code */
 import GetTimezoneInfoResponse from '../definitions/GetTimezoneInfoResponse';
+import GetTimezoneListResponse from '../definitions/GetTimezoneListResponse';
 import PathSegment from '../PathSegment';
 
 export default class Timezone extends PathSegment {

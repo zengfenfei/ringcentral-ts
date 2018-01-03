@@ -1,6 +1,7 @@
 /* Generated code */
 import CreateSubscriptionRequest from '../definitions/CreateSubscriptionRequest';
 import ModifySubscriptionRequest from '../definitions/ModifySubscriptionRequest';
+import RecordsCollectionResourceSubscriptionResponse from '../definitions/RecordsCollectionResourceSubscriptionResponse';
 import SubscriptionInfo from '../definitions/SubscriptionInfo';
 import PathSegment from '../PathSegment';
 import Renew from './Renew';

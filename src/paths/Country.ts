@@ -1,5 +1,6 @@
 /* Generated code */
 import GetCountryInfoDictionaryResponse from '../definitions/GetCountryInfoDictionaryResponse';
+import GetCountryListResponse from '../definitions/GetCountryListResponse';
 import PathSegment from '../PathSegment';
 
 export default class Country extends PathSegment {

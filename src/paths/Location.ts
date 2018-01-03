@@ -1,4 +1,5 @@
 /* Generated code */
+import GetLocationListResponse from '../definitions/GetLocationListResponse';
 import PathSegment from '../PathSegment';
 
 export default class Location extends PathSegment {

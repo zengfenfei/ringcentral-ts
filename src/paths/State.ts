@@ -1,5 +1,6 @@
 /* Generated code */
 import GetStateInfoResponse from '../definitions/GetStateInfoResponse';
+import GetStateListResponse from '../definitions/GetStateListResponse';
 import PathSegment from '../PathSegment';
 
 export default class State extends PathSegment {
