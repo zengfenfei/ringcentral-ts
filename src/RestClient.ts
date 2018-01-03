@@ -236,11 +236,11 @@ export default class RestClient extends EventEmitter {
 	parseOauthCallback(paramsStr: string): OauthCallbackParams {
 		let params = parse(paramsStr);
 		if (!params.code) {
-			let e = new Error(params.error_description || params.error || 'No authorization code contained in the callback url.');
+			let e = new Error(params.error_description + '' || params.error + '' || 'No authorization code contained in the callback url.');
 			e['code'] = params.error;
 			throw e;
 		}
-		return params;
+		return <any>params;
 	}
 
 	oauthUrl(redirect_uri: string, opts?: { state?: string, force?: boolean }) {
