@@ -98,6 +98,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_clientinfo_.clientinfo.html#customdata" class="tsd-kind-icon">custom<wbr>Data</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_clientinfo_.clientinfo.html#getendpoint" class="tsd-kind-icon">get<wbr>Endpoint</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="_paths_clientinfo_.clientinfo.html#getrest" class="tsd-kind-icon">get<wbr>Rest</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_clientinfo_.clientinfo.html#sipprovision" class="tsd-kind-icon">sip<wbr>Provision</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_clientinfo_.clientinfo.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 							</ul>
 						</section>
@@ -117,7 +118,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/ClientInfo.ts#L5">paths/ClientInfo.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/ClientInfo.ts#L6">paths/ClientInfo.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -149,14 +150,9 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/ClientInfo.ts#L12">paths/ClientInfo.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/ClientInfo.ts#L15">paths/ClientInfo.ts:15</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Custom data access key. The number of unique custom data keys is limited to 100 keys per extension, summarized for all the applications. For example, if you have created 50 custom data keys under the Android mobile client application for the particular extension, then logged in the iOS application and created another 50 keys, the web client application won&#39;t be allowed to create any custom data key for that extension</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -178,7 +174,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getendpoint">getEndpoint</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -202,10 +198,33 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getrest">getRest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_restclient_.restclient.html" class="tsd-signature-type">RestClient</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="sipprovision" class="tsd-anchor"></a>
+					<h3>sip<wbr>Provision</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">sip<wbr>Provision<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_paths_sipprovision_.sipprovision.html" class="tsd-signature-type">SipProvision</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/ClientInfo.ts#L11">paths/ClientInfo.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_paths_sipprovision_.sipprovision.html" class="tsd-signature-type">SipProvision</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -220,7 +239,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -264,6 +283,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
 								<a href="_paths_clientinfo_.clientinfo.html#getrest" class="tsd-kind-icon">get<wbr>Rest</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_paths_clientinfo_.clientinfo.html#sipprovision" class="tsd-kind-icon">sip<wbr>Provision</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="_paths_clientinfo_.clientinfo.html#tostring" class="tsd-kind-icon">to<wbr>String</a>

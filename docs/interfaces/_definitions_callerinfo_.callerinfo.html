@@ -84,8 +84,11 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#contact" class="tsd-kind-icon">contact</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#extensionnumber" class="tsd-kind-icon">extension<wbr>Number</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#faxerrorcode" class="tsd-kind-icon">fax<wbr>Error<wbr>Code</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#location" class="tsd-kind-icon">location</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#messagestatus" class="tsd-kind-icon">message<wbr>Status</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_callerinfo_.callerinfo.html#phonenumber" class="tsd-kind-icon">phone<wbr>Number</a></li>
 							</ul>
@@ -96,19 +99,34 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="contact" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> contact</h3>
+					<div class="tsd-signature tsd-kind-icon">contact<span class="tsd-signature-symbol">:</span> <a href="_definitions_personalcontactresource_.personalcontactresource.html" class="tsd-signature-type">PersonalContactResource</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L14">definitions/CallerInfo.ts:14</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="extensionnumber" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extension<wbr>Number</h3>
 					<div class="tsd-signature tsd-kind-icon">extension<wbr>Number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/CallerInfo.ts#L13">definitions/CallerInfo.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L8">definitions/CallerInfo.ts:8</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Extension short number (usually 3 or 4 digits). This property is filled when parties communicate by means of short internal numbers, for example when calling to other extension or sending/receiving Company Pager message</p>
-						</div>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="faxerrorcode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> fax<wbr>Error<wbr>Code</h3>
+					<div class="tsd-signature tsd-kind-icon">fax<wbr>Error<wbr>Code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Undefined"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"NoFaxSendPermission"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"NoInternationalPermission"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"NoFaxMachine"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"OutgoingCallError"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"RenderingFailed"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"TooManyPages"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ReturnToDBQueue"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"NoCallTime"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"WrongNumber"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ProhibitedNumber"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"InternalError"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"FaxSendingProhibited"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ThePhoneIsBlacklisted"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UserNotFound"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ConvertError"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DBGeneralError"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"SkypeBillingFailed"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"AccountSuspended"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ProhibitedDestination"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"InternationalDisabled"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L18">definitions/CallerInfo.ts:18</a></li>
+						</ul>
+					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="location" class="tsd-anchor"></a>
@@ -116,14 +134,19 @@
 					<div class="tsd-signature tsd-kind-icon">location<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/CallerInfo.ts#L18">definitions/CallerInfo.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L12">definitions/CallerInfo.ts:12</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)</p>
-						</div>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="messagestatus" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> message<wbr>Status</h3>
+					<div class="tsd-signature tsd-kind-icon">message<wbr>Status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Sent"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"SendingFailed"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Queued"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L16">definitions/CallerInfo.ts:16</a></li>
+						</ul>
+					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="name" class="tsd-anchor"></a>
@@ -131,14 +154,9 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/CallerInfo.ts#L23">definitions/CallerInfo.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L10">definitions/CallerInfo.ts:10</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Symbolic name associated with a party. If the phone does not belong to the known extension, only the location is returned, the name is not determined then</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="phonenumber" class="tsd-anchor"></a>
@@ -146,14 +164,9 @@
 					<div class="tsd-signature tsd-kind-icon">phone<wbr>Number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/CallerInfo.ts#L8">definitions/CallerInfo.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/CallerInfo.ts#L6">definitions/CallerInfo.ts:6</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Phone number of a party. Usually it is a plain number including country and area code like 18661234567. But sometimes it could be returned from database with some formatting applied, for example (866)123-4567. This property is filled in all cases where parties communicate by means of global phone numbers, for example when calling to direct numbers or sending/receiving SMS</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -176,10 +189,19 @@
 						<a href="_definitions_callerinfo_.callerinfo.html" class="tsd-kind-icon">Caller<wbr>Info</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_definitions_callerinfo_.callerinfo.html#contact" class="tsd-kind-icon">contact</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_definitions_callerinfo_.callerinfo.html#extensionnumber" class="tsd-kind-icon">extension<wbr>Number</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_definitions_callerinfo_.callerinfo.html#faxerrorcode" class="tsd-kind-icon">fax<wbr>Error<wbr>Code</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_definitions_callerinfo_.callerinfo.html#location" class="tsd-kind-icon">location</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_definitions_callerinfo_.callerinfo.html#messagestatus" class="tsd-kind-icon">message<wbr>Status</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_definitions_callerinfo_.callerinfo.html#name" class="tsd-kind-icon">name</a>

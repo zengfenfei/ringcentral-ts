@@ -99,6 +99,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_device_.device.html#getendpoint" class="tsd-kind-icon">get<wbr>Endpoint</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="_paths_device_.device.html#getrest" class="tsd-kind-icon">get<wbr>Rest</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_device_.device.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_device_.device.html#put" class="tsd-kind-icon">put</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_device_.device.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 							</ul>
 						</section>
@@ -118,7 +119,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Device.ts#L6">paths/Device.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Device.ts#L8">paths/Device.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -144,21 +145,21 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_deviceinfo_.deviceinfo.html" class="tsd-signature-type">DeviceInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_getdeviceinforesponse_.getdeviceinforesponse.html" class="tsd-signature-type">GetDeviceInfoResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Device.ts#L27">paths/Device.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Device.ts#L29">paths/Device.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Get Device by ID</p>
+									<p style='font-style:italic;'>Since 1.0.9 (Release 6.1)</p><p>Returns account device(s) by their ID(s).</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_deviceinfo_.deviceinfo.html" class="tsd-signature-type">DeviceInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_getdeviceinforesponse_.getdeviceinforesponse.html" class="tsd-signature-type">GetDeviceInfoResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -173,7 +174,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getendpoint">getEndpoint</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -197,7 +198,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getrest">getRest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_restclient_.restclient.html" class="tsd-signature-type">RestClient</a></h4>
@@ -208,21 +209,44 @@
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_pagingresult_.pagingresult.html" class="tsd-signature-type">PagingResult</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_deviceinfo_.deviceinfo.html" class="tsd-signature-type">DeviceInfo</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_getaccountdevicesresponse_.getaccountdevicesresponse.html" class="tsd-signature-type">GetAccountDevicesResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Device.ts#L14">paths/Device.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Device.ts#L16">paths/Device.ts:16</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Get Account Device List</p>
+									<p style='font-style:italic;'>Since 1.0.12 (Release 6.4)</p><p>Returns all the devices for a particular extension.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadAccounts</td><td>Viewing user account info (including name, business name, address and phone number/account number)</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_pagingresult_.pagingresult.html" class="tsd-signature-type">PagingResult</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_deviceinfo_.deviceinfo.html" class="tsd-signature-type">DeviceInfo</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_getaccountdevicesresponse_.getaccountdevicesresponse.html" class="tsd-signature-type">GetAccountDevicesResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="put" class="tsd-anchor"></a>
+					<h3>put</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/_definitions_accountdeviceupdate_.accountdeviceupdate.html" class="tsd-signature-type">AccountDeviceUpdate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_deviceresource_.deviceresource.html" class="tsd-signature-type">DeviceResource</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Device.ts#L39">paths/Device.ts:39</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body: <a href="../interfaces/_definitions_accountdeviceupdate_.accountdeviceupdate.html" class="tsd-signature-type">AccountDeviceUpdate</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_deviceresource_.deviceresource.html" class="tsd-signature-type">DeviceResource</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -237,7 +261,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,6 +308,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_paths_device_.device.html#list" class="tsd-kind-icon">list</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_paths_device_.device.html#put" class="tsd-kind-icon">put</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="_paths_device_.device.html#tostring" class="tsd-kind-icon">to<wbr>String</a>

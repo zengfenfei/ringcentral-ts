@@ -118,7 +118,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Timezone.ts#L6">paths/Timezone.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Timezone.ts#L6">paths/Timezone.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -144,21 +144,27 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_timezoneinfo_.timezoneinfo.html" class="tsd-signature-type">TimezoneInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_paths_timezone_.getquery.html" class="tsd-signature-type">GetQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_gettimezoneinforesponse_.gettimezoneinforesponse.html" class="tsd-signature-type">GetTimezoneInfoResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Timezone.ts#L27">paths/Timezone.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Timezone.ts#L27">paths/Timezone.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Get Time Zone by ID</p>
+									<p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns the information on a certain timezone.</p><h4>Usage Plan Group</h4><p>Light</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_timezoneinfo_.timezoneinfo.html" class="tsd-signature-type">TimezoneInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/_paths_timezone_.getquery.html" class="tsd-signature-type">GetQuery</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_gettimezoneinforesponse_.gettimezoneinforesponse.html" class="tsd-signature-type">GetTimezoneInfoResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -173,7 +179,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getendpoint">getEndpoint</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -197,7 +203,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getrest">getRest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_restclient_.restclient.html" class="tsd-signature-type">RestClient</a></h4>
@@ -208,18 +214,18 @@
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_paths_timezone_.listquery.html" class="tsd-signature-type">ListQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_pagingresult_.pagingresult.html" class="tsd-signature-type">PagingResult</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_timezoneinfo_.timezoneinfo.html" class="tsd-signature-type">TimezoneInfo</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_paths_timezone_.listquery.html" class="tsd-signature-type">ListQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_gettimezonelistresponse_.gettimezonelistresponse.html" class="tsd-signature-type">GetTimezoneListResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Timezone.ts#L14">paths/Timezone.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Timezone.ts#L14">paths/Timezone.ts:14</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Get Time Zone List</p>
+									<p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns all available timezones.</p><h4>Usage Plan Group</h4><p>Light</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -228,7 +234,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/_paths_timezone_.listquery.html" class="tsd-signature-type">ListQuery</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_pagingresult_.pagingresult.html" class="tsd-signature-type">PagingResult</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_timezoneinfo_.timezoneinfo.html" class="tsd-signature-type">TimezoneInfo</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_gettimezonelistresponse_.gettimezonelistresponse.html" class="tsd-signature-type">GetTimezoneListResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -243,7 +249,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -298,6 +304,9 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="../interfaces/_paths_timezone_.getquery.html" class="tsd-kind-icon">Get<wbr>Query</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
 						<a href="../interfaces/_paths_timezone_.listquery.html" class="tsd-kind-icon">List<wbr>Query</a>
 					</li>

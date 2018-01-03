@@ -86,6 +86,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_greetinginfo_.greetinginfo.html#preset" class="tsd-kind-icon">preset</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_greetinginfo_.greetinginfo.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_greetinginfo_.greetinginfo.html#usagetype" class="tsd-kind-icon">usage<wbr>Type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,27 +100,37 @@
 					<div class="tsd-signature tsd-kind-icon">preset<span class="tsd-signature-symbol">:</span> <a href="_definitions_presetinfo_.presetinfo.html" class="tsd-signature-type">PresetInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/GreetingInfo.ts#L14">definitions/GreetingInfo.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/GreetingInfo.ts#L16">definitions/GreetingInfo.ts:16</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Predefined greeting information</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="type" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Introductory"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Announcement"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ConnectingMessage"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ConnectingAudio"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Voicemail"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Unavailable"</span></div>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Introductory"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Announcement"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ConnectingMessage"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ConnectingAudio"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Voicemail"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Unavailable"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"InterruptPrompt"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"HoldMusic"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Custom"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Company"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"BlockedCallersSpecific"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"BlockedCallersAll"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"BlockedNoCallerId"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"BlockedPayPhones"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"StartRecording"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"StopRecording"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"AutomaticRecording"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/GreetingInfo.ts#L9">definitions/GreetingInfo.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/GreetingInfo.ts#L9">definitions/GreetingInfo.ts:9</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Type of a greeting, specifying the case when the greeting is played. See also Greeting Types</p>
+							<p>Type of a greeting, specifying the case when the greeting is played. See Greeting Types = [&#39;Introductory&#39;, &#39;Announcement&#39;, &#39;ConnectingMessage&#39;, &#39;ConnectingAudio&#39;, &#39;Voicemail&#39;, &#39;Unavailable&#39;, &#39;InterruptPrompt&#39;, &#39;HoldMusic&#39;]</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="usagetype" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> usage<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">usage<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"UserExtensionAnsweringRule"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ExtensionAnsweringRule"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DepartmentExtensionAnsweringRule"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/GreetingInfo.ts#L14">definitions/GreetingInfo.ts:14</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Usage type of a greeting, specifying if the greeting is applied to user extension or department extension = [&#39;UserExtensionAnsweringRule&#39;, &#39;ExtensionAnsweringRule DepartmentExtensionAnsweringRule&#39;]</p>
 						</div>
 					</div>
 				</section>
@@ -148,6 +159,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_definitions_greetinginfo_.greetinginfo.html#type" class="tsd-kind-icon">type</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_definitions_greetinginfo_.greetinginfo.html#usagetype" class="tsd-kind-icon">usage<wbr>Type</a>
 							</li>
 						</ul>
 					</li>

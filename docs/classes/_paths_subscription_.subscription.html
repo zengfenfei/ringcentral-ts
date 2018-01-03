@@ -102,6 +102,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_subscription_.subscription.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_subscription_.subscription.html#post" class="tsd-kind-icon">post</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_subscription_.subscription.html#put" class="tsd-kind-icon">put</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_subscription_.subscription.html#renew" class="tsd-kind-icon">renew</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_subscription_.subscription.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 							</ul>
 						</section>
@@ -121,7 +122,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Subscription.ts#L7">paths/Subscription.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L9">paths/Subscription.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -153,12 +154,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Subscription.ts#L41">paths/Subscription.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L70">paths/Subscription.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Cancel Subscription by ID</p>
+									<p style='font-style:italic;'></p><p>Cancels the existent subscription.</p><h4>Usage Plan Group</h4><p>Medium</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -175,12 +176,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Subscription.ts#L52">paths/Subscription.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L44">paths/Subscription.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Get Subscription by ID</p>
+									<p style='font-style:italic;'>Since 1.0.6 (Release 5.15)</p><p>Returns the requested subscription.</p><h4>Usage Plan Group</h4><p>Light</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -198,7 +199,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getendpoint">getEndpoint</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -222,7 +223,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getrest">getRest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_restclient_.restclient.html" class="tsd-signature-type">RestClient</a></h4>
@@ -233,21 +234,16 @@
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_pagingresult_.pagingresult.html" class="tsd-signature-type">PagingResult</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_recordscollectionresourcesubscriptionresponse_.recordscollectionresourcesubscriptionresponse.html" class="tsd-signature-type">RecordsCollectionResourceSubscriptionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Subscription.ts#L28">paths/Subscription.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L18">paths/Subscription.ts:18</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p> Get Subscription List</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_pagingresult_.pagingresult.html" class="tsd-signature-type">PagingResult</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_recordscollectionresourcesubscriptionresponse_.recordscollectionresourcesubscriptionresponse.html" class="tsd-signature-type">RecordsCollectionResourceSubscriptionResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -255,24 +251,24 @@
 					<a name="post" class="tsd-anchor"></a>
 					<h3>post</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">post<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/_paths_subscription_.postbody.html" class="tsd-signature-type">PostBody</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">post<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/_definitions_createsubscriptionrequest_.createsubscriptionrequest.html" class="tsd-signature-type">CreateSubscriptionRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Subscription.ts#L15">paths/Subscription.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L31">paths/Subscription.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Create New Subscription</p>
+									<p style='font-style:italic;'>Since 1.0.6 (Release 5.15)</p><p>Creates a new subscription.</p><h4>Usage Plan Group</h4><p>Medium</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>body: <a href="../interfaces/_paths_subscription_.postbody.html" class="tsd-signature-type">PostBody</a></h5>
+									<h5>body: <a href="../interfaces/_definitions_createsubscriptionrequest_.createsubscriptionrequest.html" class="tsd-signature-type">CreateSubscriptionRequest</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -283,27 +279,53 @@
 					<a name="put" class="tsd-anchor"></a>
 					<h3>put</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/_paths_subscription_.putbody.html" class="tsd-signature-type">PutBody</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/_definitions_modifysubscriptionrequest_.modifysubscriptionrequest.html" class="tsd-signature-type">ModifySubscriptionRequest</a>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_paths_subscription_.putquery.html" class="tsd-signature-type">PutQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Subscription.ts#L65">paths/Subscription.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L57">paths/Subscription.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Update/Renew Subscription by ID</p>
+									<p style='font-style:italic;'>Since 1.0.6 (Release 5.15)</p><p>Renews the existent subscription if the request body is empty. If event filters are specified, calling this method modifies the event filters for the existing subscription. The client application can extend or narrow the events for which it receives notifications in the frame of one subscription.</p><h4>Usage Plan Group</h4><p>Medium</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>body: <a href="../interfaces/_paths_subscription_.putbody.html" class="tsd-signature-type">PutBody</a></h5>
+									<h5>body: <a href="../interfaces/_definitions_modifysubscriptionrequest_.modifysubscriptionrequest.html" class="tsd-signature-type">ModifySubscriptionRequest</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/_paths_subscription_.putquery.html" class="tsd-signature-type">PutQuery</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_subscriptioninfo_.subscriptioninfo.html" class="tsd-signature-type">SubscriptionInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="renew" class="tsd-anchor"></a>
+					<h3>renew</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">renew<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_paths_renew_.renew.html" class="tsd-signature-type">Renew</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Subscription.ts#L14">paths/Subscription.ts:14</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_paths_renew_.renew.html" class="tsd-signature-type">Renew</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -318,7 +340,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -375,6 +397,9 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_paths_subscription_.subscription.html#put" class="tsd-kind-icon">put</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_paths_subscription_.subscription.html#renew" class="tsd-kind-icon">renew</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="_paths_subscription_.subscription.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
 							</li>
@@ -383,10 +408,7 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="../interfaces/_paths_subscription_.postbody.html" class="tsd-kind-icon">Post<wbr>Body</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="../interfaces/_paths_subscription_.putbody.html" class="tsd-kind-icon">Put<wbr>Body</a>
+						<a href="../interfaces/_paths_subscription_.putquery.html" class="tsd-kind-icon">Put<wbr>Query</a>
 					</li>
 				</ul>
 			</nav>

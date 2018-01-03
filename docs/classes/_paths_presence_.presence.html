@@ -98,6 +98,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_presence_.presence.html#get" class="tsd-kind-icon">get</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_presence_.presence.html#getendpoint" class="tsd-kind-icon">get<wbr>Endpoint</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="_paths_presence_.presence.html#getrest" class="tsd-kind-icon">get<wbr>Rest</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_presence_.presence.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_paths_presence_.presence.html#put" class="tsd-kind-icon">put</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_paths_presence_.presence.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 							</ul>
 						</section>
@@ -117,7 +119,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Presence.ts#L5">paths/Presence.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Presence.ts#L7">paths/Presence.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -143,21 +145,21 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_presenceinfo_.presenceinfo.html" class="tsd-signature-type">PresenceInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_getpresenceinfo_.getpresenceinfo.html" class="tsd-signature-type">GetPresenceInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/paths/Presence.ts#L13">paths/Presence.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Presence.ts#L25">paths/Presence.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Get Extension Presence</p>
+									<p style='font-style:italic;'>Since 1.0.2</p><p>Returns presence status of an extension or several extensions by their ID(s). Batch request is supported, see Batch Requests for details.The presenceStatus is returned as Offline (the parameters telephonyStatus, message, userStatus and dndStatus are not returned at all) for the following extension types: Department/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.If the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.Batch request is supported. For batch requests the number of extensions in one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error code InvalidMultipartRequest and the corresponding message &#39;Extension Presence Info multipart request is limited to 30 extensions&#39;.</p><h4>Required Permissions</h4><table class='fullwidth'><thead><tr><th>Permission</th><th>Description</th></tr></thead><tbody><tr><td class='code'>ReadPresence</td><td>Getting user presence information</td></tr></tbody></table><h4>Usage Plan Group</h4><p>Light</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_presenceinfo_.presenceinfo.html" class="tsd-signature-type">PresenceInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_getpresenceinfo_.getpresenceinfo.html" class="tsd-signature-type">GetPresenceInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -172,7 +174,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getendpoint">getEndpoint</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L26">PathSegment.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -196,10 +198,50 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#getrest">getRest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L34">PathSegment.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_restclient_.restclient.html" class="tsd-signature-type">RestClient</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_accountpresenceinfo_.accountpresenceinfo.html" class="tsd-signature-type">AccountPresenceInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Presence.ts#L12">paths/Presence.ts:12</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_accountpresenceinfo_.accountpresenceinfo.html" class="tsd-signature-type">AccountPresenceInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="put" class="tsd-anchor"></a>
+					<h3>put</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="../interfaces/_definitions_presenceinforesource_.presenceinforesource.html" class="tsd-signature-type">PresenceInfoResource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_presenceinforesource_.presenceinforesource.html" class="tsd-signature-type">PresenceInfoResource</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/paths/Presence.ts#L35">paths/Presence.ts:35</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>body: <a href="../interfaces/_definitions_presenceinforesource_.presenceinforesource.html" class="tsd-signature-type">PresenceInfoResource</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_definitions_presenceinforesource_.presenceinforesource.html" class="tsd-signature-type">PresenceInfoResource</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -214,7 +256,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pathsegment_.urlsection.html">UrlSection</a>.<a href="_pathsegment_.urlsection.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/PathSegment.ts#L18">PathSegment.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -258,6 +300,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
 								<a href="_paths_presence_.presence.html#getrest" class="tsd-kind-icon">get<wbr>Rest</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_paths_presence_.presence.html#list" class="tsd-kind-icon">list</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_paths_presence_.presence.html#put" class="tsd-kind-icon">put</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="_paths_presence_.presence.html#tostring" class="tsd-kind-icon">to<wbr>String</a>

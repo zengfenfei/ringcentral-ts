@@ -92,7 +92,9 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#greetings" class="tsd-kind-icon">greetings</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#queue" class="tsd-kind-icon">queue</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#schedule" class="tsd-kind-icon">schedule</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#transfer" class="tsd-kind-icon">transfer</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#type" class="tsd-kind-icon">type</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#unconditionalforwarding" class="tsd-kind-icon">unconditional<wbr>Forwarding</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_definitions_answeringruleinfo_.answeringruleinfo.html#uri" class="tsd-kind-icon">uri</a></li>
@@ -107,10 +109,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="callhandlingaction" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> call<wbr>Handling<wbr>Action</h3>
-					<div class="tsd-signature tsd-kind-icon">call<wbr>Handling<wbr>Action<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ForwardCalls"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"TakeMessagesOnly"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"PlayAnnouncementOnly"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UnconditionalForwarding"</span></div>
+					<div class="tsd-signature tsd-kind-icon">call<wbr>Handling<wbr>Action<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ForwardCalls"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UnconditionalForwarding"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"AgentQueue"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"TransferToExtension"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"TakeMessagesOnly"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"PlayAnnouncementOnly"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L55">definitions/AnsweringRuleInfo.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L57">definitions/AnsweringRuleInfo.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -122,10 +124,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="callednumbers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> called<wbr>Numbers</h3>
-					<div class="tsd-signature tsd-kind-icon">called<wbr>Numbers<span class="tsd-signature-symbol">:</span> <a href="_definitions_answeringruleinfocalleeinfo_.answeringruleinfocalleeinfo.html" class="tsd-signature-type">AnsweringRuleInfoCalleeInfo</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">called<wbr>Numbers<span class="tsd-signature-symbol">:</span> <a href="_definitions_callednumberinfo_.callednumberinfo.html" class="tsd-signature-type">CalledNumberInfo</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L45">definitions/AnsweringRuleInfo.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L47">definitions/AnsweringRuleInfo.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -137,10 +139,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="callers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> callers</h3>
-					<div class="tsd-signature tsd-kind-icon">callers<span class="tsd-signature-symbol">:</span> <a href="_definitions_answeringruleinfocallerinfo_.answeringruleinfocallerinfo.html" class="tsd-signature-type">AnsweringRuleInfoCallerInfo</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">callers<span class="tsd-signature-symbol">:</span> <a href="_definitions_callersinfo_.callersinfo.html" class="tsd-signature-type">CallersInfo</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L50">definitions/AnsweringRuleInfo.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L52">definitions/AnsweringRuleInfo.ts:52</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -155,7 +157,7 @@
 					<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L35">definitions/AnsweringRuleInfo.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L37">definitions/AnsweringRuleInfo.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -170,7 +172,7 @@
 					<div class="tsd-signature tsd-kind-icon">forwarding<span class="tsd-signature-symbol">:</span> <a href="_definitions_forwardinginfo_.forwardinginfo.html" class="tsd-signature-type">ForwardingInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L60">definitions/AnsweringRuleInfo.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L62">definitions/AnsweringRuleInfo.ts:62</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -185,12 +187,12 @@
 					<div class="tsd-signature tsd-kind-icon">greetings<span class="tsd-signature-symbol">:</span> <a href="_definitions_greetinginfo_.greetinginfo.html" class="tsd-signature-type">GreetingInfo</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L75">definitions/AnsweringRuleInfo.ts:75</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L87">definitions/AnsweringRuleInfo.ts:87</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Predefined greetings applied for an answering rule</p>
+							<p>Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List</p>
 						</div>
 					</div>
 				</section>
@@ -200,7 +202,7 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L20">definitions/AnsweringRuleInfo.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L22">definitions/AnsweringRuleInfo.ts:22</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -215,7 +217,7 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L30">definitions/AnsweringRuleInfo.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L32">definitions/AnsweringRuleInfo.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -225,12 +227,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="queue" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> queue</h3>
+					<div class="tsd-signature tsd-kind-icon">queue<span class="tsd-signature-symbol">:</span> <a href="_definitions_queueinfo_.queueinfo.html" class="tsd-signature-type">QueueInfo</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L72">definitions/AnsweringRuleInfo.ts:72</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Queue settings applied for department (call queue) extension type, with the &#39;AgentQueue&#39; value specified as a call handling action</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="schedule" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> schedule</h3>
 					<div class="tsd-signature tsd-kind-icon">schedule<span class="tsd-signature-symbol">:</span> <a href="_definitions_scheduleinfo_.scheduleinfo.html" class="tsd-signature-type">ScheduleInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L40">definitions/AnsweringRuleInfo.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L42">definitions/AnsweringRuleInfo.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -240,12 +257,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="transfer" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> transfer</h3>
+					<div class="tsd-signature tsd-kind-icon">transfer<span class="tsd-signature-symbol">:</span> <a href="_definitions_transferredextensioninfo_.transferredextensioninfo.html" class="tsd-signature-type">TransferredExtensionInfo</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L77">definitions/AnsweringRuleInfo.ts:77</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Transfer settings applied for department (call queue) extension type, with &#39;TransferToExtension&#39; call handling action</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="type" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
 					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"BusinessHours"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"AfterHours"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Custom"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L25">definitions/AnsweringRuleInfo.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L27">definitions/AnsweringRuleInfo.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -260,7 +292,7 @@
 					<div class="tsd-signature tsd-kind-icon">unconditional<wbr>Forwarding<span class="tsd-signature-symbol">:</span> <a href="_definitions_unconditionalforwardinginfo_.unconditionalforwardinginfo.html" class="tsd-signature-type">UnconditionalForwardingInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L65">definitions/AnsweringRuleInfo.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L67">definitions/AnsweringRuleInfo.ts:67</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -275,7 +307,7 @@
 					<div class="tsd-signature tsd-kind-icon">uri<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L15">definitions/AnsweringRuleInfo.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L17">definitions/AnsweringRuleInfo.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -290,7 +322,7 @@
 					<div class="tsd-signature tsd-kind-icon">voicemail<span class="tsd-signature-symbol">:</span> <a href="_definitions_voicemailinfo_.voicemailinfo.html" class="tsd-signature-type">VoicemailInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/762a936/src/definitions/AnsweringRuleInfo.ts#L70">definitions/AnsweringRuleInfo.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/zengfenfei/ringcentral-ts/blob/3d12f9d/src/definitions/AnsweringRuleInfo.ts#L82">definitions/AnsweringRuleInfo.ts:82</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -344,7 +376,13 @@
 								<a href="_definitions_answeringruleinfo_.answeringruleinfo.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_definitions_answeringruleinfo_.answeringruleinfo.html#queue" class="tsd-kind-icon">queue</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_definitions_answeringruleinfo_.answeringruleinfo.html#schedule" class="tsd-kind-icon">schedule</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_definitions_answeringruleinfo_.answeringruleinfo.html#transfer" class="tsd-kind-icon">transfer</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_definitions_answeringruleinfo_.answeringruleinfo.html#type" class="tsd-kind-icon">type</a>
