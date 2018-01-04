@@ -29,11 +29,13 @@ export default class Meeting extends PathSegment {
 	}
 
 
-	post(body: MeetingRequestResource): Promise<void> {
+	post(body: MeetingRequestResource): Promise<MeetingResponseResource> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
 			body: body,
 			method: 'post'
-		}).then(res => {});
+		}).then<any>((res) => {
+				return res.json();
+		});
 	}
 
 
