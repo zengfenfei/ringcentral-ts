@@ -94,6 +94,13 @@ export default class RestClient extends EventEmitter {
 		}
 	}
 
+	async setToken(token) {
+		let t = new Token();
+		t.fromServer(token, 24 * 60 * 60 * 1000);
+		this.tokenStore.save(t);
+		return t;
+	}
+
 	/**
 	 * Send http GET method
 	 */
