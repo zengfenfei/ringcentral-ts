@@ -10,7 +10,7 @@ interface ForwardingNumberResource {
 
 	label?: string;
 
-	features?: ('CallFlip' | 'CallForwarding')[];
+	features?: 'CallFlip' | 'CallForwarding'[];
 
 	flipNumber?: string;
 }

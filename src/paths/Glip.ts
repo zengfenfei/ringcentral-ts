@@ -3,7 +3,6 @@ import PathSegment from '../PathSegment';
 import Companies from './Companies';
 import Groups from './Groups';
 import Persons from './Persons';
-import Posts from './Posts';
 import Files from './Files';
 import Profile from './Profile';
 
@@ -19,7 +18,7 @@ export default class Glip extends PathSegment {
 	}
 
 /**
-	 * Internal identifier of a group to be edited
+	 * Id of a group to send post
 	 */	groups(id?: string) {
 		return new Groups(this, id);
 	}
@@ -28,10 +27,6 @@ export default class Glip extends PathSegment {
 	 * Internal identifier of a user to be returned, the maximum number of IDs is 30
 	 */	persons(id?: string) {
 		return new Persons(this, id);
-	}
-
-	posts(id?: string) {
-		return new Posts(this, id);
 	}
 
 /**
