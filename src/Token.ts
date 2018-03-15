@@ -38,7 +38,7 @@ export default class Token {
 		this.expiresIn = Date.now() + newToken['expires_in'] * 1000 - timeSpent;
 		this.refreshToken = newToken['refresh_token'];
 		this.refreshTokenExpiresIn = Date.now() + newToken['refresh_token_expires_in'] * 1000 - timeSpent;
-		this.scope = newToken['scope'].split(' ');
+		this.scope = (newToken['scope'] || '').split(' ');
 		this.ownerId = newToken['owner_id'];
 		this.endpointId = newToken['endpoint_id'];
 		return this;
