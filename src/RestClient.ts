@@ -251,13 +251,27 @@ export default class RestClient extends EventEmitter {
 		return <any>params;
 	}
 
-	oauthUrl(redirect_uri: string, opts?: { state?: string, force?: boolean }) {
+	/**
+	 * 
+	 * @param redirect_uri 
+	 * @param opts Refer to https://developer.ringcentral.com/api-docs/latest/index.html#!#RefAuthorization
+	 */
+	oauthUrl(redirect_uri: string, opts?: {
+		state?: string;
+		brand_id?: string;
+		force?: boolean;
+		display?: string;
+		prompt?: string;
+		localeId?: string;
+		ui_locales?: string;
+		ui_options?: string;
+	}) {
+		opts = opts || {}
 		let query = {
 			response_type: 'code',
 			client_id: this.appKey,
 			redirect_uri,
-			force: opts && opts.force,
-			state: opts && opts.state
+			...opts
 		};
 		return format({ pathname: this.server + AUTHORIZE_URL, query });
 	}
