@@ -252,8 +252,8 @@ export default class RestClient extends EventEmitter {
 	}
 
 	/**
-	 * 
-	 * @param redirect_uri 
+	 * Create the url of the oauth login window
+	 * @param redirect_uri
 	 * @param opts Refer to https://developer.ringcentral.com/api-docs/latest/index.html#!#RefAuthorization
 	 */
 	oauthUrl(redirect_uri: string, opts?: {
@@ -266,7 +266,7 @@ export default class RestClient extends EventEmitter {
 		ui_locales?: string;
 		ui_options?: string;
 	}) {
-		opts = opts || {}
+		opts = opts || {};
 		let query = {
 			response_type: 'code',
 			client_id: this.appKey,
