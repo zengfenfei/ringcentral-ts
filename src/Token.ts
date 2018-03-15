@@ -32,9 +32,9 @@ export default class Token {
 	 *  Populate token from server response. You should set owner after calling this method.
 	 *  timeSpent: Time in ms spent fetching token.
 	 */
-	fromServer(newToken, timeSpent: number) {
+	fromServer(newToken: ServerToken, timeSpent: number) {
 		this.accessToken = newToken['access_token'];
-		this.type = newToken['token_type'];
+		this.type = newToken['token_type'] || 'bearer';
 		this.expiresIn = Date.now() + newToken['expires_in'] * 1000 - timeSpent;
 		this.refreshToken = newToken['refresh_token'];
 		this.refreshTokenExpiresIn = Date.now() + newToken['refresh_token_expires_in'] * 1000 - timeSpent;
@@ -68,6 +68,17 @@ export default class Token {
 		return Date.now() >= this.refreshTokenExpiresIn;
 	}
 
+}
+
+export interface ServerToken {
+	access_token: string;
+	token_type?: string;
+	expires_in?: number; // In seconds
+	refresh_token?: string;
+	refresh_token_expires_in?: number;
+	scope: string;
+	owner_id: string;
+	endpoint_id: string;
 }
 
 function tokenOwner(ownerInfo: { username: string, extension?: string }) {

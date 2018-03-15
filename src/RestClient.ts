@@ -5,7 +5,7 @@ import { TOO_MANY_REQUESTS } from 'http-status';
 import 'isomorphic-fetch';
 import delay from 'delay.ts';
 import * as pkg from './pkg';
-import Token, { TokenStore, MemoryTokenStore } from './Token';
+import Token, { TokenStore, MemoryTokenStore, ServerToken } from './Token';
 import isKnownReqBodyType from 'known-fetch-body';
 import RCAccount from './RCAccount';
 
@@ -94,8 +94,9 @@ export default class RestClient extends EventEmitter {
 		}
 	}
 
-	async setToken(token) {
+	async setToken(token: ServerToken) {
 		let t = new Token();
+		t.appKey = this.appKey;
 		t.fromServer(token, 24 * 60 * 60 * 1000);
 		this.tokenStore.save(t);
 		return t;
