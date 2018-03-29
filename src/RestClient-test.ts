@@ -1,3 +1,4 @@
+import * as url from 'url';
 import { expect } from 'chai';
 import delay from 'delay.ts';
 import * as fetchMock from 'fetch-mock';
@@ -52,11 +53,11 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 			body: 'grant_type=password&username=' + username + '&extension=&password=' + password + '&access_token_ttl=90&refresh_token_ttl=360&scope=scp',
 			method: 'POST',
 			headers:
-			{
-				'Content-Type': 'application/x-www-form-urlencoded',
-				Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
-				'X-User-Agent': client.agents.join(' '),
-			}
+				{
+					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
+					'X-User-Agent': client.agents.join(' '),
+				}
 		});
 		// #2 Check the parsed response
 		let expectedToken = new Token();
@@ -232,7 +233,12 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 		const state = 'Test.Oauth.State';
 		const force = true;
 		const loginUrl = client.oauthUrl(redirectUri, { state, force });
-		expect(loginUrl).to.eq(`https://platform.ringcentral.com/restapi/oauth/authorize?response_type=code&client_id=testAppKey&redirect_uri=${encodeURIComponent(redirectUri)}&force=${force}&state=${encodeURIComponent(state)}`);
+		const { query } = url.parse(loginUrl, true);
+		expect(query['response_type']).to.eq('code');
+		expect(query['client_id']).to.eq(appKey);
+		expect(query['redirect_uri']).to.eq(redirectUri);
+		expect(query['state']).to.eq(state);
+		expect(query['force']).to.eq(force + '');
 	});
 
 	it('parses parameters from oauth callback', () => {
@@ -266,11 +272,11 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 				body: 'grant_type=authorization_code&code=TheTestOauthCode&redirect_uri=https%3A%2F%2Fyour-app.github.io%2Femail-manipulator%2F&access_token_ttl=&refresh_token_ttl=',
 				method: 'POST',
 				headers:
-				{
-					'Content-Type': 'application/x-www-form-urlencoded',
-					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
-					'X-User-Agent': client.agents.join(' ')
-				}
+					{
+						'Content-Type': 'application/x-www-form-urlencoded',
+						Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0',
+						'X-User-Agent': client.agents.join(' ')
+					}
 			}]);
 	});
 
@@ -286,10 +292,10 @@ describe('RestClient Auth: auth, oauth, refreshToken, logout and related methods
 				method: 'POST',
 				body: 'refresh_token=MockRefreshToken&grant_type=refresh_token&endpoint_id=MockEndpointId',
 				headers:
-				{
-					'Content-Type': 'application/x-www-form-urlencoded',
-					Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0'
-				}
+					{
+						'Content-Type': 'application/x-www-form-urlencoded',
+						Authorization: 'Basic dGVzdEFwcEtleTp0ZXN0QXBwU2VjcmV0'
+					}
 			}]);
 		expect(newToken.accessToken).not.eq(accessToken);
 		expect(newToken.refreshToken).not.eq(refreshToken);
@@ -387,13 +393,13 @@ describe('RestClient API call methods', () => {
 			{
 				body: '{"jsonBody":"value"}',
 				headers:
-				{
-					customHeader: 'customer-headers',
-					Authorization: 'bearer MockAccessToken',
-					'Client-Id': 'testAppKey',
-					'X-User-Agent': client.agents.join(' '),
-					'content-type': 'application/json'
-				},
+					{
+						customHeader: 'customer-headers',
+						Authorization: 'bearer MockAccessToken',
+						'Client-Id': 'testAppKey',
+						'X-User-Agent': client.agents.join(' '),
+						'content-type': 'application/json'
+					},
 				method: 'GET'
 			}]);
 		expect(await res.json()).to.deep.eq(resData);
