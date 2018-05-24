@@ -9,7 +9,10 @@ export default class Country extends PathSegment {
 	}
 
 	/**
-	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns all the countries available for calling.</p><h4>Usage Plan Group</h4><p>Light</p>
+	 * Returns all the countries available for calling.
+	 * 
+	 * Permission: None
+	 * Usage Plan Group: Light
 	 */
 	list(query?: ListQuery): Promise<GetCountryListResponse> {
 		return this.getRest().call(this.getEndpoint(false), query, {
@@ -22,7 +25,10 @@ export default class Country extends PathSegment {
 
 
 	/**
-	 *  <p style='font-style:italic;'>Since 1.0.10 (Release 6.2)</p><p>Returns the information on the required country.</p><h4>Usage Plan Group</h4><p>Light</p>
+	 * Returns the information on the required country.
+	 * 
+	 * Permission: None
+	 * Usage Plan Group: Light
 	 */
 	get(): Promise<GetCountryInfoDictionaryResponse> {
 		return this.getRest().call(this.getEndpoint(true), undefined, {
