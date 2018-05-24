@@ -10,7 +10,9 @@ export default class PhoneNumber extends PathSegment {
 
 	/**
 	 * Returns the list of phone numbers that are used by a particular extension, and can be filtered by the phone number type. 
-	 * The returned list contains all numbers which are directly mapped to a given extension plus the features and also company-level numbers which may be used when performing different operations on behalf of this extension. 
+	 * The returned list contains all numbers which are directly mapped to a given extension plus the features and also company-level
+	 * numbers which may be used when performing different operations on behalf of this extension. 
+	 * 
 	 * Permission: ReadAccounts
 	 * Usage Plan Group: Light
 	 */
@@ -26,6 +28,7 @@ export default class PhoneNumber extends PathSegment {
 
 	/**
 	 * Returns info about a specific phone number, specified by ID
+	 * 
 	 * Required Permissions: ReadAccounts
 	 * Usage Plan Group: Light
 	 */
@@ -48,12 +51,15 @@ export interface ListQuery {
 	usageType?: ('MainCompanyNumber' | 'AdditionalCompanyNumber' | 'CompanyNumber' | 'DirectNumber' | 'CompanyFaxNumber' | 'ForwardedNumber')[];
 
 	/**
-	 * Indicates the page number to retrieve. Only positive number values are allowed. Default value is '1'
+	 * Indicates the page number to retrieve. 
+	 * Only positive number values are allowed. 
+	 * Default value is '1'
 	 */
 	page?: number;
 
 	/**
-	 * Indicates the page size (number of items). If not specified, the value is '100' by default
+	 * Indicates the page size (number of items). 
+	 * If not specified, the value is '100' by default
 	 */
 	perPage?: number;
 }

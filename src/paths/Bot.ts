@@ -9,7 +9,8 @@ export default class Bot extends PathSegment {
 	}
 
 	/**
-	 * Creates a bot extension. Please note: Bot extension is always created in Enabled status, no welcome email is sent.
+	 * Creates a bot extension. Please note: 
+	 * Bot extension is always created in Enabled status, no welcome email is sent.
 	 * 
 	 * Permission: EditAccounts
 	 * API Group: Medium

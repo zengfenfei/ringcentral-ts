@@ -8,7 +8,8 @@ export default class BulkPurchase extends PathSegment {
 	}
 
 	/**
-	 * Purchases licenses for add-on features: Rooms, Room Connector, Webinar, Live Reports, etc.
+	 * Purchases licenses for add-on features: 
+	 * Rooms, Room Connector, Webinar, Live Reports, etc.
 	 * 
 	 * Permission: ReadAccounts, EditExtensions, EditAccounts
 	 * API Group: Heavy

@@ -49,7 +49,8 @@ export interface ListQuery {
 	loginAllowed?: boolean;
 
 	/**
-	 * Indicates whether signup/billing is allowed for a country. If not specified all countries are returned (according to other filters specified if any)
+	 * Indicates whether signup/billing is allowed for a country. 
+	 * If not specified all countries are returned (according to other filters specified if any)
 	 */
 	signupAllowed?: boolean;
 
@@ -59,12 +60,14 @@ export interface ListQuery {
 	numberSelling?: boolean;
 
 	/**
-	 * Indicates the page number to retrieve. Only positive number values are allowed. Default value is '1'
+	 * Indicates the page number to retrieve. 
+	 * Only positive number values are allowed. Default value is '1'
 	 */
 	page?: number;
 
 	/**
-	 * Indicates the page size (number of items). If not specified, the value is '100' by default
+	 * Indicates the page size (number of items). 
+	 * If not specified, the value is '100' by default
 	 */
 	perPage?: number;
 

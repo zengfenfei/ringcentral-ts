@@ -75,7 +75,8 @@ export default class Account extends PathSegment {
 	}
 
 /**
-	 * Internal identifier of an answering rule. The value can be standard digital ID or specific ID - either business-hours-rule or after-hours-rule
+	 * Internal identifier of an answering rule. 
+	 * The value can be standard digital ID or specific ID - either business-hours-rule or after-hours-rule
 	 */	answeringRule(id?: string) {
 		return new AnsweringRule(this, id);
 	}
